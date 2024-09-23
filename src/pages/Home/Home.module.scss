@@ -1,0 +1,146 @@
+.container {
+    height: auto;
+    background-size: cover;
+    background-position: center;
+}
+
+.leftColumn {
+    padding-right: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+}
+
+.welcomeTitle {
+    font-size: 2rem;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.welcomeTitle2 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #4caf50;
+}
+
+.leftColumn p {
+    text-align: center;
+}
+
+.buttonGroup {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.greenButton {
+    width: 120px;
+    padding: 20px;
+    background-color: #4caf50 !important;
+    border-color: #4caf50 !important;
+    color: white !important;
+}
+
+.greenButton:hover {
+    background-color: #fff !important;
+    color: #4caf50 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.backButton {
+    width: 120px;
+    padding: 20px !important;
+    background-color: transparent;
+    border-color: #4caf50 !important;
+    color: #4caf50;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border-width: 1px;
+    border-style: solid;
+    margin-left: 10px;
+    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s !important;
+}
+
+.backButton:hover {
+    background-color: #4caf50 !important;
+    color: #fff !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.lgImage {
+    padding: 20px;
+    text-align: center;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.partnerCol {
+    background-color: #e1faf6;
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.partnerCol img {
+    width: 60px;
+    height: 52px;
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+.centeredRow {
+    max-width: 800px;
+    margin: auto;
+    margin-top: 50px;
+}
+
+.themedRow {
+    color: #4caf50;
+}
+
+.themedRow:hover {
+    border-color: #4caf50 !important;
+    background-color: #edfbf3 !important;
+    color: #4caf50 !important;
+}
+
+.benefitItem {
+    text-align: center;
+    margin: 10px;
+    max-width: 370px;
+}
+
+.benefitImage {
+    width: 100%;
+    max-width: 100px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.featureCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.featureIcon {
+    width: 100px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.bannerImage {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+}
