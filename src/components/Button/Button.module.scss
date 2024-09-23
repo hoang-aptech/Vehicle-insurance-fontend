@@ -1,0 +1,37 @@
+.wrapper {
+    padding: 0 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 100px;
+    height: 43px;
+    color: var(--white-color);
+    border-radius: 4px;
+
+    &.primary {
+        background-color: #14c560;
+        border: none;
+        outline: none;
+    }
+
+    &.outline {
+        color: #14c560;
+        background-color: var(--white-color);
+        border: 1px solid #14c560;
+        border-radius: 4px;
+    }
+
+    & + .wrapper {
+        margin-left: 12px;
+    }
+}
+
+.icon {
+    font-size: 1.8rem;
+    transform: translateY(1px);
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: 600;
+}

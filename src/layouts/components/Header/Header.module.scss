@@ -1,0 +1,51 @@
+.header {
+    box-shadow: rgba(0, 0, 0, 0.06) 0px 3px 5px -1px, rgba(0, 0, 0, 0.04) 0px 1px 18px 0px,
+        rgba(0, 0, 0, 0.05) 0px 6px 10px 0px;
+}
+
+.wrapper {
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1200px;
+    height: var(--header-height);
+}
+
+.logo-with-nav-menu,
+.actions-with-nation {
+    display: flex;
+    align-items: center;
+}
+
+.nav-list {
+    margin-left: 24px;
+    display: flex;
+    align-items: center;
+    list-style: none;
+    font-size: 1.5rem;
+    color: var(--text-color);
+}
+
+.nav-item {
+    transition: color 0.2s ease-in-out;
+    & + .nav-item {
+        margin-left: 24px;
+    }
+    &:hover {
+        cursor: pointer;
+        color: var(--primary-color);
+    }
+}
+
+.nation-box {
+    margin-left: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.nation-name {
+    margin-left: 6px;
+    font-size: 1.4rem;
+    color: var(--text-color);
+}
