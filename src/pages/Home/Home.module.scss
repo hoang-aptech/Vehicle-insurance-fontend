@@ -2,6 +2,7 @@
     height: auto;
     background-size: cover;
     background-position: center;
+    justify-content: center;
 }
 
 .leftColumn {
@@ -102,6 +103,7 @@
 
 .themedRow {
     color: #4caf50;
+    // margin-left: -700px;
 }
 
 .themedRow:hover {
@@ -135,7 +137,12 @@
 .featureIcon {
     width: 100px;
     height: auto;
-    margin-bottom: 10px;
+}
+
+.featureContent {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
 }
 
 .bannerImage {
@@ -143,4 +150,38 @@
     height: auto;
     display: block;
     margin: 0 auto;
+}
+
+.featureButton {
+    align-self: flex-start;
+    margin-top: 60px;
+    color: rgb(49 199 111);
+    font-weight: 500;
+    font-size: 16px;
+    border: none;
+    background-color: transparent;
+}
+
+.cardColor1 {
+    background-color: #f4f3fd;
+}
+
+.cardColor6 {
+    background-color: #f4f3fd;
+}
+
+.cardColor2 {
+    background-color: #ffeeeb;
+}
+
+.cardColor4 {
+    background-color: #ffeeeb;
+}
+
+.cardColor5 {
+    background-color: #ffeeeb;
+}
+
+.cardColor3 {
+    background-color: #eafbff;
 }
