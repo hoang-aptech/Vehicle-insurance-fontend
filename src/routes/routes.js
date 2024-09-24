@@ -6,7 +6,7 @@ import Home from '~/pages/Home';
 import Login from '~/pages/Login';
 import Private from '~/pages/Private';
 import AdminLayout from '~/layouts/DefaultLayout/AdminLayout';
-import AdminHome from '~/pages/admin/AdminHome';
+import Dashboard from '~/pages/admin/Dashboard';
 
 // Public routes
 const publicRoutes = [
@@ -18,7 +18,7 @@ const publicRoutes = [
 // Admin routes
 const adminRoutes = [
     { path: config.routes.userAdmin, component: UserAdmin, layout: AdminLayout },
-    { path: '/admin', component: AdminHome, layout: AdminLayout }, // Trang chính cho admin
+    { path: '/admin', component: Dashboard, layout: AdminLayout }, // Trang chính cho admin
 ];
 
 // Private routes

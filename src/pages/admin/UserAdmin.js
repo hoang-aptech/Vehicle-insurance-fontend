@@ -1,12 +1,14 @@
-// UserAdmin.js
 import React, { useState } from 'react';
 import { Layout, Table, Button, Input, Row, Col, Card, Avatar } from 'antd';
 import { UserAddOutlined, LogoutOutlined } from '@ant-design/icons';
+import './UserAdmin.css';
 
 const { Header, Content } = Layout;
 
 const UserAdmin = () => {
     const [search, setSearch] = useState('');
+    const [selectedUser, setSelectedUser] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
 
     const dataSource = [
         {
@@ -25,15 +27,49 @@ const UserAdmin = () => {
             email: 'jane@example.com',
             avatar: 'https://via.placeholder.com/150',
         },
-        // Thêm dữ liệu người dùng ở đây
+        {
+            id: '3',
+            fullname: 'Alice Smith',
+            address: '30 Downing Street',
+            phone: '0123456780',
+            email: 'alice@example.com',
+            avatar: 'https://via.placeholder.com/150',
+        },
+        {
+            id: '4',
+            fullname: 'Bob Johnson',
+            address: '40 Downing Street',
+            phone: '0123456781',
+            email: 'bob@example.com',
+            avatar: 'https://via.placeholder.com/150',
+        },
+        {
+            id: '5',
+            fullname: 'Charlie Brown',
+            address: '50 Downing Street',
+            phone: '0123456782',
+            email: 'charlie@example.com',
+            avatar: 'https://via.placeholder.com/150',
+        },
+        {
+            id: '6',
+            fullname: 'Diana Prince',
+            address: '60 Downing Street',
+            phone: '0123456783',
+            email: 'diana@example.com',
+            avatar: 'https://via.placeholder.com/150',
+        },
     ];
 
-    // Lọc người dùng theo tên hoặc email
     const filteredUsers = dataSource.filter(
         (user) =>
             user.fullname.toLowerCase().includes(search.toLowerCase()) ||
             user.email.toLowerCase().includes(search.toLowerCase()),
     );
+
+    const pageSize = 5;
+    const paginatedUsers = filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const totalUsers = filteredUsers.length;
 
     const columns = [
         {
@@ -63,6 +99,15 @@ const UserAdmin = () => {
         },
     ];
 
+    const handleUserClick = (user) => {
+        setSelectedUser(user);
+    };
+
+    // Hàm xác định màu nền cho hàng
+    const rowClassName = (record) => {
+        return selectedUser && selectedUser.id === record.id ? 'highlight-row' : '';
+    };
+
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Header
@@ -90,18 +135,42 @@ const UserAdmin = () => {
                         onChange={(e) => setSearch(e.target.value)}
                         style={{ marginBottom: 16 }}
                     />
-                    <Table dataSource={filteredUsers} columns={columns} rowKey="id" />
 
-                    <Row gutter={16} style={{ marginTop: 32 }}>
-                        {filteredUsers.map((user) => (
-                            <Col span={6} key={user.id}>
-                                <Card style={{ marginBottom: 16 }}>
-                                    <Avatar src={user.avatar} size={64} style={{ borderRadius: '50%' }} />
-                                    <h3>{user.fullname}</h3>
-                                    <p>{user.email}</p>
+                    <Row gutter={16}>
+                        <Col span={16}>
+                            <Table
+                                dataSource={paginatedUsers}
+                                columns={columns}
+                                rowKey="id"
+                                onRow={(record) => ({
+                                    onClick: () => handleUserClick(record),
+                                })}
+                                rowClassName={rowClassName} // Áp dụng hàm xác định màu nền
+                                pagination={{
+                                    current: currentPage,
+                                    pageSize: pageSize,
+                                    total: totalUsers,
+                                    onChange: (page) => setCurrentPage(page),
+                                }}
+                            />
+                        </Col>
+                        <Col span={8} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                            {selectedUser ? (
+                                <Card style={{ padding: 16, textAlign: 'center', width: '100%' }}>
+                                    <Avatar
+                                        src={selectedUser.avatar}
+                                        size={100}
+                                        style={{ borderRadius: '50%', marginBottom: 16 }}
+                                    />
+                                    <h3>{selectedUser.fullname}</h3>
+                                    <p>Email: {selectedUser.email}</p>
+                                    <p>Address: {selectedUser.address}</p>
+                                    <p>Phone: {selectedUser.phone}</p>
                                 </Card>
-                            </Col>
-                        ))}
+                            ) : (
+                                <div>Click on a user to see their profile</div>
+                            )}
+                        </Col>
                     </Row>
                 </div>
             </Content>
