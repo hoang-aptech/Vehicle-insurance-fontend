@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { Layout, Table, Button, Input, Row, Col, Card, Avatar } from 'antd';
-import { UserAddOutlined, LogoutOutlined } from '@ant-design/icons';
+import { Layout, Table, Button, Input, Row, Col, Card, Avatar, Popconfirm, Modal } from 'antd';
+import { UserAddOutlined, LogoutOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import AddUser from './add/AddUser';
+import EditUser from './edit/EditUser';
 import './UserAdmin.css';
 
 const { Header, Content } = Layout;
@@ -9,6 +11,8 @@ const UserAdmin = () => {
     const [search, setSearch] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
+    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
     const dataSource = [
         {
@@ -97,15 +101,58 @@ const UserAdmin = () => {
             dataIndex: 'phone',
             key: 'phone',
         },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (text, record) => (
+                <span>
+                    <Button
+                        type="primary"
+                        icon={<EditOutlined />}
+                        style={{ marginRight: 8, backgroundColor: '#32CD32', borderColor: '#32CD32' }}
+                        onClick={() => handleEdit(record)}
+                    />
+                    <Popconfirm title="Are you sure to delete this user?" onConfirm={() => handleDelete(record.id)}>
+                        <Button
+                            type="danger"
+                            icon={<DeleteOutlined />}
+                            style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
+                        />
+                    </Popconfirm>
+                </span>
+            ),
+        },
     ];
 
     const handleUserClick = (user) => {
         setSelectedUser(user);
     };
 
-    // Hàm xác định màu nền cho hàng
-    const rowClassName = (record) => {
-        return selectedUser && selectedUser.id === record.id ? 'highlight-row' : '';
+    const handleEdit = (user) => {
+        setSelectedUser(user);
+        setIsEditModalVisible(true);
+    };
+
+    const handleDelete = (id) => {
+        // Logic xóa người dùng
+        console.log('Delete user with ID:', id);
+    };
+
+    const handleAddOk = (values) => {
+        console.log('Add user:', values);
+        setIsAddModalVisible(false);
+        // Logic thêm người dùng mới
+    };
+
+    const handleEditOk = (values) => {
+        console.log('Edit user:', values);
+        setIsEditModalVisible(false);
+        // Logic cập nhật người dùng
+    };
+
+    const handleModalCancel = () => {
+        setIsAddModalVisible(false);
+        setIsEditModalVisible(false);
     };
 
     return (
@@ -119,7 +166,7 @@ const UserAdmin = () => {
                     color: '#fff',
                 }}
             >
-                <Button type="primary" icon={<UserAddOutlined />}>
+                <Button type="primary" icon={<UserAddOutlined />} onClick={() => setIsAddModalVisible(true)}>
                     Add User
                 </Button>
                 <Button type="default" icon={<LogoutOutlined />}>
@@ -145,7 +192,6 @@ const UserAdmin = () => {
                                 onRow={(record) => ({
                                     onClick: () => handleUserClick(record),
                                 })}
-                                rowClassName={rowClassName} // Áp dụng hàm xác định màu nền
                                 pagination={{
                                     current: currentPage,
                                     pageSize: pageSize,
@@ -174,6 +220,14 @@ const UserAdmin = () => {
                     </Row>
                 </div>
             </Content>
+
+            <Modal title="Add User" visible={isAddModalVisible} onCancel={handleModalCancel} footer={null}>
+                <AddUser onFinish={handleAddOk} />
+            </Modal>
+
+            <Modal title="Edit User" visible={isEditModalVisible} onCancel={handleModalCancel} footer={null}>
+                <EditUser user={selectedUser} onFinish={handleEditOk} />
+            </Modal>
         </Layout>
     );
 };

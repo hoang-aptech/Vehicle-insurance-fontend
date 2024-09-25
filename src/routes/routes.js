@@ -18,7 +18,7 @@ const publicRoutes = [
 // Admin routes
 const adminRoutes = [
     { path: config.routes.userAdmin, component: UserAdmin, layout: AdminLayout },
-    { path: '/admin', component: Dashboard, layout: AdminLayout }, // Trang chính cho admin
+    { path: '/admin', component: Dashboard, layout: AdminLayout },
 ];
 
 // Private routes
