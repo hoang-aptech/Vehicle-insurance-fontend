@@ -3,12 +3,15 @@ import Home from '~/pages/Home';
 import Login from '~/pages/Login';
 import Private from '~/pages/Private';
 import Dashboard from '~/pages/DashBoard';
+import HomeNew from '~/pages/Home/Home';
 
 // Public routes
 const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.login, component: Login },
     { path: config.routes.dashboard, component: Dashboard },
+    { path: config.routes.dashboard, component: Dashboard },
+    { path: config.routes.homenew, component: HomeNew },
 ];
 
 // Private routes
