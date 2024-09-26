@@ -1,0 +1,128 @@
+.blogContainer {
+    padding: 20px;
+    background-color: #f9f9f9;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.blogTitle {
+    margin-bottom: 20px;
+}
+
+.blogDate {
+    color: #888;
+    margin-bottom: 20px;
+}
+
+.mainTitle {
+    font-size: 38px !important;
+    font-weight: bold;
+}
+
+.itemTitle {
+    font-size: 22px;
+    font-weight: bold;
+    height: 20px;
+}
+
+.blogContent {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sidebar {
+    background-color: #e6f7ff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    max-height: 600px;
+}
+
+.blogImage {
+    width: 100%;
+    border-radius: 8px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.commentForm {
+    max-width: 600px;
+    margin-top: 20px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.commentButton {
+    width: 100%;
+}
+
+.btn {
+    display: flex;
+    align-items: center;
+    // justify-content: center;
+    background-color: #defdff;
+    min-height: 20vh;
+    padding: 10px;
+
+    img {
+        width: 200px;
+        height: auto;
+        margin-right: 10px;
+    }
+
+    h6 {
+        margin: 0;
+        flex-grow: 1;
+        text-align: center;
+        font-size: 18px;
+        max-width: 300px;
+    }
+
+    button {
+        margin-left: 10px;
+        padding: 20px;
+    }
+}
+
+.contactBox {
+    background-color: #f0f8ff;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 10px 0;
+    text-align: center;
+    position: relative;
+    height: 30vh;
+}
+
+.contactBox .divider {
+    width: 100%;
+    height: 2px;
+    background-color: black;
+    margin: 10px 0;
+}
+
+.icon {
+    font-size: 44px;
+    margin-right: 8px;
+    margin-top: 30px;
+}
+
+.hotline {
+    background-color: #ffe7a9;
+}
+
+.email {
+    background-color: #d0cef3;
+}
+
+.website {
+    background-color: #8cece0;
+}
+
+.blogbutton button {
+    background-color: transparent;
+}

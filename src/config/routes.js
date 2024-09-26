@@ -4,6 +4,8 @@ const routes = {
     private: '/private-test',
     dashboard: '/dashboard',
     homenew: '/homenew',
+    blog: '/blog',
+    blogdetails: '/blogdetails',
 };
 
 export default routes;

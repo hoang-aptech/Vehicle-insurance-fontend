@@ -4,6 +4,8 @@ import Login from '~/pages/Login';
 import Private from '~/pages/Private';
 import Dashboard from '~/pages/DashBoard';
 import HomeNew from '~/pages/Home/Home';
+import Blog from '~/pages/Blog/Blog';
+import BlogDetails from '~/pages/Blog/BlogDetails';
 
 // Public routes
 const publicRoutes = [
@@ -12,6 +14,8 @@ const publicRoutes = [
     { path: config.routes.dashboard, component: Dashboard },
     { path: config.routes.dashboard, component: Dashboard },
     { path: config.routes.homenew, component: HomeNew },
+    { path: config.routes.blog, component: Blog },
+    { path: config.routes.blogdetails, component: BlogDetails },
 ];
 
 // Private routes
