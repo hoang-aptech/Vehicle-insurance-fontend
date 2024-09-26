@@ -1,0 +1,25 @@
+/* AdminSidebar.css */
+.ant-menu {
+    background-color: #006494; /* Màu nền cho menu */
+}
+
+.ant-menu-item {
+    color: #fff !important; /* Màu chữ cho menu item */
+    font-weight: 600;
+}
+
+.ant-menu-item:hover {
+    background-color: #1b98e0 !important;
+}
+
+.ant-menu-item-selected {
+    background-color: #1b98e0 !important;
+}
+.image-logo {
+    width: 80%;
+    margin-bottom: 8px;
+    border-radius: 50%;
+}
+.title-logo {
+    color: #fff;
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Row, Col, Card, Tag, Carousel, Typography } from 'antd';
-import styles from './Home_new.module.scss';
+import styles from './Home.module.scss';
 import Hero from '../../assets/Images/hero_mascot.png';
 import carou1 from '../../assets/Images/anh1.png';
 import carou2 from '../../assets/Images/anh2.png';

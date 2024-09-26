@@ -1,187 +1,175 @@
-.container {
-    height: auto;
+.saladinContainer {
+    position: relative;
+    padding: 20px;
+    background-repeat: no-repeat;
     background-size: cover;
-    background-position: center;
-    justify-content: center;
-}
-
-.leftColumn {
-    padding-right: 15px;
+    background-image: url(../../assets/Images/bg_home.jpg);
     display: flex;
     flex-direction: column;
-    justify-content: center;
     align-items: center;
-    height: 100%;
+    justify-content: center;
+    min-height: 100vh;
+    overflow: hidden;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.5);
+        z-index: 0;
+    }
 }
 
-.welcomeTitle {
+.saladinHeader {
+    display: flex;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    img {
+        max-width: 65%;
+        height: auto;
+        margin-left: 300px;
+        position: relative;
+        z-index: 0;
+    }
+
+    h1 {
+        position: absolute;
+        top: 70px;
+        left: 170px;
+        color: #4caf50;
+        font-size: 42px;
+        z-index: 1;
+        max-width: 400px;
+    }
+
+    p {
+        position: absolute;
+        top: 190px;
+        left: 170px;
+        font-size: 18px;
+        z-index: 1;
+    }
+}
+
+.saladinContent1 {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    width: 100%;
+    max-width: 715px;
+    min-height: 180px;
+}
+
+.saladinCard {
+    display: flex;
+    max-width: 164px;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    max-height: 124px;
+    text-align: center;
+    margin: -1px;
+    position: relative;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.saladinCard:hover {
+    background-color: #f0fff7;
+}
+
+.saladinIcon {
     font-size: 2rem;
-    margin-bottom: 10px;
-    text-align: center;
 }
 
-.welcomeTitle2 {
-    font-size: 1.5rem;
-    margin-bottom: 10px;
-    text-align: center;
-    color: #4caf50;
+.saladinTitle {
+    margin-top: 10px;
+    font-weight: bold;
+    white-space: nowrap;
 }
 
-.leftColumn p {
-    text-align: center;
+.saladinTag {
+    position: absolute;
+    top: -10px;
+    right: -20px;
+    z-index: 1;
 }
 
-.buttonGroup {
-    margin-top: 20px;
+.saladinCarouselContainer {
+    max-width: 1200px;
+    margin: 40px auto;
+    text-align: center;
+
+    h2 {
+        margin-bottom: 20px;
+        font-size: 24px;
+        color: #4caf50;
+    }
+}
+
+.saladinCarouselItem {
     display: flex;
     justify-content: center;
 }
 
-.greenButton {
-    width: 120px;
-    padding: 20px;
-    background-color: #4caf50 !important;
-    border-color: #4caf50 !important;
-    color: white !important;
+.saladinCarouselImageContainer {
+    display: flex;
+    justify-content: space-around;
 }
 
-.greenButton:hover {
-    background-color: #fff !important;
-    color: #4caf50 !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
-
-.backButton {
-    width: 120px;
-    padding: 20px !important;
-    background-color: transparent;
-    border-color: #4caf50 !important;
-    color: #4caf50;
-    padding: 10px 20px;
+.saladinCarouselImage {
+    width: 48%;
     border-radius: 8px;
-    border-width: 1px;
-    border-style: solid;
-    margin-left: 10px;
-    transition: background-color 0.3s, color 0.3s, box-shadow 0.3s !important;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.backButton:hover {
-    background-color: #4caf50 !important;
-    color: #fff !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+.saladinContainer2 {
+    display: flex;
+    margin: 0 auto;
+    max-width: 750px;
 }
 
-.lgImage {
-    padding: 20px;
-    text-align: center;
-    max-width: 700px;
+.saladinBlock {
+    margin-bottom: 40px;
+    max-width: 300px;
     margin: 0 auto;
 }
 
-.partnerCol {
-    background-color: #e1faf6;
-    margin: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px;
-    border-radius: 10px;
+.saladinBlock h2,
+p {
+    max-width: 400px;
+    width: 100%;
+    // margin-left: 15px;
 }
 
-.partnerCol img {
+.saladinRow {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.saladinCard2 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 75px;
+    height: 65px;
+    margin: 0;
+}
+
+.saladinImage {
     width: 60px;
     height: 52px;
     object-fit: contain;
     border-radius: 10px;
-}
-
-.centeredRow {
-    max-width: 800px;
-    margin: auto;
-    margin-top: 50px;
-}
-
-.themedRow {
-    color: #4caf50;
-    // margin-left: -700px;
-}
-
-.themedRow:hover {
-    border-color: #4caf50 !important;
-    background-color: #edfbf3 !important;
-    color: #4caf50 !important;
-}
-
-.benefitItem {
-    text-align: center;
-    margin: 10px;
-    max-width: 370px;
-}
-
-.benefitImage {
-    width: 100%;
-    max-width: 100px;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-    margin-bottom: 20px;
-}
-
-.featureCard {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%;
-}
-
-.featureIcon {
-    width: 100px;
-    height: auto;
-}
-
-.featureContent {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-}
-
-.bannerImage {
-    max-width: 100%;
-    height: auto;
-    display: block;
-    margin: 0 auto;
-}
-
-.featureButton {
-    align-self: flex-start;
-    margin-top: 60px;
-    color: rgb(49 199 111);
-    font-weight: 500;
-    font-size: 16px;
-    border: none;
-    background-color: transparent;
-}
-
-.cardColor1 {
-    background-color: #f4f3fd;
-}
-
-.cardColor6 {
-    background-color: #f4f3fd;
-}
-
-.cardColor2 {
-    background-color: #ffeeeb;
-}
-
-.cardColor4 {
-    background-color: #ffeeeb;
-}
-
-.cardColor5 {
-    background-color: #ffeeeb;
-}
-
-.cardColor3 {
-    background-color: #eafbff;
 }
