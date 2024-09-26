@@ -6,24 +6,20 @@ import Home from '~/pages/Home';
 import Login from '~/pages/Login';
 import Private from '~/pages/Private';
 import Dashboard from '~/pages/DashBoard';
-import HomeNew from '~/pages/Home/Home';
 import AdminLayout from '~/layouts/DefaultLayout/AdminLayout';
-import Dashboard from '~/pages/admin/Dashboard';
+import InsuranceAutomotivePhysical from '~/pages/InsuranceAutomotivePhysical';
 
 // Public routes
 const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.login, component: Login },
-    { path: config.routes.dashboard, component: Dashboard },
-    { path: config.routes.dashboard, component: Dashboard },
-    { path: config.routes.homenew, component: HomeNew },
-    // Không cần AdminSidebar ở đây
+    { path: config.routes.insuranceAutomotivePhysical, component: InsuranceAutomotivePhysical },
 ];
 
 // Admin routes
 const adminRoutes = [
     { path: config.routes.userAdmin, component: UserAdmin, layout: AdminLayout },
-    { path: '/admin', component: Dashboard, layout: AdminLayout },
+    { path: config.routes.admin, component: Dashboard, layout: AdminLayout },
 ];
 
 // Private routes

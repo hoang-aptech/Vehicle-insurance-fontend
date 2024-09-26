@@ -2,7 +2,7 @@ import { useState } from 'react';
 import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react/headless';
 import { CaretDownOutlined, CloseOutlined } from '@ant-design/icons';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 import Button from '~/components/Button';
 import logo from '~/assets/img/logo.png';
@@ -21,6 +21,7 @@ import {
 } from '~/components/Icon';
 import ukFlag from '~/assets/img/uk-flag.png';
 import style from './Header.module.scss';
+import config from '~/config';
 
 const cx = classNames.bind(style);
 
@@ -28,14 +29,18 @@ const menuHeaderMobileTablet = [
     {
         label: 'Buy insurance',
         children: [
-            { label: 'International travel', icon: <PlaneIcon width={32} height={32} /> },
-            { label: 'Automobile Liability', icon: <CarIcon width={32} height={32} /> },
-            { label: 'Automotive Material', icon: <CarComprehensiveIcon width={32} height={32} /> },
-            { label: 'Health', icon: <HealthIcon width={32} height={32} /> },
-            { label: 'Accident 24/24', icon: <AccidentIcon width={32} height={32} /> },
-            { label: 'Motorcycle Liability', icon: <BikeIcon width={32} height={32} /> },
-            { label: 'Private house', icon: <HomeInsuranceIcon width={32} height={32} /> },
-            { label: 'Health & Cancer', icon: <HealthCancerIcon width={32} height={32} /> },
+            { label: 'International travel', to: '', icon: <PlaneIcon width={32} height={32} /> },
+            { label: 'Automobile Liability', to: '', icon: <CarIcon width={32} height={32} /> },
+            {
+                label: 'Automotive Material',
+                to: config.routes.insuranceAutomotivePhysical,
+                icon: <CarComprehensiveIcon width={32} height={32} />,
+            },
+            { label: 'Health', to: '', icon: <HealthIcon width={32} height={32} /> },
+            { label: 'Accident 24/24', to: '', icon: <AccidentIcon width={32} height={32} /> },
+            { label: 'Motorcycle Liability', to: '', icon: <BikeIcon width={32} height={32} /> },
+            { label: 'Private house', to: '', icon: <HomeInsuranceIcon width={32} height={32} /> },
+            { label: 'Health & Cancer', to: '', icon: <HealthCancerIcon width={32} height={32} /> },
         ],
         rightBox: {
             icon: <DownOutlinedIcon />,
@@ -75,6 +80,7 @@ const showMenuChildrenValues = menuHeaderMobileTablet
     .map((i) => ({ label: i.label, show: false }));
 
 function Header() {
+    const navigate = useNavigate();
     const [showMenuResponsive, setShowMenuResponsive] = useState(false);
     const [showMenuChildren, setShowMenuChildren] = useState(showMenuChildrenValues);
 
@@ -92,7 +98,13 @@ function Header() {
         setShowMenuChildren(newShowMenuChildren);
     };
 
-    console.log(showMenuChildren);
+    const handleNavigate = (e, route) => {
+        e.preventDefault();
+        setShowMenuResponsive(false);
+        navigate(route);
+    };
+
+    // console.log(showMenuChildren);
 
     return (
         <div className={cx('header')}>
@@ -110,7 +122,12 @@ function Header() {
                                     className={cx('close-icon')}
                                     onClick={() => setShowMenuResponsive(false)}
                                 />
-                                <img src={logo} alt="logo" className={cx('logo')} />
+                                <img
+                                    src={logo}
+                                    alt="logo"
+                                    className={cx('logo')}
+                                    onClick={(e) => handleNavigate(e, config.routes.home)}
+                                />
                             </div>
                             <p className={cx('message')}>Login to enjoy member privileges!</p>
                             <ul className={cx('menu-items')}>
@@ -159,7 +176,13 @@ function Header() {
                                                                 <ul key={menu.label} className={cx('menu-list')}>
                                                                     {i.children.map((item, idx) => (
                                                                         <li key={idx}>
-                                                                            <Link to="/" className={cx('menu-link')}>
+                                                                            <Link
+                                                                                to={item.to}
+                                                                                className={cx('menu-link')}
+                                                                                onClick={(e) =>
+                                                                                    handleNavigate(e, item.to)
+                                                                                }
+                                                                            >
                                                                                 {item.icon}
                                                                                 <span className={cx('menu-title')}>
                                                                                     {item.label}
@@ -181,7 +204,12 @@ function Header() {
                         </div>
                         <div className={cx('blur')} onClick={() => setShowMenuResponsive(false)}></div>
                     </div>
-                    <img src={logo} alt="logo" className={cx('logo')} />
+                    <img
+                        src={logo}
+                        alt="logo"
+                        className={cx('logo')}
+                        onClick={(e) => handleNavigate(e, config.routes.home)}
+                    />
                     <nav className={cx('nav')}>
                         <ul className={cx('nav-list')}>
                             <li className={cx('nav-item')}>
@@ -205,7 +233,10 @@ function Header() {
                                                     </Link>
                                                 </li>
                                                 <li>
-                                                    <Link to="/" className={cx('menu-link')}>
+                                                    <Link
+                                                        to={config.routes.insuranceAutomotivePhysical}
+                                                        className={cx('menu-link')}
+                                                    >
                                                         <CarComprehensiveIcon />
                                                         <span className={cx('menu-title')}>Automotive Material</span>
                                                     </Link>

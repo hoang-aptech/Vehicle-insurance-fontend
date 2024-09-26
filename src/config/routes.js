@@ -2,9 +2,8 @@ const routes = {
     home: '/',
     login: '/login',
     private: '/private-test',
-    dashboard: '/dashboard',
-    homenew: '/homenew',
-    adminSidebar: '/admin/admin-sidebar',
+    insuranceAutomotivePhysical: '/insurance-automotive-physical',
+    admin: '/admin',
     userAdmin: '/admin/user-admin',
 };
 

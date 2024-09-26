@@ -7,7 +7,7 @@ import pviLogo from '../../assets/Images/pvi.png';
 import baominhLogo from '../../assets/Images/baominh_logo.png';
 import libertyLogo from '../../assets/Images/liberty_logo.png';
 import vniLogo from '../../assets/Images/pvi.png';
-import styles from './Home.module.scss';
+import styles from './InsuranceAutomotivePhysical.module.scss';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import car1 from '../../assets/Images/car-1.png';
 import car2 from '../../assets/Images/car-2.png';
@@ -250,7 +250,7 @@ const ContactForm = () => {
 const { Option } = Select;
 const { Panel } = Collapse;
 
-const HomePage = () => {
+const InsuranceAutomotivePhysical = () => {
     const [activeButton, setActiveButton] = useState('');
     const [isMenuVisible, setIsMenuVisible] = useState(true);
 
@@ -305,11 +305,11 @@ const HomePage = () => {
                         position: 'fixed',
                         maxWidth: '800px',
                         margin: 'auto',
-                        top: 0,
+                        top: 'var(--header-height)',
                         left: 0,
                         right: 0,
-                        zIndex: 2000,
-                        backgroundColor: 'white',
+                        zIndex: 1,
+                        backgroundColor: 'transparent',
                         padding: '10px 0',
                         display: activeButton === '4' ? 'none' : 'block',
                     }}
@@ -703,4 +703,4 @@ const HomePage = () => {
     );
 };
 
-export default HomePage;
+export default InsuranceAutomotivePhysical;
