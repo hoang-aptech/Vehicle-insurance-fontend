@@ -1,0 +1,7 @@
+.highlight-row {
+    background-color: #1b98e0 !important;
+    color: white; /* Màu chữ cho hàng được chọn */
+}
+.highlight-row:hover {
+    background-color: #1b98e0 !important;
+}
