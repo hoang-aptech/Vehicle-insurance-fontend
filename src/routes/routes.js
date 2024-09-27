@@ -6,6 +6,8 @@ import Private from '~/pages/Private';
 import Blog from '~/pages/Blog/Blog';
 import BlogDetails from '~/pages/Blog/BlogDetails';
 import InsuranceAutomotivePhysical from '~/pages/InsuranceAutomotivePhysical';
+import Indemnity from '~/pages/Indemnity/Indemnity';
+import Chat from '~/pages/ChatBot/Chat';
 
 // Admin
 import Dashboard from '~/pages/DashBoard';
@@ -21,10 +23,12 @@ const publicRoutes = [
 
 // Admin routes
 const adminRoutes = [
-    { path: config.routes.userAdmin, component: UserAdmin, layout: AdminLayout },
     { path: config.routes.admin, component: Dashboard, layout: AdminLayout },
+    { path: config.routes.userAdmin, component: UserAdmin, layout: AdminLayout },
     { path: config.routes.blog, component: Blog },
-    { path: config.routes.blogdetails, component: BlogDetails },
+    { path: config.routes.blogDetails, component: BlogDetails },
+    { path: config.routes.indemnity, component: Indemnity },
+    { path: config.routes.chat, component: Chat },
 ];
 
 // Private routes
