@@ -1,18 +1,52 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Modal } from 'antd';
 import { WechatOutlined } from '@ant-design/icons';
+import axios from 'axios';
 import styles from './Chat.module.scss';
 
 const ChatApp = () => {
     const [isChatVisible, setChatVisible] = useState(false);
-    const [messages, setMessages] = useState([
-        { text: 'Hello, how are you?', sender: 'left' },
-        { text: "I'm good, thanks! How about you?", sender: 'right' },
-    ]);
+    const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
+
+    const fetchMessages = async () => {
+        try {
+            const response = await axios.get('https://localhost:7289/api/Messages', {
+                params: { customersupportId: 1 },
+            });
+            const formattedMessages = response.data.map((msg) => ({
+                ...msg,
+                sender: msg.role === 'User' ? 'right' : 'left',
+            }));
+            setMessages(formattedMessages);
+        } catch (error) {
+            console.error('Lỗi khi nhận tin nhắn:', error);
+        }
+    };
+
+    const sendMessage = async (role) => {
+        const currentTime = new Date().toISOString();
+        const messageToSend = {
+            time: currentTime,
+            message: newMessage,
+            customersupportId: 1,
+            role: role,
+        };
+
+        try {
+            await axios.post('https://localhost:7289/api/Messages', messageToSend);
+            setMessages([...messages, { message: newMessage, sender: 'right', time: currentTime, role }]);
+            setNewMessage('');
+        } catch (error) {
+            console.error('Lỗi khi gửi tin nhắn:', error);
+        }
+    };
 
     const toggleChatWindow = () => {
         setChatVisible(!isChatVisible);
+        if (!isChatVisible) {
+            fetchMessages();
+        }
     };
 
     const handleCancel = () => {
@@ -21,14 +55,15 @@ const ChatApp = () => {
 
     const handleSendMessage = () => {
         if (newMessage.trim()) {
-            const messageToSend = { text: newMessage, sender: 'right' };
-
-            console.log('Sent Message:', messageToSend);
-
-            setMessages([...messages, messageToSend]);
-            setNewMessage('');
+            sendMessage('user');
         }
     };
+
+    useEffect(() => {
+        if (isChatVisible) {
+            fetchMessages();
+        }
+    }, [isChatVisible]);
 
     return (
         <div>
@@ -58,12 +93,25 @@ const ChatApp = () => {
                 <div className={styles['chat-body']}>
                     <div className={styles['messages']}>
                         {messages.map((message, index) => (
-                            <div key={index} className={`${styles['message']} ${styles[message.sender]}`}>
-                                <p>{message.text}</p>
+                            <div key={index} className={`${styles['message-container']} ${styles[message.sender]}`}>
+                                {message.sender === 'right' && (
+                                    <span className={`${styles['message-time']} ${styles['right-time']}`}>
+                                        {new Date(message.time).toLocaleTimeString()}
+                                    </span>
+                                )}
+                                <div className={`${styles['message']} ${styles[message.sender]}`}>
+                                    {message.message}
+                                </div>
+                                {message.sender === 'left' && (
+                                    <span className={`${styles['message-time']} ${styles['left-time']}`}>
+                                        {new Date(message.time).toLocaleTimeString()}
+                                    </span>
+                                )}
                             </div>
                         ))}
                     </div>
                 </div>
+
                 <div className={styles['chat-footer']}>
                     <input
                         type="text"
