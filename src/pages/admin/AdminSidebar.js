@@ -10,6 +10,7 @@ import {
     UserAddOutlined,
 } from '@ant-design/icons';
 import logo from './assetadmin/logo.png';
+import blogIcon from './assetadmin/ảnhblog.png'; // Import hình ảnh cho Blog
 import { Link } from 'react-router-dom';
 import './AdminSidebar.css';
 
@@ -19,32 +20,37 @@ const items = [
     {
         key: '1',
         label: <Link to="/admin">Dashboard</Link>,
-        icon: <HomeOutlined />,
+        icon: <HomeOutlined style={{ color: 'black' }} />,
     },
     {
         key: '2',
         label: <Link to="/admin/user-admin">Users</Link>,
-        icon: <UserOutlined />,
+        icon: <UserOutlined style={{ color: 'black' }} />,
     },
     {
         key: '3',
-        label: 'Billing',
-        icon: <BilibiliOutlined />,
+        label: <Link to="/admin/billing-admin">Billing</Link>,
+        icon: <BilibiliOutlined style={{ color: 'black' }} />,
     },
     {
         key: '4',
-        label: 'Advertisement',
-        icon: <UserAddOutlined />,
+        label: <Link to="/admin/adver-admin">Advertisement</Link>,
+        icon: <UserAddOutlined style={{ color: 'black' }} />,
     },
     {
         key: '5',
-        label: 'Insurance',
-        icon: <InsuranceOutlined />,
+        label: <Link to="/admin/insurance-admin">Insurance</Link>,
+        icon: <InsuranceOutlined style={{ color: 'black' }} />,
     },
     {
         key: '6',
-        label: 'Vehicle',
-        icon: <CarOutlined />,
+        label: <Link to="/admin/vehicle-admin">Vehicle</Link>,
+        icon: <CarOutlined style={{ color: 'black' }} />,
+    },
+    {
+        key: '7',
+        label: <Link to="/admin/blog-admin">Blog</Link>,
+        icon: <img src={blogIcon} alt="Blog Icon" style={{ width: '20px', height: '20px' }} />,
     },
 ];
 

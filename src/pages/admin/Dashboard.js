@@ -3,10 +3,10 @@ import { Card, Row, Col, Statistic } from 'antd';
 import { PieChart, Pie, Cell, BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid } from 'recharts';
 
 const dataPie = [
-    { name: 'Doanh thu A', value: 400 },
-    { name: 'Doanh thu B', value: 300 },
-    { name: 'Doanh thu C', value: 300 },
-    { name: 'Doanh thu D', value: 200 },
+    { name: 'sp A', value: 400 },
+    { name: 'sp B', value: 300 },
+    { name: 'sp C', value: 300 },
+    { name: 'sp D', value: 200 },
 ];
 
 const dataBar = [
