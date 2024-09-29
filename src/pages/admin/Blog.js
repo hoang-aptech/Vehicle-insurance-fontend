@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Layout, Table, Button, Form, Input, Modal, Row, Col, Upload, Popconfirm } from 'antd';
 import { EditOutlined, DeleteOutlined, LogoutOutlined, PlusCircleOutlined, UploadOutlined } from '@ant-design/icons';
+import { Editor } from '@tinymce/tinymce-react';
 
 const { Header, Content } = Layout;
 
@@ -14,6 +15,7 @@ const Blog = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
     const [filterName, setFilterName] = useState('');
+    const [description, setDescription] = useState('');
     const [fileList, setFileList] = useState([]);
     const [imageUrl, setImageUrl] = useState('');
 
@@ -22,39 +24,33 @@ const Blog = () => {
         const sampleData = [
             {
                 id: 1,
-                name: 'First Blog Post',
-                description: 'This is the first blog post.',
+                name: 'Blog Post #1',
+                description: 'This is the description of the first blog post.',
                 image_path: '/path/to/image1.jpg',
             },
             {
                 id: 2,
-                name: 'Second Blog Post',
-                description: 'This is the second blog post.',
+                name: 'Blog Post #2',
+                description: 'This is the description of the second blog post.',
                 image_path: '/path/to/image2.jpg',
             },
             {
                 id: 3,
-                name: 'Third Blog Post',
-                description: 'This is the third blog post.',
+                name: 'Blog Post #3',
+                description: 'This is the description of the third blog post.',
                 image_path: '/path/to/image3.jpg',
             },
             {
                 id: 4,
-                name: 'Fourth Blog Post',
-                description: 'This is the fourth blog post.',
+                name: 'Blog Post #4',
+                description: 'This is the description of the fourth blog post.',
                 image_path: '/path/to/image4.jpg',
             },
             {
                 id: 5,
-                name: 'Fifth Blog Post',
-                description: 'This is the fifth blog post.',
+                name: 'Blog Post #5',
+                description: 'This is the description of the fifth blog post.',
                 image_path: '/path/to/image5.jpg',
-            },
-            {
-                id: 6,
-                name: 'Sixth Blog Post',
-                description: 'This is the sixth blog post.',
-                image_path: '/path/to/image6.jpg',
             },
         ];
         setDataSource(sampleData);
@@ -62,32 +58,35 @@ const Blog = () => {
 
     const showModal = (post = null) => {
         setIsModalVisible(true);
+        setCurrentPost(post);
         setImageUrl(''); // Reset image URL
         setFileList([]); // Reset file list
-        setCurrentPost(post);
         if (post) {
             setIsEditMode(true);
             form.setFieldsValue(post);
+            setDescription(post.description); // Set description for TinyMCE
         } else {
             setIsEditMode(false);
             form.resetFields();
+            setDescription('');
         }
     };
 
     const handleOk = () => {
         form.validateFields().then((values) => {
+            const updatedPost = { ...values, description, image_path: imageUrl }; // Get the description and image path
             if (isEditMode && currentPost) {
                 // Sửa bài viết
                 setDataSource(
-                    dataSource.map((post) =>
-                        post.id === currentPost.id ? { ...post, ...values, image_path: imageUrl } : post,
-                    ),
+                    dataSource.map((post) => (post.id === currentPost.id ? { ...post, ...updatedPost } : post)),
                 );
             } else {
                 // Thêm bài viết
-                setDataSource([...dataSource, { id: dataSource.length + 1, ...values, image_path: imageUrl }]);
+                setDataSource([...dataSource, { id: dataSource.length + 1, ...updatedPost }]);
             }
             form.resetFields();
+            setDescription('');
+            setImageUrl('');
             setIsModalVisible(false);
         });
     };
@@ -105,10 +104,8 @@ const Blog = () => {
 
     const handleChange = ({ fileList }) => {
         setFileList(fileList);
-
         if (fileList.length > 0) {
             const file = fileList[fileList.length - 1].originFileObj;
-
             const reader = new FileReader();
             reader.onload = () => {
                 setImageUrl(reader.result);
@@ -122,7 +119,6 @@ const Blog = () => {
     const handleRemove = (file) => {
         const newFileList = fileList.filter((item) => item.uid !== file.uid);
         setFileList(newFileList);
-
         if (newFileList.length === 0) {
             setImageUrl('');
         } else {
@@ -154,6 +150,7 @@ const Blog = () => {
             title: 'Description',
             dataIndex: 'description',
             key: 'description',
+            render: (text) => <div dangerouslySetInnerHTML={{ __html: text }} />,
         },
         {
             title: 'Image',
@@ -234,16 +231,33 @@ const Blog = () => {
                         <Form.Item
                             name="name"
                             label="Name"
-                            rules={[{ required: true, message: 'Please input the blog name!' }]}
+                            rules={[{ required: true, message: 'Please input the blog post name!' }]}
                         >
                             <Input />
                         </Form.Item>
                         <Form.Item
-                            name="description"
                             label="Description"
                             rules={[{ required: true, message: 'Please input the description!' }]}
                         >
-                            <Input />
+                            <Editor
+                                apiKey="l1i9v8q0xwfkdzno0iih7p59m4dqchz5cdie0khvrozcztbg"
+                                initialValue={description}
+                                init={{
+                                    height: 300,
+                                    menubar: false,
+                                    plugins: [
+                                        'advlist autolink lists link image charmap print preview anchor',
+                                        'searchreplace visualblocks code fullscreen',
+                                        'insertdatetime media table paste code help wordcount',
+                                    ],
+                                    toolbar:
+                                        'undo redo | formatselect | ' +
+                                        'bold italic backcolor | alignleft aligncenter ' +
+                                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                                        'link image | removeformat | help',
+                                }}
+                                onEditorChange={(newDescription) => setDescription(newDescription)}
+                            />
                         </Form.Item>
                         <Form.Item label="Upload Image">
                             <Upload

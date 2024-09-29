@@ -1,9 +1,10 @@
 // Advertisement.js
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Button, Form, Input, Modal, Row, Col, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined, LogoutOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Layout, Table, Button, Form, Input, Modal, Row, Col, Popconfirm, Select } from 'antd';
+import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 
 const { Header, Content } = Layout;
+const { Option } = Select;
 
 const Advertisement = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -18,11 +19,41 @@ const Advertisement = () => {
     // Dữ liệu mẫu
     useEffect(() => {
         const sampleData = [
-            { id: 1, title: 'Ad #1', description: 'This is the first advertisement.', duration: '30 days' },
-            { id: 2, title: 'Ad #2', description: 'This is the second advertisement.', duration: '60 days' },
-            { id: 3, title: 'Ad #3', description: 'This is the third advertisement.', duration: '15 days' },
-            { id: 4, title: 'Ad #4', description: 'This is the fourth advertisement.', duration: '45 days' },
-            { id: 5, title: 'Ad #5', description: 'This is the fifth advertisement.', duration: '90 days' },
+            {
+                id: 1,
+                customerName: 'John Doe',
+                customerPhone: '0123456789',
+                customerEmail: 'john@example.com',
+                type: 'Car',
+            },
+            {
+                id: 2,
+                customerName: 'Jane Smith',
+                customerPhone: '0987654321',
+                customerEmail: 'jane@example.com',
+                type: 'Motorbike',
+            },
+            {
+                id: 3,
+                customerName: 'Alice Johnson',
+                customerPhone: '0112233445',
+                customerEmail: 'alice@example.com',
+                type: 'Car',
+            },
+            {
+                id: 4,
+                customerName: 'Bob Brown',
+                customerPhone: '0223344556',
+                customerEmail: 'bob@example.com',
+                type: 'Motorbike',
+            },
+            {
+                id: 5,
+                customerName: 'Charlie Green',
+                customerPhone: '0334455667',
+                customerEmail: 'charlie@example.com',
+                type: 'Car',
+            },
         ];
         setDataSource(sampleData);
     }, []);
@@ -62,7 +93,9 @@ const Advertisement = () => {
         setCurrentPage(1); // Reset to first page on filter change
     };
 
-    const filteredData = dataSource.filter((item) => item.title.toLowerCase().includes(filterName.toLowerCase()));
+    const filteredData = dataSource.filter((item) =>
+        item.customerName.toLowerCase().includes(filterName.toLowerCase()),
+    );
 
     const handleDelete = (id) => {
         setDataSource(dataSource.filter((ad) => ad.id !== id));
@@ -75,19 +108,24 @@ const Advertisement = () => {
             key: 'id',
         },
         {
-            title: 'Title',
-            dataIndex: 'title',
-            key: 'title',
+            title: 'Customer Name',
+            dataIndex: 'customerName',
+            key: 'customerName',
         },
         {
-            title: 'Description',
-            dataIndex: 'description',
-            key: 'description',
+            title: 'Customer Phone',
+            dataIndex: 'customerPhone',
+            key: 'customerPhone',
         },
         {
-            title: 'Duration',
-            dataIndex: 'duration',
-            key: 'duration',
+            title: 'Customer Email',
+            dataIndex: 'customerEmail',
+            key: 'customerEmail',
+        },
+        {
+            title: 'Type',
+            dataIndex: 'type',
+            key: 'type',
         },
         {
             title: 'Action',
@@ -137,7 +175,7 @@ const Advertisement = () => {
             <Content style={{ margin: '16px' }}>
                 <Row gutter={16} style={{ marginBottom: '16px' }}>
                     <Col span={8}>
-                        <Input placeholder="Filter by Title" value={filterName} onChange={handleFilterChange} />
+                        <Input placeholder="Filter by Customer Name" value={filterName} onChange={handleFilterChange} />
                     </Col>
                 </Row>
                 <Table
@@ -160,25 +198,35 @@ const Advertisement = () => {
                 >
                     <Form form={form} onFinish={handleOk} layout="vertical">
                         <Form.Item
-                            name="title"
-                            label="Title"
-                            rules={[{ required: true, message: 'Please input the advertisement title!' }]}
+                            name="customerName"
+                            label="Customer Name"
+                            rules={[{ required: true, message: 'Please input the customer name!' }]}
                         >
                             <Input />
                         </Form.Item>
                         <Form.Item
-                            name="description"
-                            label="Description"
-                            rules={[{ required: true, message: 'Please input the description!' }]}
+                            name="customerPhone"
+                            label="Customer Phone"
+                            rules={[{ required: true, message: 'Please input the customer phone!' }]}
                         >
                             <Input />
                         </Form.Item>
                         <Form.Item
-                            name="duration"
-                            label="Duration"
-                            rules={[{ required: true, message: 'Please input the duration!' }]}
+                            name="customerEmail"
+                            label="Customer Email"
+                            rules={[{ required: true, message: 'Please input the customer email!' }]}
                         >
                             <Input />
+                        </Form.Item>
+                        <Form.Item
+                            name="type"
+                            label="Type"
+                            rules={[{ required: true, message: 'Please select the type!' }]}
+                        >
+                            <Select placeholder="Select type">
+                                <Option value="Car">Car</Option>
+                                <Option value="Motorbike">Motorbike</Option>
+                            </Select>
                         </Form.Item>
                     </Form>
                 </Modal>

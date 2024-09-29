@@ -9,30 +9,30 @@ const Billing = () => {
     const [dataSource, setDataSource] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    const [currentBill, setCurrentBill] = useState(null);
+    const [currentBilling, setCurrentBilling] = useState(null);
     const [form] = Form.useForm();
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
-    const [filterName, setFilterName] = useState('');
+    const [filterPrice, setFilterPrice] = useState('');
 
     // Dữ liệu mẫu
     useEffect(() => {
         const sampleData = [
-            { id: 1, name: 'Bill #1', amount: 100, status: 'Paid' },
-            { id: 2, name: 'Bill #2', amount: 200, status: 'Unpaid' },
-            { id: 3, name: 'Bill #3', amount: 150, status: 'Paid' },
-            { id: 4, name: 'Bill #4', amount: 300, status: 'Unpaid' },
-            { id: 5, name: 'Bill #5', amount: 250, status: 'Paid' },
+            { id: 1, price: 100.0, customerInsuranceId: 101 },
+            { id: 2, price: 150.5, customerInsuranceId: 102 },
+            { id: 3, price: 200.75, customerInsuranceId: 103 },
+            { id: 4, price: 250.0, customerInsuranceId: 104 },
+            { id: 5, price: 300.25, customerInsuranceId: 105 },
         ];
         setDataSource(sampleData);
     }, []);
 
-    const showModal = (bill = null) => {
+    const showModal = (billing = null) => {
         setIsModalVisible(true);
-        setCurrentBill(bill);
-        if (bill) {
+        setCurrentBilling(billing);
+        if (billing) {
             setIsEditMode(true);
-            form.setFieldsValue(bill);
+            form.setFieldsValue(billing);
         } else {
             setIsEditMode(false);
             form.resetFields();
@@ -41,9 +41,13 @@ const Billing = () => {
 
     const handleOk = () => {
         form.validateFields().then((values) => {
-            if (isEditMode && currentBill) {
+            if (isEditMode && currentBilling) {
                 // Sửa hóa đơn
-                setDataSource(dataSource.map((bill) => (bill.id === currentBill.id ? { ...bill, ...values } : bill)));
+                setDataSource(
+                    dataSource.map((billing) =>
+                        billing.id === currentBilling.id ? { ...billing, ...values } : billing,
+                    ),
+                );
             } else {
                 // Thêm hóa đơn
                 setDataSource([...dataSource, { id: dataSource.length + 1, ...values }]);
@@ -58,14 +62,14 @@ const Billing = () => {
     };
 
     const handleFilterChange = (e) => {
-        setFilterName(e.target.value);
+        setFilterPrice(e.target.value);
         setCurrentPage(1); // Reset to first page on filter change
     };
 
-    const filteredData = dataSource.filter((item) => item.name.toLowerCase().includes(filterName.toLowerCase()));
+    const filteredData = dataSource.filter((item) => item.price.toString().includes(filterPrice));
 
     const handleDelete = (id) => {
-        setDataSource(dataSource.filter((bill) => bill.id !== id));
+        setDataSource(dataSource.filter((billing) => billing.id !== id));
     };
 
     const columns = [
@@ -75,19 +79,15 @@ const Billing = () => {
             key: 'id',
         },
         {
-            title: 'Name',
-            dataIndex: 'name',
-            key: 'name',
+            title: 'Price',
+            dataIndex: 'price',
+            key: 'price',
+            render: (text) => `$${text.toFixed(2)}`,
         },
         {
-            title: 'Amount',
-            dataIndex: 'amount',
-            key: 'amount',
-        },
-        {
-            title: 'Status',
-            dataIndex: 'status',
-            key: 'status',
+            title: 'Customer Insurance ID',
+            dataIndex: 'customerInsuranceId',
+            key: 'customerInsuranceId',
         },
         {
             title: 'Action',
@@ -100,7 +100,10 @@ const Billing = () => {
                         style={{ marginRight: 8, backgroundColor: '#32CD32', borderColor: '#32CD32' }}
                         onClick={() => showModal(record)}
                     />
-                    <Popconfirm title="Are you sure to delete this bill?" onConfirm={() => handleDelete(record.id)}>
+                    <Popconfirm
+                        title="Are you sure to delete this billing record?"
+                        onConfirm={() => handleDelete(record.id)}
+                    >
                         <Button
                             type="danger"
                             icon={<DeleteOutlined />}
@@ -124,7 +127,7 @@ const Billing = () => {
                 }}
             >
                 <Button type="primary" icon={<PlusCircleOutlined />} onClick={() => showModal()}>
-                    Add Bill
+                    Add Billing
                 </Button>
                 <h1 style={{ margin: 0 }}>Billing Management</h1>
                 <Button type="default" icon={<LogoutOutlined />}>
@@ -134,7 +137,7 @@ const Billing = () => {
             <Content style={{ margin: '16px' }}>
                 <Row gutter={16} style={{ marginBottom: '16px' }}>
                     <Col span={8}>
-                        <Input placeholder="Filter by Name" value={filterName} onChange={handleFilterChange} />
+                        <Input placeholder="Filter by Price" value={filterPrice} onChange={handleFilterChange} />
                     </Col>
                 </Row>
                 <Table
@@ -150,32 +153,25 @@ const Billing = () => {
                 />
 
                 <Modal
-                    title={isEditMode ? 'Edit Bill' : 'Add New Bill'}
+                    title={isEditMode ? 'Edit Billing Record' : 'Add New Billing Record'}
                     visible={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                 >
                     <Form form={form} onFinish={handleOk} layout="vertical">
                         <Form.Item
-                            name="name"
-                            label="Name"
-                            rules={[{ required: true, message: 'Please input the bill name!' }]}
+                            name="price"
+                            label="Price"
+                            rules={[{ required: true, message: 'Please input the price!' }]}
                         >
-                            <Input />
+                            <Input type="number" step="0.01" />
                         </Form.Item>
                         <Form.Item
-                            name="amount"
-                            label="Amount"
-                            rules={[{ required: true, message: 'Please input the amount!' }]}
+                            name="customerInsuranceId"
+                            label="Customer Insurance ID"
+                            rules={[{ required: true, message: 'Please input the customer insurance ID!' }]}
                         >
                             <Input type="number" />
-                        </Form.Item>
-                        <Form.Item
-                            name="status"
-                            label="Status"
-                            rules={[{ required: true, message: 'Please select the status!' }]}
-                        >
-                            <Input />
                         </Form.Item>
                     </Form>
                 </Modal>
