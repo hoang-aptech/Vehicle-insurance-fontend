@@ -169,6 +169,7 @@ const UserAdmin = () => {
                 <Button type="primary" icon={<UserAddOutlined />} onClick={() => setIsAddModalVisible(true)}>
                     Add User
                 </Button>
+                <h1 style={{ margin: 0 }}>User Management</h1>
                 <Button type="default" icon={<LogoutOutlined />}>
                     Logout
                 </Button>
