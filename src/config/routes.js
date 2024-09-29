@@ -7,6 +7,7 @@ const routes = {
     insuranceAutomotivePhysical: '/insurance-automotive-physical',
     indemnity: '/indemnity',
     chat: '/chat',
+    chat2: '/chat2',
 
     admin: '/admin',
     userAdmin: '/admin/user-admin',

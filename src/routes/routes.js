@@ -28,7 +28,8 @@ const publicRoutes = [
     { path: config.routes.blog, component: Blog },
     { path: config.routes.blogDetails, component: BlogDetails },
     { path: config.routes.indemnity, component: Indemnity },
-    { path: config.routes.chat, component: Chat },
+    { path: config.routes.chat, component: Chat, params: { chatId: 1, role: 'User' } },
+    { path: config.routes.chat2, component: Chat, params: { chatId: 1, role: 'Employee' } },
 ];
 
 // Admin routes
