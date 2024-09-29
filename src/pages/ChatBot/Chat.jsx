@@ -25,9 +25,13 @@ const ChatApp = () => {
     };
 
     const sendMessage = async (role) => {
-        const currentTime = new Date().toISOString();
+        const currentTimeUTC = new Date();
+        const timeZoneOffset = 7 * 60; // +7 hours converted to minutes
+        const currentTimePlus7 = new Date(currentTimeUTC.getTime() + timeZoneOffset * 60 * 1000);
+        const currentTimePlus7ISO = currentTimePlus7.toISOString().slice(0, 19);
+
         const messageToSend = {
-            time: currentTime,
+            time: currentTimePlus7ISO,
             message: newMessage,
             customersupportId: 1,
             role: role,
@@ -35,7 +39,7 @@ const ChatApp = () => {
 
         try {
             await axios.post('https://localhost:7289/api/Messages', messageToSend);
-            setMessages([...messages, { message: newMessage, sender: 'right', time: currentTime, role }]);
+            setMessages([...messages, { message: newMessage, sender: 'right', time: currentTimePlus7ISO, role }]);
             setNewMessage('');
         } catch (error) {
             console.error('Lỗi khi gửi tin nhắn:', error);
