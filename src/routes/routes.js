@@ -31,10 +31,10 @@ const publicRoutes = [
 const adminRoutes = [
     { path: config.routes.userAdmin, component: UserAdmin, layout: AdminLayout },
     { path: config.routes.admin, component: Dashboard, layout: AdminLayout },
-    { path: config.routes.billing, component: Billing, layout: AdminLayout },
-    { path: config.routes.vehicle, component: Vehicle, layout: AdminLayout },
-    { path: config.routes.advertisement, component: Advertisement, layout: AdminLayout },
-    { path: config.routes.insurance, component: Insurance, layout: AdminLayout },
+    { path: config.routes.billingAdmin, component: Billing, layout: AdminLayout },
+    { path: config.routes.vehicleAdmin, component: Vehicle, layout: AdminLayout },
+    { path: config.routes.advertisementAdmin, component: Advertisement, layout: AdminLayout },
+    { path: config.routes.insuranceAdmin, component: Insurance, layout: AdminLayout },
     { path: config.routes.blogAmin, component: BlogAmin, layout: AdminLayout },
 ];
 

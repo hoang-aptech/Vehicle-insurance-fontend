@@ -8,10 +8,10 @@ const routes = {
 
     admin: '/admin',
     userAdmin: '/admin/user-admin',
-    billing: '/admin/billing-admin',
-    vehicle: '/admin/vehicle-admin',
-    advertisement: '/admin/advertisement-admin',
-    insurance: '/admin/insurance-admin',
+    billingAdmin: '/admin/billing-admin',
+    vehicleAdmin: '/admin/vehicle-admin',
+    advertisementAdmin: '/admin/advertisement-admin',
+    insuranceAdmin: '/admin/insurance-admin',
     blogAmin: '/admin/blog-admin',
 };
 

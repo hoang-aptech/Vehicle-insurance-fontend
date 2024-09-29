@@ -1,254 +1,297 @@
 import React, { useState } from 'react';
-import { Typography, Button, Input, Row, Col, Card, Pagination } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { Row, Col, Typography, Form, Input, Button, Collapse, Card } from 'antd';
+import Truck from '../../assets/Images/tainan.jpg';
 import styles from './BlogDetails.module.scss';
-import Cute from '../../assets/Images/cute1.png';
-import blog1 from '../../assets/Images/blog1.png';
-import blog2 from '../../assets/Images/blog2.png';
-import blog3 from '../../assets/Images/blog3.png';
-import blog4 from '../../assets/Images/blog4.png';
-import blog5 from '../../assets/Images/blog5.png';
-import blog6 from '../../assets/Images/blog6.png';
-import blog7 from '../../assets/Images/blog7.png';
-import blog8 from '../../assets/Images/blog8.png';
-import blog9 from '../../assets/Images/blog9.png';
-import blog10 from '../../assets/Images/blog10.png';
-import blog11 from '../../assets/Images/blog11.png';
-import blog12 from '../../assets/Images/blog12.png';
-import blog13 from '../../assets/Images/blog13.png';
-import blog14 from '../../assets/Images/blog14.png';
-import blog15 from '../../assets/Images/blog15.png';
-import blog16 from '../../assets/Images/blog16.png';
-import blog17 from '../../assets/Images/blog17.png';
-import blog18 from '../../assets/Images/blog18.png';
-import blog19 from '../../assets/Images/blog19.png';
-import blog20 from '../../assets/Images/blog20.png';
-import blog21 from '../../assets/Images/blog21.png';
-import blog22 from '../../assets/Images/blog22.png';
-import blog23 from '../../assets/Images/blog23.png';
-import blog24 from '../../assets/Images/blog24.png';
+import Menu from '../../assets/Images/menu.png';
+import Si from '../../assets/Images/Si-CarCom.png';
+import { PhoneOutlined, MailOutlined, GlobalOutlined } from '@ant-design/icons';
+import { Link } from 'react-router-dom';
+import { SafetyCertificateOutlined } from '@ant-design/icons';
+import Ima1 from '../../assets/Images/ima1.png';
+import Ima2 from '../../assets/Images/imga2.png';
+import Ima3 from '../../assets/Images/imga3.png';
 
 const { Title, Paragraph } = Typography;
+const { Panel } = Collapse;
+
+// Hàm để lưu dữ liệu blog
+const getBlogData = () => {
+    return {
+        title: 'An toàn giao thông – Các điều tuyệt đối tránh sau khi lái xe ô tô gặp tai nạn giao thông',
+        dateCreate: '25/09/2024',
+        content: (
+            <>
+                <Title level={3} className={styles.mainTitle}>
+                    I. Những điều không nên làm khi gặp tai nạn giao thông
+                </Title>
+                <Paragraph className={styles.itemTitle}>
+                    <strong>1. Phớt lờ tình trạng sức khỏe của người liên quan trong vụ tai nạn</strong>
+                </Paragraph>
+                <Paragraph>Khi gặp tai nạn giao thông, tài xế thường bị ảnh hưởng tâm lý rất lớn.</Paragraph>
+                <Paragraph>
+                    Dù bạn là người gây tai nạn hay gặp tai nạn, trước tiên bạn cần giữ bình tĩnh rồi kiểm tra sức khỏe
+                    và cơ thể mình. Nguy hiểm nhất là những tình huống lái xe bị thương nhưng không cảm nhận được cơn
+                    đau và để cho bản thân bị mất nhiều máu.
+                </Paragraph>
+                <Paragraph>
+                    Một việc cần làm là cài sẵn số điện thoại khẩn cấp của cứu thương và người thân để đề phòng những
+                    tình huống tương tự. Tiếp đến chính là kiểm tra tình trạng sức khỏe của hành khách trên xe bạn và xe
+                    còn lại.
+                </Paragraph>
+                <Paragraph>
+                    Xe ô tô gặp tai nạn giao thông thường tìm ẩn rất nhiều những rủi ro nguy hiểm đến tính mạng, vì vậy
+                    bạn cần phải quan sát thật kĩ để nắm được tình trạng của những người khác trên xe và những rủi ro có
+                    thể xuất hiện chiếc xe bị tai nạn. Trong trường hợp cần phải sơ tán khỏi xe, hãy ưu tiên người chịu
+                    nhiều thương tích nhất.
+                </Paragraph>
+                <Paragraph>
+                    <img src={Truck} alt="tainan" className={styles.blogImage} />
+                    Nắm rõ những việc nên và không nên làm khi gặp tai nạn giao thông để đảm bảo an toàn và quyền lợi
+                    cho tất cả mọi người.
+                </Paragraph>
+                <Paragraph className={styles.itemTitle}>
+                    <strong>2. Tiếp cận xe ô tô gặp tai nạn trước khi quan sát</strong>
+                </Paragraph>
+                <Paragraph>
+                    Trong trường hợp bị va chạm nhẹ, bạn có thể chuyển đến bước kiểm tra tình trạng của xe. Còn trong
+                    tình huống xe bị hư hỏng nặng nề và bị rò rỉ nhiên liệu, điều đầu tiên bạn nên làm là hỗ trợ hành
+                    khách trên xe nên rời khỏi và giữ khoảng cách an toàn so với hiện trường vụ tai nạn.
+                </Paragraph>
+                <Paragraph className={styles.itemTitle}>
+                    <strong>3. Chậm trễ trong việc thông báo với phía nhà bảo hiểm</strong>
+                </Paragraph>
+                <Paragraph>
+                    Thường mỗi bên bảo hiểm vật chất xe ô tô sẽ quy định một mốc thời gian cố định mà bạn có thể thông
+                    báo cho phía công ty để được hỗ trợ bồi thường. Tuy nhiên, bạn nên thông báo với công ty bảo hiểm
+                    ngay thời điểm xảy ra tai nạn để nhận được các chỉ dẫn cụ thể nhất, đảm bảo bạn không mất quyền lợi
+                    bồi thường.
+                </Paragraph>
+                <Paragraph>
+                    Nếu như bạn tiếp tục sử dụng phương tiện bị hư hỏng do tai nạn thêm một khoảng thời gian rồi mới đem
+                    xe đi giám định thì công ty bảo hiểm hoàn toàn có quyền từ chối bồi thường cho bạn vì có thể xảy ra
+                    các tổn thất phát sinh trong quá trình bạn sử dụng.
+                </Paragraph>
+                <Paragraph className={styles.itemTitle}>
+                    <strong>4. Tự ý thay đổi hiện trường, dời xe ra khỏi hiện trường</strong>
+                </Paragraph>
+                <Paragraph>
+                    Quy tắc bất di bất dịch của bảo hiểm là phải giữ nguyên hiện trạng của vụ tai nạn. Tùy thuộc vào mức
+                    độ nghiêm trọng mà bạn có thể bị từ chối bảo hiểm TNDS ô tô, bảo hiểm vật chất xe ô tô và vụ tai nạn
+                    có thể được truy tố ở mức hình sự, thậm chí phạt hành chính lên đến 18 triệu đồng.
+                </Paragraph>
+                <Paragraph className={styles.itemTitle}>
+                    <strong>5. Bỏ qua bước ghi lại hình ảnh hiện trường vụ tai nạn</strong>
+                </Paragraph>
+                <Paragraph>
+                    Bạn nên ghi lại hình ảnh, video về vụ tai nạn càng chi tiết và đầy đủ càng tốt. Hãy lưu giữ cả thông
+                    tin về những người liên quan trong vụ tai nạn, có thể bao gồm tên, tuổi, số căn cước, bằng lái xe,…
+                    Các thông tin này cực kì cần thiết khi lập hồ sơ yêu cầu bồi thường với phía bảo hiểm vật chất xe ô
+                    tô cũng như phục vụ quá trình làm việc của công an giao thông nếu có.
+                </Paragraph>
+                <Title level={3} className={styles.mainTitle}>
+                    II. Sở hữu bảo hiểm ô tô để bảo vệ tài sản và sức khỏe bản thân
+                </Title>
+                <Paragraph>
+                    Như vậy, để có thể giải quyết một cách gọn gàng nhất trong tình huống xe ô tô gặp tai nạn giao thông
+                    chúng ta cần phải thông qua những bước trên. Saladin hi vọng rằng bài viết này đã cung cấp cho bạn
+                    những thông tin hữu ích nhất.
+                </Paragraph>
+                <Paragraph>Trong các vụ tai nạn, bảo hiểm xe ô tô sẽ phát huy tối đa tác dụng.</Paragraph>
+                {/* Nút MUA NGAY */}
+                <div className={styles.btn}>
+                    <img src={Si} alt="si" />
+                    <h6>Nhận báo giá từ 6 Công ty Bảo hiểm vật chất ô tô</h6>
+                    <Button type="primary" style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }}>
+                        MUA NGAY
+                    </Button>
+                </div>
+                <Title level={3} className={styles.mainTitle}>
+                    Các loại bảo hiểm ô tô
+                </Title>
+                <Paragraph>
+                    Các bảo hiểm Vật chất ô tô hay thân vỏ ô tô giúp bạn chi trả cho tổn thất về phương tiện. Nhiều hư
+                    hại gây ra bởi tai nạn có thể vô cùng tốn kém để khắc phục, lên đến hàng chục, hàng trăm triệu đồng.
+                </Paragraph>
+                <Paragraph>
+                    Bảo hiểm TNDS ô tô là loại bảo hiểm bắt buộc cho mọi tài xế theo Luật Giao thông, giúp chi trả chi
+                    phí y tế và đền bù cho bên thứ ba bị ảnh hưởng bởi tai nạn. Khi có chuyện không may xảy ra, bảo hiểm
+                    này sẽ giúp bạn giảm gánh nặng tài chính và tinh thần.
+                </Paragraph>
+                <Paragraph>
+                    Bảo hiểm tai nạn sẽ đền bù cho các thương tật đối với cơ thể bạn khi gặp tai nạn giao thông. Đây là
+                    loại bảo hiểm cần thiết để đảm bảo bạn hưởng được hỗ trợ y tế tốt nhất khi gặp nguy hiểm.
+                </Paragraph>
+                <Title level={3} className={styles.mainTitle}>
+                    Mua bảo hiểm ô tô tại Saladin
+                </Title>
+                <Paragraph>
+                    Bạn có thể tham khảo các sản phẩm bảo hiểm tại Saladin – nền tảng bảo hiểm cho người Việt. Saladin
+                    quy tụ các nhà bảo hiểm uy tín nhất thị trường và mang đến mức giá phải chăng.
+                </Paragraph>
+                <Paragraph>
+                    Lấy 6 báo giá bảo hiểm ô tô chỉ với vài cú click. Mua ngay các sản phẩm bảo hiểm trên điện thoại
+                    ngay tại nhà và thanh toán bằng chuyển khoản, quẹt thẻ, tiền mặt hoặc trả góp. Đội ngũ tư vấn viên
+                    chuyên nghiệp luôn túc trực và sẵn sàng giải đáp mọi thắc mắc của bạn. Tham khảo website hoặc liên
+                    hệ với Saladin ngay!
+                </Paragraph>
+                <Paragraph>
+                    Bài viết chỉ mang tính chất tham khảo. Vui lòng liên hệ với Saladin để được tư vấn và hỗ trợ tìm
+                    được các sản phẩm bảo hiểm phù hợp.
+                </Paragraph>
+                <Title level={3} className={styles.mainTitle}>
+                    MỌI NHU CẦU TƯ VẤN VÀ THẮC MẮC LIÊN HỆ
+                </Title>
+                <Row gutter={16}>
+                    <Col span={8}>
+                        <div className={`${styles.contactBox} ${styles.hotline}`}>
+                            <Title level={4}>Hotline</Title>
+                            <Paragraph>1900 638 454</Paragraph>
+                            <div className={styles.divider}></div>
+                            <PhoneOutlined className={styles.icon} />
+                        </div>
+                    </Col>
+                    <Col span={8}>
+                        <div className={`${styles.contactBox} ${styles.email}`}>
+                            <Title level={4}>Email</Title>
+                            <Paragraph>cs@saladin.vn</Paragraph>
+                            <div className={styles.divider}></div>
+                            <MailOutlined className={styles.icon} />
+                        </div>
+                    </Col>
+                    <Col span={8}>
+                        <div className={`${styles.contactBox} ${styles.website}`}>
+                            <Title level={4}>Website</Title>
+                            <Paragraph>saladin.vn</Paragraph>
+                            <div className={styles.divider}></div>
+                            <GlobalOutlined className={styles.icon} />
+                        </div>
+                    </Col>
+                </Row>
+            </>
+        ),
+    };
+};
 
 const data = [
     {
-        title: 'Bảo hiểm Thai sản độc quyền “Bên Mẹ, Bên Bé” nay đã đến bên bạn!',
+        title: 'Cách lái xe ô tô an toàn khi chở trẻ em - Các loại bảo hiểm ô tô cần thiết cho gia đình có con nhỏ',
         description:
-            'Saladin phối hợp với Bảo hiểm Bảo Minh cho ra mắt sản phẩm Bảo hiểm Thai sản độc quyền với mức phí chỉ từ 750.000 VND/năm cùng 6 lựa chọn […]',
+            'Cùng Saladin tìm hiểu cách lái xe ô tô an toàn khi chở trẻ em dưới đây bằng cách tránh các sai lầm nguy hiểm thường gặp, cũng như cách [...]',
         link: '#',
-        image: blog1,
+        image: Ima1,
     },
     {
-        title: 'An toàn giao thông – Các điều tuyệt đối tránh sau khi lái xe ô tô gặp tai nạn giao thông',
+        title: 'Giải đáp câu hỏi thường gặp về chi phí bảo hiểm thân vỏ xe ô tô',
         description:
-            'Bị va chạm hoặc gây tai nạn khi tham gia giao thông có lẽ là những tình huống tồi tệ nhất mà chúng ta thường có tâm lý né tránh […]',
+            'Bảo hiểm thân vỏ xe ô tô là một giải pháp thông minh và an toàn giúp bảo vệ bản thân và tài sản quý giá của bạn khỏi những [...]',
         link: '#',
-        image: blog2,
+        image: Ima2,
     },
     {
-        title: 'Quy trình hoàn tiền hủy chuyến khi mua bảo hiểm chuyến đi như thế nào?',
+        title: 'Nổ lốp xe có được bảo hiểm vật chất dành cho xe ô tô bồi thường?',
         description:
-            'Bạn đã lên kế hoạch cho chuyến du lịch mơ ước và háo hức chờ ngày khởi hành? Nhưng bạn đã cân nhắc hết những rủi ro bất ngờ có […]',
+            'Nổ lốp xe là hiện tượng thường xuyên xảy ra với xe ô tô do nhiều nguyên nhân chủ quan lẫn khách quan. Nổ lốp có thể là một sự [...]',
         link: '#',
-        image: blog3,
-    },
-    {
-        title: 'Luật giao thông 2024: Không tích hợp giấy phép lái xe trên VNeID có bị phạt?',
-        description:
-            'Từ ngày 01/07/2024, người dân tham gia giao thông có thể sử dụng ứng dụng VNeID để xuất trình giấy phép lái xe (GPLX) và giấy đăng ký xe (đăng […]',
-        link: '#',
-        image: blog4,
-    },
-    {
-        title: 'Kinh nghiệm du lịch Úc an toàn: Top những thành phố an toàn nhất ở Úc',
-        description:
-            'Úc là điểm đến khiến nhiều người mê say bởi thiên nhiên hùng vĩ, văn hóa đa dạng và nhiều thành phố xinh đẹp để khám phá. Nếu bạn đang […]',
-        link: '#',
-        image: blog5,
-    },
-    {
-        title: 'Cách tra cứu phạt nguội và đăng kiểm toàn quốc',
-        description:
-            'Bên cạnh việc xử phạt ngay tại thời điểm vi phạm, Luật Giao thông đường bộ còn quy định hình thức xử lý “phạt nguội” đối với một số hành […]',
-        link: '#',
-        image: blog6,
-    },
-    {
-        title: 'Những lưu ý khi mua bảo hiểm trợ cấp nằm viện',
-        description:
-            'Bảo hiểm trợ cấp nằm viện không chỉ bảo vệ tài chính của bạn khi phải nhập viện mà còn giúp bạn an tâm và tiện lợi trong các trường […]',
-        link: '#',
-        image: blog7,
-    },
-    {
-        title: 'Điều kiện để được mua bảo hiểm cho người lớn tuổi',
-        description:
-            'Vấn đề sức khỏe và bảo hiểm du lịch đã trở thành một phần không thể thiếu trong cuộc sống của mỗi người. Tuy nhiên, khi đến tuổi già, việc […]',
-        link: '#',
-        image: blog8,
-    },
-    {
-        title: 'Mẹ bầu không có bảo hiểm y tế nên mua bảo hiểm thai sản thế nào?',
-        description:
-            'Trong một giai đoạn cần nhiều sự chăm sóc như thai kỳ, việc mẹ bầu sở hữu một chương trình bảo hiểm thai sản đáng tin cậy sẽ đảm bảo […]',
-        link: '#',
-        image: blog9,
-    },
-    {
-        title: 'Giá bảo hiểm thân vỏ ô tô khác nhau giữa các loại xe như thế nào và làm sao lấy báo giá trực tuyến?',
-        description:
-            'Trong thị trường bảo hiểm ô tô, giá bảo hiểm thân vỏ luôn được các chủ xe xem xét, bởi đây là bộ phận rất dễ hư hỏng từ các […]',
-        link: '#',
-        image: blog10,
-    },
-    {
-        title: 'Những điều cần biết về giá mua bảo hiểm thân vỏ ô tô cao cấp',
-        description:
-            'Khi sở hữu một chiếc xe ô tô cao cấp, việc mua bảo hiểm thân vỏ là cần thiết để đảm bảo an toàn cho chiếc xe của chủ xe, […]',
-        link: '#',
-        image: blog11,
-    },
-    {
-        title: 'Phí bảo hiểm thân vỏ ô tô cho xe kinh doanh tính thế nào?',
-        description:
-            'Hãy cùng khám phá cách tính phí bảo hiểm thân vỏ ô tô và ảnh hưởng của bảo hiểm này đối với doanh nghiệp kinh doanh xe ô tô. Đối […]',
-        link: '#',
-        image: blog12,
-    },
-    {
-        title: 'Làm thế nào để định giá xe để tính phí bảo hiểm vật chất xe ô tô chuẩn nhất?',
-        description:
-            'Saladin phối hợp với Bảo hiểm Bảo Minh cho ra mắt sản phẩm Bảo hiểm Thai sản độc quyền với mức phí chỉ từ 750.000 VND/năm cùng 6 lựa chọn […]',
-        link: '#',
-        image: blog13,
-    },
-    {
-        title: '11 điều sản phụ cần làm trước khi mang thai',
-        description:
-            'Bị va chạm hoặc gây tai nạn khi tham gia giao thông có lẽ là những tình huống tồi tệ nhất mà chúng ta thường có tâm lý né tránh […]',
-        link: '#',
-        image: blog14,
-    },
-    {
-        title: 'Các loại bảo hiểm ô tô: Bảo hiểm ô tô 2 chiều là gì và cách mua thế nào?',
-        description:
-            'Bạn đã lên kế hoạch cho chuyến du lịch mơ ước và háo hức chờ ngày khởi hành? Nhưng bạn đã cân nhắc hết những rủi ro bất ngờ có […]',
-        link: '#',
-        image: blog15,
-    },
-    {
-        title: 'Làm gì khi mất giấy chứng nhận kiểm định ô tô?',
-        description:
-            'Từ ngày 01/07/2024, người dân tham gia giao thông có thể sử dụng ứng dụng VNeID để xuất trình giấy phép lái xe (GPLX) và giấy đăng ký xe (đăng […]',
-        link: '#',
-        image: blog16,
-    },
-    {
-        title: 'Một số biến chứng thai sản hay gặp trong quá trình mang thai',
-        description:
-            'Úc là điểm đến khiến nhiều người mê say bởi thiên nhiên hùng vĩ, văn hóa đa dạng và nhiều thành phố xinh đẹp để khám phá. Nếu bạn đang […]',
-        link: '#',
-        image: blog17,
-    },
-    {
-        title: 'Kinh nghiệm du lịch Đài Loan: Bí kíp tham quan vườn quốc gia Taroko',
-        description:
-            'Bên cạnh việc xử phạt ngay tại thời điểm vi phạm, Luật Giao thông đường bộ còn quy định hình thức xử lý “phạt nguội” đối với một số hành […]',
-        link: '#',
-        image: blog18,
-    },
-    {
-        title: 'Mua bảo hiểm cho xe ô tô điện cần lưu ý những gì?',
-        description:
-            'Bảo hiểm trợ cấp nằm viện không chỉ bảo vệ tài chính của bạn khi phải nhập viện mà còn giúp bạn an tâm và tiện lợi trong các trường […]',
-        link: '#',
-        image: blog19,
-    },
-    {
-        title: 'So sánh bảo hiểm du lịch quốc tế: Nên mua bảo hiểm du lịch giá rẻ hay giá cao?',
-        description:
-            'Vấn đề sức khỏe và bảo hiểm du lịch đã trở thành một phần không thể thiếu trong cuộc sống của mỗi người. Tuy nhiên, khi đến tuổi già, việc […]',
-        link: '#',
-        image: blog20,
-    },
-    {
-        title: 'Các trường hợp loại trừ trong bảo hiểm vận chuyển nội địa đối với người gửi và người nhận',
-        description:
-            'Trong một giai đoạn cần nhiều sự chăm sóc như thai kỳ, việc mẹ bầu sở hữu một chương trình bảo hiểm thai sản đáng tin cậy sẽ đảm bảo […]',
-        link: '#',
-        image: blog21,
-    },
-    {
-        title: 'Luật giao thông 2024 – Cập nhật Luật Đường bộ và Luật Trật tự, an toàn giao thông đường bộ từ 27/6/2024',
-        description:
-            'Trong thị trường bảo hiểm ô tô, giá bảo hiểm thân vỏ luôn được các chủ xe xem xét, bởi đây là bộ phận rất dễ hư hỏng từ các […]',
-        link: '#',
-        image: blog22,
-    },
-    {
-        title: 'Cháy xe máy điện có được bảo hiểm xe máy bồi thường không?',
-        description:
-            'Khi sở hữu một chiếc xe ô tô cao cấp, việc mua bảo hiểm thân vỏ là cần thiết để đảm bảo an toàn cho chiếc xe của chủ xe, […]',
-        link: '#',
-        image: blog23,
-    },
-    {
-        title: '8 trường hợp bảo hiểm sức khỏe không chi trả',
-        description:
-            'Hãy cùng khám phá cách tính phí bảo hiểm thân vỏ ô tô và ảnh hưởng của bảo hiểm này đối với doanh nghiệp kinh doanh xe ô tô. Đối […]',
-        link: '#',
-        image: blog24,
+        image: Ima3,
     },
 ];
 
 const { Meta } = Card;
 
 const BlogDetails = () => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 12;
+    const blogData = getBlogData();
+    const [isCollapseVisible, setIsCollapseVisible] = useState(false);
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
-
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
+    const handleToggle = () => {
+        setIsCollapseVisible(!isCollapseVisible);
     };
 
+    const onFinish = (values) => {
+        console.log('Received values:', values);
+        // logic chưa nghĩ ra
+    };
+
+    const { TextArea } = Input;
+
     return (
-        <div className={styles.blogDetailsContainer}>
-            <div className={styles.blogHeader}>
-                <Title level={1} style={{ fontSize: '16px', color: 'green' }}>
+        <div className={styles.blogContainer}>
+            <div className={styles.Link}>
+                <Link to="/blog" style={{ marginRight: '10px', color: 'green', textDecoration: 'none' }}>
                     Saladin Blog
-                </Title>
-                <Title level={2} style={{ fontSize: '34px' }}>
-                    Tự tin sống, tự tin yêu thương cùng Saladin
-                </Title>
+                </Link>
+                /
+                <Link to="/blog/insurance" style={{ marginLeft: '10px', color: 'green', textDecoration: 'none' }}>
+                    Bảo hiểm ô tô
+                </Link>
             </div>
-            <div className={styles.blogContent}>
-                <div className={styles.blogBanner}>
-                    <div className={styles.bannerText}>
-                        <Title level={3} style={{ color: 'white', fontSize: '34px' }}>
-                            Từ điển bảo hiểm
-                        </Title>
-                        <Paragraph style={{ color: 'white', fontSize: '20px' }}>
-                            Bạn thắc mắc về ý nghĩa của các thuật ngữ bảo hiểm? Hãy để Saladin giúp bạn!
-                        </Paragraph>
-                        <Button type="primary" size="large" className={styles.btn}>
-                            Khám phá
+            <Title level={1} className={styles.blogTitle}>
+                {blogData.title}
+            </Title>
+            <Title level={5} className={styles.blogDate}>
+                {blogData.dateCreate}
+            </Title>
+
+            <Row gutter={16}>
+                {/* Phần MỤC LỤC (70% bên trái) */}
+                <Col span={17}>
+                    <div style={{ backgroundColor: '#f6fefa', padding: '10px', marginBottom: '20px' }}>
+                        <Button onClick={handleToggle} style={{ maxWidth: '44px', height: '37px', marginLeft: '5px' }}>
+                            <img src={Menu} alt="menu" />
                         </Button>
+                        <Collapse activeKey={isCollapseVisible ? '1' : ''} bordered={false}>
+                            <Panel
+                                header="Mục lục"
+                                key="1"
+                                showArrow={false}
+                                style={{ fontSize: '18px', fontWeight: 'bold' }}
+                            >
+                                <ul style={{ marginLeft: '-40px', fontSize: '12px' }}>
+                                    <p>I. Những điều không nên làm khi gặp tai nạn giao thông</p>
+                                    <p>II. Sở hữu bảo hiểm ô tô để bảo vệ tài sản và sức khỏe bản thân</p>
+                                </ul>
+                            </Panel>
+                        </Collapse>
                     </div>
-                    <div className={styles.bannerImage}>
-                        <img src={Cute} alt="Girl with question mark" />
-                    </div>
-                </div>
+                    {/* Nội dung chính */}
+                    <Paragraph>{blogData.content}</Paragraph>
+                </Col>
 
-                <div className={styles.searchBar}>
-                    <Input placeholder="Tìm kiếm bài báo" suffix={<SearchOutlined />} />
-                </div>
+                {/* Sidebar (30% bên phải) */}
+                <Col span={7} className={styles.sidebar}>
+                    <Paragraph>sidebar</Paragraph>
+                </Col>
+            </Row>
 
-                <Row gutter={[16, 16]} style={{ marginTop: '40px' }}>
-                    {currentItems.map((item) => (
+            {/* Comment Form */}
+            <div style={{ margin: '20px 0' }}>
+                <Typography.Title level={3}>Để lại bình luận của bạn</Typography.Title>
+                <Form name="comment" onFinish={onFinish} layout="vertical" initialValues={{ remember: true }}>
+                    <Form.Item
+                        name="name"
+                        label="Tên của bạn"
+                        rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
+                    >
+                        <Input placeholder="Nhập tên của bạn" />
+                    </Form.Item>
+                    <Form.Item
+                        name="comment"
+                        label="Nội dung bình luận"
+                        rules={[{ required: true, message: 'Vui lòng nhập bình luận!' }]}
+                    >
+                        <TextArea rows={4} placeholder="Nhập bình luận của bạn" />
+                    </Form.Item>
+                    <Form.Item>
+                        <Button type="primary" htmlType="submit">
+                            Gửi bình luận
+                        </Button>
+                    </Form.Item>
+                </Form>
+            </div>
+
+            <div>
+                <h2 style={{ textAlign: 'center' }}>Bài viết liên quan</h2>
+                <Row gutter={[16, 16]}>
+                    {data.map((item) => (
                         <Col xs={24} sm={12} md={8} key={item.title}>
                             <Card
                                 hoverable
@@ -261,18 +304,13 @@ const BlogDetails = () => {
                                 }
                             >
                                 <Meta title={<a href={item.link}>{item.title}</a>} description={item.description} />
+                                <div style={{ marginTop: 16 }}>
+                                    <SafetyCertificateOutlined style={{ marginRight: 8 }} /> BẢO HIỂM Ô TÔ
+                                </div>
                             </Card>
                         </Col>
                     ))}
                 </Row>
-
-                <Pagination
-                    current={currentPage}
-                    pageSize={itemsPerPage}
-                    total={data.length}
-                    onChange={handlePageChange}
-                    style={{ marginTop: '20px', textAlign: 'center' }}
-                />
             </div>
         </div>
     );

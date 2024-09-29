@@ -13,43 +13,44 @@ import logo from './assetadmin/logo.png';
 import blogIcon from './assetadmin/ảnhblog.png'; // Import hình ảnh cho Blog
 import { Link } from 'react-router-dom';
 import './AdminSidebar.css';
+import config from '~/config';
 
 const { Sider } = Layout;
 
 const items = [
     {
         key: '1',
-        label: <Link to="/admin">Dashboard</Link>,
+        label: <Link to={config.routes.admin}>Dashboard</Link>,
         icon: <HomeOutlined style={{ color: 'black' }} />,
     },
     {
         key: '2',
-        label: <Link to="/admin/user-admin">Users</Link>,
+        label: <Link to={config.routes.userAdmin}>Users</Link>,
         icon: <UserOutlined style={{ color: 'black' }} />,
     },
     {
         key: '3',
-        label: <Link to="/admin/billing-admin">Billing</Link>,
+        label: <Link to={config.routes.billingAdmin}>Billing</Link>,
         icon: <BilibiliOutlined style={{ color: 'black' }} />,
     },
     {
         key: '4',
-        label: <Link to="/admin/adver-admin">Advertisement</Link>,
+        label: <Link to={config.routes.advertisementAdmin}>Advertisement</Link>,
         icon: <UserAddOutlined style={{ color: 'black' }} />,
     },
     {
         key: '5',
-        label: <Link to="/admin/insurance-admin">Insurance</Link>,
+        label: <Link to={config.routes.insuranceAdmin}>Insurance</Link>,
         icon: <InsuranceOutlined style={{ color: 'black' }} />,
     },
     {
         key: '6',
-        label: <Link to="/admin/vehicle-admin">Vehicle</Link>,
+        label: <Link to={config.routes.vehicleAdmin}>Vehicle</Link>,
         icon: <CarOutlined style={{ color: 'black' }} />,
     },
     {
         key: '7',
-        label: <Link to="/admin/blog-admin">Blog</Link>,
+        label: <Link to={config.routes.blogAmin}>Blog</Link>,
         icon: <img src={blogIcon} alt="Blog Icon" style={{ width: '20px', height: '20px' }} />,
     },
 ];
