@@ -1,0 +1,91 @@
+.footer {
+    color: white;
+    background-color: #0f0f0f;
+
+    .title {
+        margin-bottom: 24px;
+        padding-bottom: 24px;
+        font-size: 2rem;
+        font-weight: 500;
+        border-bottom: 1px solid #e5e7eb;
+    }
+}
+
+.wrapper {
+    margin: 0 auto;
+    padding: 64px 0 45px;
+    max-width: 1136px;
+}
+
+.locations {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.location {
+    margin-bottom: 8px;
+}
+
+.location-title {
+    margin-bottom: 8px;
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: #f0f0f0;
+}
+
+.location-address {
+    font-size: 1.4rem;
+    line-height: 2rem;
+    opacity: 0.7;
+}
+
+.company-info {
+    margin-top: 64px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.company-details {
+    font-size: 1.6rem;
+    width: 352px;
+
+    .logo {
+        margin-bottom: 20px;
+        width: 114px;
+        border-radius: 25px;
+    }
+}
+
+.socials {
+    color: #fff;
+}
+
+.item-box {
+}
+
+.item-box div {
+    margin-bottom: 24px;
+}
+
+.item-box h5 {
+    font-size: 1.6rem;
+    font-weight: bold;
+    color: white;
+    margin-bottom: 16px;
+}
+
+.item-box a {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 1.4rem;
+    color: white;
+    opacity: 0.7;
+    text-decoration: none;
+}
+
+.item-box a:hover {
+    opacity: 1;
+}

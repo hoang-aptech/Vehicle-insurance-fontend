@@ -145,7 +145,7 @@ function Header() {
                                                 <>
                                                     <div
                                                         className={cx('menu-item-wrapper', {
-                                                            ['have-children']: i.children,
+                                                            'have-children': i.children,
                                                         })}
                                                         onClick={() => handleShowMenuChildren(i.label)}
                                                     >
