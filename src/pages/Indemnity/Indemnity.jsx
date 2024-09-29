@@ -5,6 +5,7 @@ import Icon1 from '../../assets/Images/icon-1.jpg';
 import Icon2 from '../../assets/Images/icon-2.jpg';
 import { MailOutlined, PhoneOutlined } from '@ant-design/icons';
 import styles from './Indemnity.module.scss';
+import Chat from '../ChatBot/Chat';
 
 const { Title, Paragraph } = Typography;
 
@@ -124,6 +125,7 @@ const Indemnity = () => {
                     </Form.Item>
                 </Form>
             </Modal>
+            <Chat />
         </>
     );
 };

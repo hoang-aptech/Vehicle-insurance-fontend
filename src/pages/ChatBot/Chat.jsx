@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal } from 'antd';
-import { WechatOutlined } from '@ant-design/icons';
+import {
+    WechatOutlined,
+    MessageOutlined,
+    PhoneOutlined,
+    CloseCircleOutlined,
+    FacebookOutlined,
+} from '@ant-design/icons';
 import axios from 'axios';
 import styles from './Chat.module.scss';
 
 const ChatApp = () => {
-    const [isChatVisible, setChatVisible] = useState(true);
+    const [isChatVisible, setChatVisible] = useState(false);
+    const [isIconVisible, setIconVisible] = useState(false);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
 
@@ -26,7 +33,7 @@ const ChatApp = () => {
 
     const sendMessage = async (role) => {
         const currentTimeUTC = new Date();
-        const timeZoneOffset = 7 * 60; // +7 hours converted to minutes
+        const timeZoneOffset = 7 * 60;
         const currentTimePlus7 = new Date(currentTimeUTC.getTime() + timeZoneOffset * 60 * 1000);
         const currentTimePlus7ISO = currentTimePlus7.toISOString().slice(0, 19);
 
@@ -46,15 +53,18 @@ const ChatApp = () => {
         }
     };
 
-    const toggleChatWindow = () => {
-        setChatVisible(!isChatVisible);
-        if (!isChatVisible) {
-            fetchMessages();
-        }
+    const toggleIconVisibility = () => {
+        setIconVisible(!isIconVisible);
+    };
+
+    const showChatWindow = () => {
+        setChatVisible(true);
+        fetchMessages();
     };
 
     const handleCancel = () => {
         setChatVisible(false);
+        setIconVisible(false);
     };
 
     const handleSendMessage = () => {
@@ -71,12 +81,45 @@ const ChatApp = () => {
 
     return (
         <div>
-            <Button
-                type="primary"
-                icon={<WechatOutlined />}
-                onClick={toggleChatWindow}
-                style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}
-            />
+            {!isIconVisible ? (
+                <Button
+                    type="primary"
+                    icon={<WechatOutlined />}
+                    onClick={toggleIconVisibility}
+                    style={{
+                        position: 'fixed',
+                        bottom: '20px',
+                        right: '20px',
+                        zIndex: 1000,
+                        backgroundColor: '#14c560',
+                    }}
+                />
+            ) : (
+                <div style={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
+                    <Button
+                        type="primary"
+                        icon={<MessageOutlined />}
+                        onClick={showChatWindow}
+                        style={{ marginRight: '10px', backgroundColor: '#14c560' }}
+                    />
+                    <Button
+                        type="primary"
+                        icon={<PhoneOutlined />}
+                        style={{ marginRight: '10px', backgroundColor: '#14c560' }}
+                    />
+                    <Button
+                        type="primary"
+                        icon={<FacebookOutlined />}
+                        style={{ marginRight: '10px', backgroundColor: '#14c560' }}
+                    />
+                    <Button
+                        type="primary"
+                        icon={<CloseCircleOutlined />}
+                        onClick={handleCancel}
+                        style={{ backgroundColor: '#14c560' }}
+                    />
+                </div>
+            )}
 
             <Modal
                 open={isChatVisible}

@@ -9,6 +9,7 @@ import Blog, { BlogDetails } from '~/pages/Blog';
 import InsuranceAutomotivePhysical from '~/pages/InsuranceAutomotivePhysical';
 import Indemnity from '~/pages/Indemnity/Indemnity';
 import Chat from '~/pages/ChatBot/Chat';
+import Contract from '~/pages/Contract/Contract';
 
 // Admin
 import Dashboard from '~/pages/DashBoard';
@@ -29,6 +30,7 @@ const publicRoutes = [
     { path: config.routes.blogDetails, component: BlogDetails },
     { path: config.routes.indemnity, component: Indemnity },
     { path: config.routes.chat, component: Chat },
+    { path: config.routes.contract, component: Contract },
 ];
 
 // Admin routes
