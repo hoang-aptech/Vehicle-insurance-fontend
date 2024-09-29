@@ -1,5 +1,5 @@
-import React from 'react';
-import { Row, Col, Card, Tag, Carousel, Typography } from 'antd';
+import React, { useState } from 'react';
+import { Row, Col, Card, Tag, Carousel, Typography, Form, Input, Select, Button } from 'antd';
 import styles from './Home.module.scss';
 import Hero from '../../assets/Images/hero_mascot.png';
 import carou1 from '../../assets/Images/anh1.png';
@@ -31,6 +31,10 @@ import lg15 from '../../assets/Images/gl16.png';
 import lg16 from '../../assets/Images/gl17.png';
 import lg17 from '../../assets/Images/gl18.png';
 import lg18 from '../../assets/Images/gl19.png';
+import { PhoneOutlined, MailOutlined } from '@ant-design/icons';
+import QrZalo from '../../assets/Images/qr.jpg';
+import QrFace from '../../assets/Images/prface.png';
+import MascotSp from '../../assets/Images/mascot_support.png';
 
 const carouselImages = [carou1, carou2, carou3, carou4, carou5, carou6, carou7];
 
@@ -115,6 +119,137 @@ const partnersData = [
     },
 ];
 
+// form của trang 7
+const ContactForm = () => {
+    const [form] = Form.useForm();
+    const [success, setSuccess] = useState(false);
+    const onFinish = (values) => {
+        console.log('Success:', values);
+        console.log('Submitted values:', values);
+        setSuccess(true);
+        form.resetFields();
+    };
+
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
+
+    return (
+        <Row gutter={[32, 32]} style={{ maxWidth: '1050px', margin: 'auto', marginTop: '32px', marginBottom: '40px' }}>
+            <Col span={24}>
+                <h1 style={{ textAlign: 'center', fontSize: '3rem', color: '#4caf50' }}>Tư vấn và hỗ trợ 24/7</h1>
+                <p style={{ textAlign: 'center', minWidth: '600px', margin: 'auto' }}>
+                    Đội ngũ Saladin luôn sẵn sàng hỗ trợ bạn trong suốt hành trình mua và sử dụng bảo hiểm.
+                </p>
+            </Col>
+            <Col xs={24} sm={12} md={12}>
+                <div
+                    style={{
+                        padding: '20px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        textAlign: 'center',
+                    }}
+                >
+                    <h3>Thông tin bổ sung</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', paddingTop: '20px' }}>
+                        <PhoneOutlined
+                            style={{
+                                marginRight: '8px',
+                                background: '#4caf50',
+                                padding: '14px',
+                                color: 'white',
+                                borderRadius: '4px',
+                            }}
+                        />
+                        <p style={{ marginTop: '-20px' }}>Hàng 1: Thông tin 1</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <MailOutlined
+                            style={{
+                                marginRight: '8px',
+                                background: '#4caf50',
+                                padding: '14px',
+                                color: 'white',
+                                borderRadius: '4px',
+                            }}
+                        />
+                        <p style={{ marginTop: '-20px' }}>Hàng 2: Thông tin 2</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <img src={QrZalo} alt="qr zalo" style={{ width: '50px', marginRight: '8px' }} />
+                        <p style={{ marginTop: '-20px' }}>Hàng 3: Thông tin 3</p>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <img src={QrFace} alt="qr face" style={{ width: '50px', marginRight: '8px' }} />
+                        <p style={{ marginTop: '-20px' }}>Hàng 4: Thông tin 4</p>
+                    </div>
+                </div>
+            </Col>
+            <Col xs={24} sm={12} md={12}>
+                <div
+                    className="contact-form"
+                    style={{ padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}
+                >
+                    <Row justify="center" align="middle" style={{ height: '100%' }}>
+                        <Col span={24}>
+                            <Form
+                                form={form}
+                                name="basic"
+                                layout="vertical"
+                                onFinish={onFinish}
+                                onFinishFailed={onFinishFailed}
+                                initialValues={{
+                                    remember: true,
+                                }}
+                            >
+                                <h2>Nhận tư vấn ngay</h2>
+                                <p>Để lại thông tin để nhận tư vấn và ưu đãi từ Saladin nhé</p>
+                                <Form.Item
+                                    label="Họ và tên"
+                                    name="name"
+                                    rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item
+                                    label="Số điện thoại"
+                                    name="phone"
+                                    rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
+                                >
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item label="Email" name="email">
+                                    <Input />
+                                </Form.Item>
+                                <Form.Item label="Sản phẩm mà bạn quan tâm" name="product">
+                                    <Select>
+                                        <Option value="bao-hiem-xe-hoi">Bảo hiểm vật chất xe ô tô</Option>
+                                    </Select>
+                                </Form.Item>
+                                <Form.Item>
+                                    <Button type="primary" htmlType="submit" style={{ background: '#4caf50' }}>
+                                        Nhận tư vấn
+                                    </Button>
+                                </Form.Item>
+                                {success && (
+                                    <div className="success-message">
+                                        Cảm ơn bạn đã liên hệ! Chúng tôi sẽ liên lạc với bạn sớm nhất có thể.
+                                    </div>
+                                )}
+                            </Form>
+                        </Col>
+                    </Row>
+                </div>
+            </Col>
+            <img src={MascotSp} alt="" style={{ maxWidth: '800px', height: '30vh', margin: '0 auto' }}></img>
+        </Row>
+    );
+};
+
+const { Option } = Select;
+
 const { Title, Paragraph } = Typography;
 
 const Home = () => {
@@ -190,7 +325,7 @@ const Home = () => {
                                 <br />
                                 nhanh chóng và tiện lợi
                             </Title>
-                            <Paragraph>
+                            <Paragraph style={{ maxWidth: '500px' }}>
                                 Tại Saladin, ngoài việc tìm thấy các lựa chọn sản phẩm bảo hiểm đa dạng từ tiêu chuẩn
                                 đến nâng cao, khách hàng còn có thể tự do lựa chọn quyền lợi theo nhu cầu để tạo ra gói
                                 bảo hiểm phù hợp nhất.
@@ -228,7 +363,7 @@ const Home = () => {
                         <div key={index} className={`${styles.saladinBlock}`}>
                             <h2>{partner.title}</h2>
                             <p style={{ fontSize: '12px' }}>{partner.description}</p>
-                            <Row gutter={[16, 16]}>
+                            <Row gutter={[16, 16]} style={{ paddingTop: '20px' }}>
                                 {partner.images.map((image, imgIndex) => (
                                     <Col key={imgIndex} span={8} className={`${styles.saladinCol}`}>
                                         <Card className={`${styles.saladinCard2}`}>
@@ -245,6 +380,7 @@ const Home = () => {
                     ))}
                 </div>
             </div>
+            <ContactForm />
         </>
     );
 };

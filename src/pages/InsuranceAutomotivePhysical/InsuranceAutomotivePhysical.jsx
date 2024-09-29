@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Row, Col, Card, Button, Form, Input, Select, Collapse } from 'antd';
+import { Row, Col, Card, Button, Collapse } from 'antd';
 import backgroundImage from '../../assets/Images/landing_car_bg.jpg';
 import exampleImage from '../../assets/Images/mascot_car_com.png';
 import baovietLogo from '../../assets/Images/baoviet_logo.png';
@@ -31,10 +31,6 @@ import Rescue from '../../assets/Images/rescue-hotline.png';
 import Inspection from '../../assets/Images/inspection-support.png';
 import Garage from '../../assets/Images/garage-system.png';
 import Claim from '../../assets/Images/claim-guide.png';
-import { PhoneOutlined, MailOutlined } from '@ant-design/icons';
-import QrZalo from '../../assets/Images/qr.jpg';
-import QrFace from '../../assets/Images/prface.png';
-import MascotSp from '../../assets/Images/mascot_support.png';
 
 // setup cho các trang
 const features = [
@@ -119,135 +115,6 @@ const features = [
     },
 ];
 
-// form của trang 7
-const ContactForm = () => {
-    const [form] = Form.useForm();
-    const [success, setSuccess] = useState(false);
-    const onFinish = (values) => {
-        console.log('Success:', values);
-        setSuccess(true);
-        form.resetFields();
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
-    return (
-        <Row gutter={[32, 32]} style={{ maxWidth: '1050px', margin: 'auto', marginTop: '32px', marginBottom: '40px' }}>
-            <Col span={24}>
-                <h1 style={{ textAlign: 'center', fontSize: '3rem', color: '#4caf50' }}>Tư vấn và hỗ trợ 24/7</h1>
-                <p style={{ textAlign: 'center', marginBottom: '30px' }}>
-                    Đội ngũ Saladin luôn sẵn sàng hỗ trợ bạn trong suốt hành trình mua và sử dụng bảo hiểm.
-                </p>
-            </Col>
-            <Col xs={24} sm={12} md={12}>
-                <div
-                    style={{
-                        padding: '20px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                    }}
-                >
-                    <h3>Thông tin bổ sung</h3>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <PhoneOutlined
-                            style={{
-                                marginRight: '8px',
-                                background: '#4caf50',
-                                padding: '14px',
-                                color: 'white',
-                                borderRadius: '4px',
-                            }}
-                        />
-                        <p style={{ margin: 0 }}>Hàng 1: Thông tin 1</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <MailOutlined
-                            style={{
-                                marginRight: '8px',
-                                background: '#4caf50',
-                                padding: '14px',
-                                color: 'white',
-                                borderRadius: '4px',
-                            }}
-                        />
-                        <p style={{ margin: 0 }}>Hàng 2: Thông tin 2</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <img src={QrZalo} alt="qr zalo" style={{ width: '50px', marginRight: '8px' }} />
-                        <p style={{ margin: 0 }}>Hàng 3: Thông tin 3</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <img src={QrFace} alt="qr face" style={{ width: '50px', marginRight: '8px' }} />
-                        <p style={{ margin: 0 }}>Hàng 4: Thông tin 4</p>
-                    </div>
-                </div>
-            </Col>
-            <Col xs={24} sm={12} md={12}>
-                <div
-                    className="contact-form"
-                    style={{ padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}
-                >
-                    <Row justify="center" align="middle" style={{ height: '100%' }}>
-                        <Col span={24}>
-                            <Form
-                                form={form}
-                                name="basic"
-                                layout="vertical"
-                                onFinish={onFinish}
-                                onFinishFailed={onFinishFailed}
-                                initialValues={{
-                                    remember: true,
-                                }}
-                            >
-                                <h2>Nhận tư vấn ngay</h2>
-                                <p>Để lại thông tin để nhận tư vấn và ưu đãi từ Saladin nhé</p>
-                                <Form.Item
-                                    label="Họ và tên"
-                                    name="name"
-                                    rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="Số điện thoại"
-                                    name="phone"
-                                    rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item label="Email" name="email">
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item label="Sản phẩm mà bạn quan tâm" name="product">
-                                    <Select>
-                                        <Option value="bao-hiem-xe-hoi">Bảo hiểm vật chất xe ô tô</Option>
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" htmlType="submit" style={{ background: '#4caf50' }}>
-                                        Nhận tư vấn
-                                    </Button>
-                                </Form.Item>
-                                {success && (
-                                    <div className="success-message">
-                                        Cảm ơn bạn đã liên hệ! Chúng tôi sẽ liên lạc với bạn sớm nhất có thể.
-                                    </div>
-                                )}
-                            </Form>
-                        </Col>
-                    </Row>
-                </div>
-            </Col>
-            <img src={MascotSp} alt="" style={{ maxWidth: '800px', height: '30vh', margin: '0 auto' }}></img>
-        </Row>
-    );
-};
-
-const { Option } = Select;
 const { Panel } = Collapse;
 
 const InsuranceAutomotivePhysical = () => {
@@ -477,13 +344,16 @@ const InsuranceAutomotivePhysical = () => {
             <Row justify="center" style={{ marginTop: 30, textAlign: 'center' }}>
                 <Col span={20}>
                     <h1 id="5">Giới thiệu bảo hiểm</h1>
-                    <p>
+                    <p style={{ margin: 'auto', minWidth: '900px' }}>
                         Bảo hiểm vật chất xe ô tô là bảo hiểm tự nguyện dành cho các loại xe ô tô tham gia giao thông
                         trên lãnh thổ Việt Nam. Khi xảy ra sự cố, công ty bảo hiểm sẽ bồi thường cho những thiệt hại vật
                         chất xe xảy ra do những tai nạn bất ngờ, và ngoài sự kiểm soát của chủ xe. Tuỳ vào nhu cầu sử
                         dụng, khách hàng có thể lựa chọn nhiều quyền lợi bổ sung khác nhau:
                     </p>
-                    <Row justify="center" style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap' }}>
+                    <Row
+                        justify="center"
+                        style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}
+                    >
                         <Col span={8} className={styles.benefitItem}>
                             <img src={car1} alt="" className={styles.benefitImage} />
                             <strong>Bảo hiểm lựa chọn nơi sửa chữa:</strong>
@@ -572,10 +442,8 @@ const InsuranceAutomotivePhysical = () => {
             </div>
             {/* Trang 6 */}
             <div style={{ padding: '50px', backgroundColor: '#f4fff9' }}>
-                <h1 style={{ textAlign: 'center', fontSize: '2rem', marginBottom: '50px', color: '#4caf50' }}>
-                    Dịch vụ hỗ trợ nhanh chóng
-                </h1>
-                <p style={{ textAlign: 'center' }}>
+                <h1 style={{ textAlign: 'center', fontSize: '2rem', color: '#4caf50' }}>Dịch vụ hỗ trợ nhanh chóng</h1>
+                <p style={{ margin: '0 auto', minWidth: '600px', marginBottom: '30px', textAlign: 'center' }}>
                     Các sản phẩm bảo hiểm từ các nhà cung cấp bảo hiểm hàng đầu với các dịch vụ hỗ trợ
                 </p>
                 <Row gutter={[32, 32]} style={{ maxWidth: '1050px', margin: 'auto' }}>
@@ -650,7 +518,7 @@ const InsuranceAutomotivePhysical = () => {
                 </Row>
             </div>
             {/* Trang 7 */}
-            <ContactForm />
+            
             {/* trang 8 */}
             <div style={{ backgroundColor: 'rgb(244, 255, 249)', height: '40vh' }}>
                 <Row gutter={[32, 32]} style={{ maxWidth: '1050px', margin: 'auto' }}>
