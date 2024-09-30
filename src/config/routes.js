@@ -8,6 +8,7 @@ const routes = {
     indemnity: '/indemnity',
     chat: '/chat',
     contract: '/contract',
+    chat2: '/chat2',
 
     admin: '/admin',
     userAdmin: '/admin/user-admin',

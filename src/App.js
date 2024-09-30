@@ -15,18 +15,25 @@ function App() {
                     {publicRoutes.map((route, index) => {
                         const Page = route.component;
                         let Layout = DefaultLayout;
+                        let params = {};
+
                         if (route.layout) {
                             Layout = route.layout;
                         } else if (route.layout === null) {
                             Layout = Fragment;
                         }
+
+                        if (typeof route.params === 'object') {
+                            params = route.params;
+                        }
+
                         return (
                             <Route
                                 key={index}
                                 path={route.path}
                                 element={
                                     <Layout>
-                                        <Page />
+                                        <Page {...params} />
                                     </Layout>
                                 }
                             />

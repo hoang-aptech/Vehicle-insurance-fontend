@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Button, Modal } from 'antd';
 import {
     WechatOutlined,
@@ -8,30 +8,80 @@ import {
     FacebookOutlined,
 } from '@ant-design/icons';
 import axios from 'axios';
+import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+
 import styles from './Chat.module.scss';
 
-const ChatApp = () => {
-    const [isChatVisible, setChatVisible] = useState(false);
+const ChatApp = ({ chatId, role }) => {
+    console.log({ chatId, role });
+
+    const [isChatVisible, setChatVisible] = useState(true);
     const [isIconVisible, setIconVisible] = useState(false);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
+    const [conn, setConnection] = useState();
+    const messagesEndRef = useRef();
 
-    const fetchMessages = async () => {
-        try {
-            const response = await axios.get('https://localhost:7289/api/Messages', {
-                params: { customersupportId: 1 },
-            });
-            const formattedMessages = response.data.map((msg) => ({
-                ...msg,
-                sender: msg.role === 'User' ? 'right' : 'left',
-            }));
-            setMessages(formattedMessages);
-        } catch (error) {
-            console.error('Lỗi khi nhận tin nhắn:', error);
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
         }
     };
 
-    const sendMessage = async (role) => {
+    const joinChatRoom = async () => {
+        console.log('joinChatRoom');
+
+        try {
+            const conn = new HubConnectionBuilder()
+                .withUrl('https://localhost:7289/chat')
+                .configureLogging(LogLevel.Information)
+                .build();
+
+            conn.on('ReceiveMessages', (messages) => {
+                console.log(messages);
+                const formattedMessages = messages.map((msg) => ({
+                    ...msg,
+                    sender: msg.role === role ? 'right' : 'left',
+                }));
+                setMessages(formattedMessages);
+            });
+
+            conn.on('ReceiveMessage', (m) => {
+                console.log(m);
+                setMessages((prevMessages) => [
+                    ...prevMessages,
+                    {
+                        ...m,
+                        sender: m.role === role ? 'right' : 'left',
+                    },
+                ]);
+            });
+
+            await conn.start();
+            await conn.invoke('JoinSpecificGroup', chatId);
+
+            setConnection(conn);
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    // const fetchMessages = async () => {
+    //     try {
+    //         const response = await axios.get('https://localhost:7289/api/Messages', {
+    //             params: { customersupportId: 1 },
+    //         });
+    //         const formattedMessages = response.data.map((msg) => ({
+    //             ...msg,
+    //             sender: msg.role === 'User' ? 'right' : 'left',
+    //         }));
+    //         setMessages(formattedMessages);
+    //     } catch (error) {
+    //         console.error('Lỗi khi nhận tin nhắn:', error);
+    //     }
+    // };
+
+    const sendMessage = async () => {
         const currentTimeUTC = new Date();
         const timeZoneOffset = 7 * 60;
         const currentTimePlus7 = new Date(currentTimeUTC.getTime() + timeZoneOffset * 60 * 1000);
@@ -40,14 +90,16 @@ const ChatApp = () => {
         const messageToSend = {
             time: currentTimePlus7ISO,
             message: newMessage,
-            customersupportId: 1,
-            role: role,
+            customersupportId: chatId,
+            role,
         };
 
         try {
-            await axios.post('https://localhost:7289/api/Messages', messageToSend);
-            setMessages([...messages, { message: newMessage, sender: 'right', time: currentTimePlus7ISO, role }]);
+            conn.invoke('SendMessage', messageToSend);
+            // await axios.post('https://localhost:7289/api/Messages', messageToSend);
+            // setMessages([...messages, { message: newMessage, sender: 'right', time: currentTimePlus7ISO, role }]);
             setNewMessage('');
+            scrollToBottom();
         } catch (error) {
             console.error('Lỗi khi gửi tin nhắn:', error);
         }
@@ -59,7 +111,7 @@ const ChatApp = () => {
 
     const showChatWindow = () => {
         setChatVisible(true);
-        fetchMessages();
+        // fetchMessages();
     };
 
     const handleCancel = () => {
@@ -69,14 +121,30 @@ const ChatApp = () => {
 
     const handleSendMessage = () => {
         if (newMessage.trim()) {
-            sendMessage('user');
+            sendMessage();
         }
     };
 
     useEffect(() => {
         if (isChatVisible) {
-            fetchMessages();
+            joinChatRoom();
+        } else if (conn) {
+            try {
+                conn.stop()
+                    .then(() => {
+                        console.log('Connection stopped.');
+                    })
+                    .catch((err) => console.error('Error while stopping connection: ', err));
+            } catch (err) {
+                console.error('Error while stopping connection: ', err);
+            }
         }
+
+        return () => {
+            if (conn) {
+                conn.stop().catch((err) => console.error('Error while stopping connection on unmount: ', err));
+            }
+        };
     }, [isChatVisible]);
 
     return (
