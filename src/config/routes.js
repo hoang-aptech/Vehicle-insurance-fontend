@@ -4,7 +4,7 @@ const routes = {
     private: '/private-test',
     blog: '/blog',
     blogDetails: '/blog-details',
-    insuranceAutomotivePhysical: '/insurance-automotive-physical',
+    insuranceAutomotivePhysical: '/insurance-automotive-physical/:id',
     indemnity: '/indemnity',
     chat: '/chat',
     contract: '/contract',
