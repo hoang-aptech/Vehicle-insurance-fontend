@@ -1,7 +1,7 @@
-// Vehicle.js
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Button, Form, Input, Modal, Row, Col, Select, Popconfirm } from 'antd';
+import { Layout, Table, Button, Form, Input, Modal, Row, Col, Select, Card } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -15,33 +15,21 @@ const Vehicle = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
     const [filterName, setFilterName] = useState('');
+    const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
-    // Dữ liệu mẫu
+    const API_URL = 'https://localhost:7289/api/Vehicles';
+
+    // Fetch vehicle data from the API
     useEffect(() => {
-        const sampleData = [
-            { id: 1, name: 'Toyota Camry', model: '2021', version: 'XSE', type: 'Car', carNumber: 'ABC123', userId: 1 },
-            { id: 2, name: 'Honda Civic', model: '2020', version: 'EX', type: 'Car', carNumber: 'XYZ456', userId: 2 },
-            {
-                id: 3,
-                name: 'Yamaha R1',
-                model: '2022',
-                version: 'M',
-                type: 'Motorbike',
-                carNumber: 'MOTO789',
-                userId: 3,
-            },
-            {
-                id: 4,
-                name: 'Kawasaki Ninja',
-                model: '2021',
-                version: 'ZX-10R',
-                type: 'Motorbike',
-                carNumber: 'MOTO101',
-                userId: 4,
-            },
-            { id: 5, name: 'Ford Mustang', model: '2021', version: 'GT', type: 'Car', carNumber: 'FORD999', userId: 5 },
-        ];
-        setDataSource(sampleData);
+        const fetchVehicleData = async () => {
+            try {
+                const response = await axios.get(API_URL);
+                setDataSource(response.data);
+            } catch (error) {
+                console.error('Failed to fetch vehicle data:', error);
+            }
+        };
+        fetchVehicleData();
     }, []);
 
     const showModal = (vehicle = null) => {
@@ -56,22 +44,45 @@ const Vehicle = () => {
         }
     };
 
-    const handleOk = () => {
-        form.validateFields().then((values) => {
-            if (isEditMode && currentVehicle) {
-                // Sửa phương tiện
-                setDataSource(dataSource.map((veh) => (veh.id === currentVehicle.id ? { ...veh, ...values } : veh)));
-            } else {
-                // Thêm phương tiện
-                setDataSource([...dataSource, { id: dataSource.length + 1, ...values }]);
+    const handleOk = async () => {
+        const values = await form.validateFields();
+        if (isEditMode && currentVehicle) {
+            // Update vehicle
+            try {
+                const response = await axios.put(`${API_URL}/${currentVehicle.id}`, values);
+                setDataSource(dataSource.map((veh) => (veh.id === currentVehicle.id ? response.data : veh)));
+            } catch (error) {
+                console.error('Failed to update vehicle:', error);
             }
-            form.resetFields();
-            setIsModalVisible(false);
-        });
+        } else {
+            // Add new vehicle
+            try {
+                const response = await axios.post(API_URL, values);
+                setDataSource([...dataSource, response.data]);
+            } catch (error) {
+                console.error('Failed to add vehicle:', error);
+            }
+        }
+        form.resetFields();
+        setIsModalVisible(false);
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`${API_URL}/${id}`);
+            setDataSource(dataSource.filter((veh) => veh.id !== id));
+        } catch (error) {
+            console.error('Failed to delete vehicle:', error);
+        }
+    };
+
+    const handleDetail = (vehicle) => {
+        setCurrentVehicle(vehicle);
+        setIsDetailModalVisible(true);
     };
 
     const handleFilterChange = (e) => {
@@ -80,10 +91,6 @@ const Vehicle = () => {
     };
 
     const filteredData = dataSource.filter((item) => item.name.toLowerCase().includes(filterName.toLowerCase()));
-
-    const handleDelete = (id) => {
-        setDataSource(dataSource.filter((veh) => veh.id !== id));
-    };
 
     const columns = [
         {
@@ -125,21 +132,31 @@ const Vehicle = () => {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                <span>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Button
                         type="primary"
                         icon={<EditOutlined />}
                         style={{ marginRight: 8, backgroundColor: '#32CD32', borderColor: '#32CD32' }}
                         onClick={() => showModal(record)}
                     />
-                    <Popconfirm title="Are you sure to delete this vehicle?" onConfirm={() => handleDelete(record.id)}>
-                        <Button
-                            type="danger"
-                            icon={<DeleteOutlined />}
-                            style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
+                    <Button
+                        type="default"
+                        style={{ marginRight: 8, backgroundColor: '#1E90FF', borderColor: '#1E90FF' }}
+                        onClick={() => handleDetail(record)}
+                    >
+                        <img
+                            src={require('./assetadmin/ảnh detail.png')}
+                            alt="Detail"
+                            style={{ width: 16, height: 16 }}
                         />
-                    </Popconfirm>
-                </span>
+                    </Button>
+                    <Button
+                        type="danger"
+                        icon={<DeleteOutlined />}
+                        style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
+                        onClick={() => handleDelete(record.id)}
+                    />
+                </div>
             ),
         },
     ];
@@ -183,7 +200,7 @@ const Vehicle = () => {
 
                 <Modal
                     title={isEditMode ? 'Edit Vehicle' : 'Add New Vehicle'}
-                    visible={isModalVisible}
+                    open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                 >
@@ -234,6 +251,39 @@ const Vehicle = () => {
                             <Input type="number" />
                         </Form.Item>
                     </Form>
+                </Modal>
+
+                <Modal
+                    title="Vehicle Details"
+                    open={isDetailModalVisible}
+                    onCancel={() => setIsDetailModalVisible(false)}
+                    footer={null}
+                >
+                    {currentVehicle && (
+                        <Card>
+                            <p>
+                                <strong>ID:</strong> {currentVehicle.id}
+                            </p>
+                            <p>
+                                <strong>Name:</strong> {currentVehicle.name}
+                            </p>
+                            <p>
+                                <strong>Model:</strong> {currentVehicle.model}
+                            </p>
+                            <p>
+                                <strong>Version:</strong> {currentVehicle.version}
+                            </p>
+                            <p>
+                                <strong>Type:</strong> {currentVehicle.type}
+                            </p>
+                            <p>
+                                <strong>Car Number:</strong> {currentVehicle.carNumber}
+                            </p>
+                            <p>
+                                <strong>User ID:</strong> {currentVehicle.userId}
+                            </p>
+                        </Card>
+                    )}
                 </Modal>
             </Content>
         </Layout>

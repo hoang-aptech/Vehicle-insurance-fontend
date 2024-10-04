@@ -1,7 +1,7 @@
-// Billing.js
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Button, Form, Input, Modal, Row, Col, Popconfirm } from 'antd';
+import { Layout, Table, Button, Form, Input, Modal, Row, Col, Card } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { Header, Content } = Layout;
 
@@ -14,17 +14,21 @@ const Billing = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
     const [filterPrice, setFilterPrice] = useState('');
+    const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
-    // Dữ liệu mẫu
+    const API_URL = 'https://localhost:7289/api/Billings';
+
+    // Fetch billing data from the API
     useEffect(() => {
-        const sampleData = [
-            { id: 1, price: 100.0, customerInsuranceId: 101 },
-            { id: 2, price: 150.5, customerInsuranceId: 102 },
-            { id: 3, price: 200.75, customerInsuranceId: 103 },
-            { id: 4, price: 250.0, customerInsuranceId: 104 },
-            { id: 5, price: 300.25, customerInsuranceId: 105 },
-        ];
-        setDataSource(sampleData);
+        const fetchBillingData = async () => {
+            try {
+                const response = await axios.get(API_URL);
+                setDataSource(response.data);
+            } catch (error) {
+                console.error('Failed to fetch billing data:', error);
+            }
+        };
+        fetchBillingData();
     }, []);
 
     const showModal = (billing = null) => {
@@ -39,22 +43,29 @@ const Billing = () => {
         }
     };
 
-    const handleOk = () => {
-        form.validateFields().then((values) => {
-            if (isEditMode && currentBilling) {
-                // Sửa hóa đơn
+    const handleOk = async () => {
+        const values = await form.validateFields();
+        if (isEditMode && currentBilling) {
+            // Update billing record
+            try {
+                const response = await axios.put(`${API_URL}/${currentBilling.id}`, values);
                 setDataSource(
-                    dataSource.map((billing) =>
-                        billing.id === currentBilling.id ? { ...billing, ...values } : billing,
-                    ),
+                    dataSource.map((billing) => (billing.id === currentBilling.id ? response.data : billing)),
                 );
-            } else {
-                // Thêm hóa đơn
-                setDataSource([...dataSource, { id: dataSource.length + 1, ...values }]);
+            } catch (error) {
+                console.error('Failed to update billing:', error);
             }
-            form.resetFields();
-            setIsModalVisible(false);
-        });
+        } else {
+            // Add new billing record
+            try {
+                const response = await axios.post(API_URL, values);
+                setDataSource([...dataSource, response.data]);
+            } catch (error) {
+                console.error('Failed to add billing:', error);
+            }
+        }
+        form.resetFields();
+        setIsModalVisible(false);
     };
 
     const handleCancel = () => {
@@ -68,8 +79,18 @@ const Billing = () => {
 
     const filteredData = dataSource.filter((item) => item.price.toString().includes(filterPrice));
 
-    const handleDelete = (id) => {
-        setDataSource(dataSource.filter((billing) => billing.id !== id));
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`${API_URL}/${id}`);
+            setDataSource(dataSource.filter((billing) => billing.id !== id));
+        } catch (error) {
+            console.error('Failed to delete billing:', error);
+        }
+    };
+
+    const handleDetail = (billing) => {
+        setCurrentBilling(billing);
+        setIsDetailModalVisible(true);
     };
 
     const columns = [
@@ -93,24 +114,31 @@ const Billing = () => {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                <span>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Button
                         type="primary"
                         icon={<EditOutlined />}
                         style={{ marginRight: 8, backgroundColor: '#32CD32', borderColor: '#32CD32' }}
                         onClick={() => showModal(record)}
                     />
-                    <Popconfirm
-                        title="Are you sure to delete this billing record?"
-                        onConfirm={() => handleDelete(record.id)}
+                    <Button
+                        type="default"
+                        style={{ marginRight: 8, backgroundColor: '#1E90FF', borderColor: '#1E90FF' }}
+                        onClick={() => handleDetail(record)}
                     >
-                        <Button
-                            type="danger"
-                            icon={<DeleteOutlined />}
-                            style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
+                        <img
+                            src={require('./assetadmin/ảnh detail.png')}
+                            alt="Detail"
+                            style={{ width: 16, height: 16 }}
                         />
-                    </Popconfirm>
-                </span>
+                    </Button>
+                    <Button
+                        type="danger"
+                        icon={<DeleteOutlined />}
+                        style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
+                        onClick={() => handleDelete(record.id)}
+                    />
+                </div>
             ),
         },
     ];
@@ -154,11 +182,11 @@ const Billing = () => {
 
                 <Modal
                     title={isEditMode ? 'Edit Billing Record' : 'Add New Billing Record'}
-                    visible={isModalVisible}
+                    open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                 >
-                    <Form form={form} onFinish={handleOk} layout="vertical">
+                    <Form form={form} layout="vertical">
                         <Form.Item
                             name="price"
                             label="Price"
@@ -174,6 +202,27 @@ const Billing = () => {
                             <Input type="number" />
                         </Form.Item>
                     </Form>
+                </Modal>
+
+                <Modal
+                    title="Billing Details"
+                    open={isDetailModalVisible}
+                    onCancel={() => setIsDetailModalVisible(false)}
+                    footer={null}
+                >
+                    {currentBilling && (
+                        <Card>
+                            <p>
+                                <strong>ID:</strong> {currentBilling.id}
+                            </p>
+                            <p>
+                                <strong>Price:</strong> ${currentBilling.price.toFixed(2)}
+                            </p>
+                            <p>
+                                <strong>Customer Insurance ID:</strong> {currentBilling.customerInsuranceId}
+                            </p>
+                        </Card>
+                    )}
                 </Modal>
             </Content>
         </Layout>

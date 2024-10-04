@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Layout, Table, Button, Input, Row, Col, Card, Avatar, Popconfirm, Modal } from 'antd';
 import { UserAddOutlined, LogoutOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import AddUser from './add/AddUser';
 import EditUser from './edit/EditUser';
+import bcrypt from 'bcryptjs';
+import axios from 'axios';
 import './UserAdmin.css';
 
 const { Header, Content } = Layout;
@@ -13,57 +15,25 @@ const UserAdmin = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+    const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+    const [dataSource, setDataSource] = useState([]);
 
-    const dataSource = [
-        {
-            id: '1',
-            fullname: 'John Doe',
-            address: '10 Downing Street',
-            phone: '0123456789',
-            email: 'john@example.com',
-            avatar: 'https://via.placeholder.com/150',
-        },
-        {
-            id: '2',
-            fullname: 'Jane Doe',
-            address: '20 Downing Street',
-            phone: '0987654321',
-            email: 'jane@example.com',
-            avatar: 'https://via.placeholder.com/150',
-        },
-        {
-            id: '3',
-            fullname: 'Alice Smith',
-            address: '30 Downing Street',
-            phone: '0123456780',
-            email: 'alice@example.com',
-            avatar: 'https://via.placeholder.com/150',
-        },
-        {
-            id: '4',
-            fullname: 'Bob Johnson',
-            address: '40 Downing Street',
-            phone: '0123456781',
-            email: 'bob@example.com',
-            avatar: 'https://via.placeholder.com/150',
-        },
-        {
-            id: '5',
-            fullname: 'Charlie Brown',
-            address: '50 Downing Street',
-            phone: '0123456782',
-            email: 'charlie@example.com',
-            avatar: 'https://via.placeholder.com/150',
-        },
-        {
-            id: '6',
-            fullname: 'Diana Prince',
-            address: '60 Downing Street',
-            phone: '0123456783',
-            email: 'diana@example.com',
-            avatar: 'https://via.placeholder.com/150',
-        },
-    ];
+    const API_URL = 'https://localhost:7289/api/Users';
+
+    // Fetch user data
+    const fetchUsers = async () => {
+        try {
+            const response = await axios.get(API_URL);
+            setDataSource(response.data);
+            console.log(response.data);
+        } catch (error) {
+            console.error('Failed to fetch users:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
 
     const filteredUsers = dataSource.filter(
         (user) =>
@@ -80,6 +50,11 @@ const UserAdmin = () => {
             title: 'ID',
             dataIndex: 'id',
             key: 'id',
+        },
+        {
+            title: 'Username',
+            dataIndex: 'username',
+            key: 'username',
         },
         {
             title: 'Full Name',
@@ -102,24 +77,40 @@ const UserAdmin = () => {
             key: 'phone',
         },
         {
+            title: 'Role',
+            dataIndex: 'role',
+            key: 'role',
+        },
+        {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                <span>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Button
                         type="primary"
                         icon={<EditOutlined />}
                         style={{ marginRight: 8, backgroundColor: '#32CD32', borderColor: '#32CD32' }}
                         onClick={() => handleEdit(record)}
                     />
+                    <Button
+                        type="default"
+                        style={{ marginRight: 8, backgroundColor: '#1E90FF', borderColor: '#1E90FF' }}
+                        onClick={() => handleDetail(record)}
+                    >
+                        <img
+                            src={require('./assetadmin/ảnh detail.png')}
+                            alt="Detail"
+                            style={{ width: 16, height: 16 }}
+                        />
+                    </Button>
                     <Popconfirm title="Are you sure to delete this user?" onConfirm={() => handleDelete(record.id)}>
                         <Button
                             type="danger"
                             icon={<DeleteOutlined />}
-                            style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
+                            style={{ backgroundColor: '#f60308', borderColor: '#f60308' }}
                         />
                     </Popconfirm>
-                </span>
+                </div>
             ),
         },
     ];
@@ -133,26 +124,58 @@ const UserAdmin = () => {
         setIsEditModalVisible(true);
     };
 
-    const handleDelete = (id) => {
-        // Logic xóa người dùng
-        console.log('Delete user with ID:', id);
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`${API_URL}/${id}`);
+            setDataSource(dataSource.filter((user) => user.id !== id));
+        } catch (error) {
+            console.error('Failed to delete user:', error);
+        }
     };
 
-    const handleAddOk = (values) => {
-        console.log('Add user:', values);
-        setIsAddModalVisible(false);
-        // Logic thêm người dùng mới
+    const handleAddOk = async (values) => {
+        try {
+            const hashedPassword = await bcrypt.hash(values.password, 10);
+            const response = await axios.post(API_URL, {
+                ...values,
+                password: hashedPassword,
+                verified: 0,
+            });
+            setDataSource([...dataSource, response.data]);
+            setIsAddModalVisible(false);
+        } catch (error) {
+            console.error('Failed to add user:', error);
+        }
     };
 
-    const handleEditOk = (values) => {
-        console.log('Edit user:', values);
-        setIsEditModalVisible(false);
-        // Logic cập nhật người dùng
+    const handleEditOk = async (values) => {
+        try {
+            const updatedValues = { ...values };
+            if (values.password) {
+                updatedValues.password = await bcrypt.hash(values.password, 10);
+            }
+
+            const response = await axios.put(`${API_URL}/${selectedUser.id}`, {
+                id: selectedUser.id,
+                ...updatedValues,
+            });
+
+            setDataSource(dataSource.map((user) => (user.id === selectedUser.id ? response.data : user)));
+            setIsEditModalVisible(false);
+        } catch (error) {
+            console.error('Failed to edit user:', error);
+        }
+    };
+
+    const handleDetail = (user) => {
+        setSelectedUser(user);
+        setIsDetailModalVisible(true);
     };
 
     const handleModalCancel = () => {
         setIsAddModalVisible(false);
         setIsEditModalVisible(false);
+        setIsDetailModalVisible(false);
     };
 
     return (
@@ -185,7 +208,7 @@ const UserAdmin = () => {
                     />
 
                     <Row gutter={16}>
-                        <Col span={16}>
+                        <Col span={20}>
                             <Table
                                 dataSource={paginatedUsers}
                                 columns={columns}
@@ -201,11 +224,11 @@ const UserAdmin = () => {
                                 }}
                             />
                         </Col>
-                        <Col span={8} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Col span={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             {selectedUser ? (
                                 <Card style={{ padding: 16, textAlign: 'center', width: '100%' }}>
                                     <Avatar
-                                        src={selectedUser.avatar}
+                                        src={'data:image/png;base64,' + selectedUser.avatar}
                                         size={100}
                                         style={{ borderRadius: '50%', marginBottom: 16 }}
                                     />
@@ -213,6 +236,7 @@ const UserAdmin = () => {
                                     <p>Email: {selectedUser.email}</p>
                                     <p>Address: {selectedUser.address}</p>
                                     <p>Phone: {selectedUser.phone}</p>
+                                    <p>Role: {selectedUser.role}</p>
                                 </Card>
                             ) : (
                                 <div>Click on a user to see their profile</div>
@@ -222,12 +246,27 @@ const UserAdmin = () => {
                 </div>
             </Content>
 
-            <Modal title="Add User" visible={isAddModalVisible} onCancel={handleModalCancel} footer={null}>
+            <Modal title="Add User" open={isAddModalVisible} onCancel={handleModalCancel} footer={null}>
                 <AddUser onFinish={handleAddOk} />
             </Modal>
 
-            <Modal title="Edit User" visible={isEditModalVisible} onCancel={handleModalCancel} footer={null}>
+            <Modal title="Edit User" open={isEditModalVisible} onCancel={handleModalCancel} footer={null}>
                 <EditUser user={selectedUser} onFinish={handleEditOk} />
+            </Modal>
+
+            <Modal title="User Details" open={isDetailModalVisible} onCancel={handleModalCancel} footer={null}>
+                <Card style={{ padding: 16 }}>
+                    <Avatar
+                        src={'data:image/png;base64,' + selectedUser?.avatar}
+                        size={100}
+                        style={{ borderRadius: '50%', marginBottom: 16 }}
+                    />
+                    <h3>{selectedUser?.fullname}</h3>
+                    <p>Email: {selectedUser?.email}</p>
+                    <p>Address: {selectedUser?.address}</p>
+                    <p>Phone: {selectedUser?.phone}</p>
+                    <p>Role: {selectedUser?.role}</p>
+                </Card>
             </Modal>
         </Layout>
     );

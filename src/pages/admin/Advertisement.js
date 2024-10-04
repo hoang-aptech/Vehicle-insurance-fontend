@@ -1,7 +1,7 @@
-// Advertisement.js
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Button, Form, Input, Modal, Row, Col, Popconfirm, Select } from 'antd';
+import { Layout, Table, Button, Form, Input, Modal, Row, Col, Select, Card } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
@@ -15,47 +15,21 @@ const Advertisement = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
     const [filterName, setFilterName] = useState('');
+    const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
-    // Dữ liệu mẫu
+    const API_URL = 'https://localhost:7289/api/Advertisements';
+
+    // Fetch advertisement data from the API
     useEffect(() => {
-        const sampleData = [
-            {
-                id: 1,
-                customerName: 'John Doe',
-                customerPhone: '0123456789',
-                customerEmail: 'john@example.com',
-                type: 'Car',
-            },
-            {
-                id: 2,
-                customerName: 'Jane Smith',
-                customerPhone: '0987654321',
-                customerEmail: 'jane@example.com',
-                type: 'Motorbike',
-            },
-            {
-                id: 3,
-                customerName: 'Alice Johnson',
-                customerPhone: '0112233445',
-                customerEmail: 'alice@example.com',
-                type: 'Car',
-            },
-            {
-                id: 4,
-                customerName: 'Bob Brown',
-                customerPhone: '0223344556',
-                customerEmail: 'bob@example.com',
-                type: 'Motorbike',
-            },
-            {
-                id: 5,
-                customerName: 'Charlie Green',
-                customerPhone: '0334455667',
-                customerEmail: 'charlie@example.com',
-                type: 'Car',
-            },
-        ];
-        setDataSource(sampleData);
+        const fetchAdvertisementData = async () => {
+            try {
+                const response = await axios.get(API_URL);
+                setDataSource(response.data);
+            } catch (error) {
+                console.error('Failed to fetch advertisement data:', error);
+            }
+        };
+        fetchAdvertisementData();
     }, []);
 
     const showModal = (ad = null) => {
@@ -70,18 +44,27 @@ const Advertisement = () => {
         }
     };
 
-    const handleOk = () => {
-        form.validateFields().then((values) => {
-            if (isEditMode && currentAd) {
-                // Sửa quảng cáo
-                setDataSource(dataSource.map((ad) => (ad.id === currentAd.id ? { ...ad, ...values } : ad)));
-            } else {
-                // Thêm quảng cáo
-                setDataSource([...dataSource, { id: dataSource.length + 1, ...values }]);
+    const handleOk = async () => {
+        const values = await form.validateFields();
+        if (isEditMode && currentAd) {
+            // Update advertisement
+            try {
+                const response = await axios.put(`${API_URL}/${currentAd.id}`, values);
+                setDataSource(dataSource.map((ad) => (ad.id === currentAd.id ? response.data : ad)));
+            } catch (error) {
+                console.error('Failed to update advertisement:', error);
             }
-            form.resetFields();
-            setIsModalVisible(false);
-        });
+        } else {
+            // Add new advertisement
+            try {
+                const response = await axios.post(API_URL, values);
+                setDataSource([...dataSource, response.data]);
+            } catch (error) {
+                console.error('Failed to add advertisement:', error);
+            }
+        }
+        form.resetFields();
+        setIsModalVisible(false);
     };
 
     const handleCancel = () => {
@@ -97,8 +80,18 @@ const Advertisement = () => {
         item.customerName.toLowerCase().includes(filterName.toLowerCase()),
     );
 
-    const handleDelete = (id) => {
-        setDataSource(dataSource.filter((ad) => ad.id !== id));
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`${API_URL}/${id}`);
+            setDataSource(dataSource.filter((ad) => ad.id !== id));
+        } catch (error) {
+            console.error('Failed to delete advertisement:', error);
+        }
+    };
+
+    const handleDetail = (ad) => {
+        setCurrentAd(ad);
+        setIsDetailModalVisible(true);
     };
 
     const columns = [
@@ -131,24 +124,31 @@ const Advertisement = () => {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                <span>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Button
                         type="primary"
                         icon={<EditOutlined />}
                         style={{ marginRight: 8, backgroundColor: '#32CD32', borderColor: '#32CD32' }}
                         onClick={() => showModal(record)}
                     />
-                    <Popconfirm
-                        title="Are you sure to delete this advertisement?"
-                        onConfirm={() => handleDelete(record.id)}
+                    <Button
+                        type="default"
+                        style={{ marginRight: 8, backgroundColor: '#1E90FF', borderColor: '#1E90FF' }}
+                        onClick={() => handleDetail(record)}
                     >
-                        <Button
-                            type="danger"
-                            icon={<DeleteOutlined />}
-                            style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
+                        <img
+                            src={require('./assetadmin/ảnh detail.png')}
+                            alt="Detail"
+                            style={{ width: 16, height: 16 }}
                         />
-                    </Popconfirm>
-                </span>
+                    </Button>
+                    <Button
+                        type="danger"
+                        icon={<DeleteOutlined />}
+                        style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
+                        onClick={() => handleDelete(record.id)}
+                    />
+                </div>
             ),
         },
     ];
@@ -192,11 +192,11 @@ const Advertisement = () => {
 
                 <Modal
                     title={isEditMode ? 'Edit Advertisement' : 'Add New Advertisement'}
-                    visible={isModalVisible}
+                    open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                 >
-                    <Form form={form} onFinish={handleOk} layout="vertical">
+                    <Form form={form} layout="vertical">
                         <Form.Item
                             name="customerName"
                             label="Customer Name"
@@ -229,6 +229,33 @@ const Advertisement = () => {
                             </Select>
                         </Form.Item>
                     </Form>
+                </Modal>
+
+                <Modal
+                    title="Advertisement Details"
+                    open={isDetailModalVisible}
+                    onCancel={() => setIsDetailModalVisible(false)}
+                    footer={null}
+                >
+                    {currentAd && (
+                        <Card>
+                            <p>
+                                <strong>ID:</strong> {currentAd.id}
+                            </p>
+                            <p>
+                                <strong>Customer Name:</strong> {currentAd.customerName}
+                            </p>
+                            <p>
+                                <strong>Customer Phone:</strong> {currentAd.customerPhone}
+                            </p>
+                            <p>
+                                <strong>Customer Email:</strong> {currentAd.customerEmail}
+                            </p>
+                            <p>
+                                <strong>Type:</strong> {currentAd.type}
+                            </p>
+                        </Card>
+                    )}
                 </Modal>
             </Content>
         </Layout>

@@ -1,8 +1,8 @@
-// Insurance.js
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Button, Form, Input, Modal, Row } from 'antd';
+import { Layout, Table, Button, Form, Input, Modal, Row, Card } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
+import axios from 'axios';
 
 const { Header, Content } = Layout;
 
@@ -15,29 +15,21 @@ const Insurance = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
     const [content, setContent] = useState('');
+    const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
-    // Dữ liệu mẫu
+    const API_URL = 'https://localhost:7289/api/Insurances';
+
+    // Fetch insurance data from the API
     useEffect(() => {
-        const sampleData = [
-            {
-                id: 1,
-                name: 'Health Insurance',
-                description: 'Comprehensive health coverage.',
-                duration: 12,
-                price: 500.0,
-            },
-            { id: 2, name: 'Car Insurance', description: 'Insurance for your car.', duration: 12, price: 300.5 },
-            { id: 3, name: 'Home Insurance', description: 'Protection for your home.', duration: 12, price: 400.75 },
-            { id: 4, name: 'Travel Insurance', description: 'Insurance for your travels.', duration: 6, price: 150.25 },
-            {
-                id: 5,
-                name: 'Life Insurance',
-                description: 'Financial protection for your loved ones.',
-                duration: 24,
-                price: 600.0,
-            },
-        ];
-        setDataSource(sampleData);
+        const fetchInsuranceData = async () => {
+            try {
+                const response = await axios.get(API_URL);
+                setDataSource(response.data);
+            } catch (error) {
+                console.error('Failed to fetch insurance data:', error);
+            }
+        };
+        fetchInsuranceData();
     }, []);
 
     const showModal = (insurance = null) => {
@@ -54,30 +46,47 @@ const Insurance = () => {
         }
     };
 
-    const handleOk = () => {
-        form.validateFields().then((values) => {
-            const updatedInsurance = { ...values, description: content }; // Get the content from TinyMCE
-            if (isEditMode && currentInsurance) {
-                // Sửa bảo hiểm
-                setDataSource(
-                    dataSource.map((ins) => (ins.id === currentInsurance.id ? { ...ins, ...updatedInsurance } : ins)),
-                );
-            } else {
-                // Thêm bảo hiểm
-                setDataSource([...dataSource, { id: dataSource.length + 1, ...updatedInsurance }]);
+    const handleOk = async () => {
+        const values = await form.validateFields();
+        const updatedInsurance = { ...values, description: content }; // Get the content from TinyMCE
+        if (isEditMode && currentInsurance) {
+            // Update insurance
+            try {
+                const response = await axios.put(`${API_URL}/${currentInsurance.id}`, updatedInsurance);
+                setDataSource(dataSource.map((ins) => (ins.id === currentInsurance.id ? response.data : ins)));
+            } catch (error) {
+                console.error('Failed to update insurance:', error);
             }
-            form.resetFields();
-            setContent('');
-            setIsModalVisible(false);
-        });
+        } else {
+            // Add new insurance
+            try {
+                const response = await axios.post(API_URL, updatedInsurance);
+                setDataSource([...dataSource, response.data]);
+            } catch (error) {
+                console.error('Failed to add insurance:', error);
+            }
+        }
+        form.resetFields();
+        setContent('');
+        setIsModalVisible(false);
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
     };
 
-    const handleDelete = (id) => {
-        setDataSource(dataSource.filter((ins) => ins.id !== id));
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`${API_URL}/${id}`);
+            setDataSource(dataSource.filter((ins) => ins.id !== id));
+        } catch (error) {
+            console.error('Failed to delete insurance:', error);
+        }
+    };
+
+    const handleDetail = (insurance) => {
+        setCurrentInsurance(insurance);
+        setIsDetailModalVisible(true);
     };
 
     const columns = [
@@ -112,7 +121,7 @@ const Insurance = () => {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                <span>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Button
                         type="primary"
                         icon={<EditOutlined />}
@@ -120,12 +129,23 @@ const Insurance = () => {
                         onClick={() => showModal(record)}
                     />
                     <Button
+                        type="default"
+                        style={{ marginRight: 8, backgroundColor: '#1E90FF', borderColor: '#1E90FF' }}
+                        onClick={() => handleDetail(record)}
+                    >
+                        <img
+                            src={require('./assetadmin/ảnh detail.png')}
+                            alt="Detail"
+                            style={{ width: 16, height: 16 }}
+                        />
+                    </Button>
+                    <Button
                         type="danger"
                         icon={<DeleteOutlined />}
                         style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
                         onClick={() => handleDelete(record.id)}
                     />
-                </span>
+                </div>
             ),
         },
     ];
@@ -165,7 +185,7 @@ const Insurance = () => {
 
                 <Modal
                     title={isEditMode ? 'Edit Insurance' : 'Add New Insurance'}
-                    visible={isModalVisible}
+                    open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                 >
@@ -201,21 +221,53 @@ const Insurance = () => {
                                 init={{
                                     height: 300,
                                     menubar: false,
-                                    plugins: [
-                                        'advlist autolink lists link image charmap print preview anchor',
-                                        'searchreplace visualblocks code fullscreen',
-                                        'insertdatetime media table paste code help wordcount',
-                                    ],
+                                    plugins: ['image'],
                                     toolbar:
                                         'undo redo | formatselect | ' +
                                         'bold italic backcolor | alignleft aligncenter ' +
                                         'alignright alignjustify | bullist numlist outdent indent | ' +
-                                        'link image | removeformat | help',
+                                        'image | removeformat | help',
+                                    automatic_uploads: false,
+                                    images_upload_handler: (blobInfo, success) => {
+                                        const reader = new FileReader();
+                                        reader.onload = () => {
+                                            success(reader.result);
+                                        };
+                                        reader.readAsDataURL(blobInfo.blob());
+                                    },
                                 }}
                                 onEditorChange={(newContent) => setContent(newContent)}
                             />
                         </Form.Item>
                     </Form>
+                </Modal>
+
+                <Modal
+                    title="Insurance Details"
+                    open={isDetailModalVisible}
+                    onCancel={() => setIsDetailModalVisible(false)}
+                    footer={null}
+                >
+                    {currentInsurance && (
+                        <Card>
+                            <p>
+                                <strong>ID:</strong> {currentInsurance.id}
+                            </p>
+                            <p>
+                                <strong>Name:</strong> {currentInsurance.name}
+                            </p>
+                            <p>
+                                <strong>Description:</strong>{' '}
+                                <div dangerouslySetInnerHTML={{ __html: currentInsurance.description }} />
+                            </p>
+                            <p>
+                                <strong>Duration:</strong> {currentInsurance.duration} months
+                            </p>
+                            <p>
+                                <strong>Price:</strong> ${currentInsurance.price.toFixed(2)}
+                            </p>
+                        </Card>
+                    )}
                 </Modal>
             </Content>
         </Layout>
