@@ -1,9 +1,10 @@
-// Vehicle.js
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Button, Form, Input, Modal, Row, Col, Popconfirm } from 'antd';
-import { EditOutlined, DeleteOutlined, LogoutOutlined, PlusCircleOutlined } from '@ant-design/icons';
+import { Layout, Table, Button, Form, Input, Modal, Row, Col, Select, Card } from 'antd';
+import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
+import axios from 'axios';
 
 const { Header, Content } = Layout;
+const { Option } = Select;
 
 const Vehicle = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -14,17 +15,21 @@ const Vehicle = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
     const [filterName, setFilterName] = useState('');
+    const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
-    // Dữ liệu mẫu
+    const API_URL = 'https://localhost:7289/api/Vehicles';
+
+    // Fetch vehicle data from the API
     useEffect(() => {
-        const sampleData = [
-            { id: 1, licensePlate: 'ABC123', model: 'Toyota Camry', owner: 'John Doe' },
-            { id: 2, licensePlate: 'XYZ456', model: 'Honda Accord', owner: 'Jane Smith' },
-            { id: 3, licensePlate: 'LMN789', model: 'Ford Focus', owner: 'Tom Brown' },
-            { id: 4, licensePlate: 'DEF012', model: 'Chevrolet Malibu', owner: 'Emily White' },
-            { id: 5, licensePlate: 'GHI345', model: 'Nissan Altima', owner: 'Michael Green' },
-        ];
-        setDataSource(sampleData);
+        const fetchVehicleData = async () => {
+            try {
+                const response = await axios.get(API_URL);
+                setDataSource(response.data);
+            } catch (error) {
+                console.error('Failed to fetch vehicle data:', error);
+            }
+        };
+        fetchVehicleData();
     }, []);
 
     const showModal = (vehicle = null) => {
@@ -39,22 +44,45 @@ const Vehicle = () => {
         }
     };
 
-    const handleOk = () => {
-        form.validateFields().then((values) => {
-            if (isEditMode && currentVehicle) {
-                // Sửa xe
-                setDataSource(dataSource.map((v) => (v.id === currentVehicle.id ? { ...v, ...values } : v)));
-            } else {
-                // Thêm xe
-                setDataSource([...dataSource, { id: dataSource.length + 1, ...values }]);
+    const handleOk = async () => {
+        const values = await form.validateFields();
+        if (isEditMode && currentVehicle) {
+            // Update vehicle
+            try {
+                const response = await axios.put(`${API_URL}/${currentVehicle.id}`, values);
+                setDataSource(dataSource.map((veh) => (veh.id === currentVehicle.id ? response.data : veh)));
+            } catch (error) {
+                console.error('Failed to update vehicle:', error);
             }
-            form.resetFields();
-            setIsModalVisible(false);
-        });
+        } else {
+            // Add new vehicle
+            try {
+                const response = await axios.post(API_URL, values);
+                setDataSource([...dataSource, response.data]);
+            } catch (error) {
+                console.error('Failed to add vehicle:', error);
+            }
+        }
+        form.resetFields();
+        setIsModalVisible(false);
     };
 
     const handleCancel = () => {
         setIsModalVisible(false);
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`${API_URL}/${id}`);
+            setDataSource(dataSource.filter((veh) => veh.id !== id));
+        } catch (error) {
+            console.error('Failed to delete vehicle:', error);
+        }
+    };
+
+    const handleDetail = (vehicle) => {
+        setCurrentVehicle(vehicle);
+        setIsDetailModalVisible(true);
     };
 
     const handleFilterChange = (e) => {
@@ -62,11 +90,7 @@ const Vehicle = () => {
         setCurrentPage(1); // Reset to first page on filter change
     };
 
-    const filteredData = dataSource.filter((item) => item.owner.toLowerCase().includes(filterName.toLowerCase()));
-
-    const handleDelete = (id) => {
-        setDataSource(dataSource.filter((v) => v.id !== id));
-    };
+    const filteredData = dataSource.filter((item) => item.name.toLowerCase().includes(filterName.toLowerCase()));
 
     const columns = [
         {
@@ -75,9 +99,9 @@ const Vehicle = () => {
             key: 'id',
         },
         {
-            title: 'License Plate',
-            dataIndex: 'licensePlate',
-            key: 'licensePlate',
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
         },
         {
             title: 'Model',
@@ -85,29 +109,54 @@ const Vehicle = () => {
             key: 'model',
         },
         {
-            title: 'Owner',
-            dataIndex: 'owner',
-            key: 'owner',
+            title: 'Version',
+            dataIndex: 'version',
+            key: 'version',
+        },
+        {
+            title: 'Type',
+            dataIndex: 'type',
+            key: 'type',
+        },
+        {
+            title: 'Car Number',
+            dataIndex: 'carNumber',
+            key: 'carNumber',
+        },
+        {
+            title: 'User ID',
+            dataIndex: 'userId',
+            key: 'userId',
         },
         {
             title: 'Action',
             key: 'action',
             render: (text, record) => (
-                <span>
+                <div style={{ display: 'flex', alignItems: 'center' }}>
                     <Button
                         type="primary"
                         icon={<EditOutlined />}
                         style={{ marginRight: 8, backgroundColor: '#32CD32', borderColor: '#32CD32' }}
                         onClick={() => showModal(record)}
                     />
-                    <Popconfirm title="Are you sure to delete this vehicle?" onConfirm={() => handleDelete(record.id)}>
-                        <Button
-                            type="danger"
-                            icon={<DeleteOutlined />}
-                            style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
+                    <Button
+                        type="default"
+                        style={{ marginRight: 8, backgroundColor: '#1E90FF', borderColor: '#1E90FF' }}
+                        onClick={() => handleDetail(record)}
+                    >
+                        <img
+                            src={require('./assetadmin/ảnh detail.png')}
+                            alt="Detail"
+                            style={{ width: 16, height: 16 }}
                         />
-                    </Popconfirm>
-                </span>
+                    </Button>
+                    <Button
+                        type="danger"
+                        icon={<DeleteOutlined />}
+                        style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
+                        onClick={() => handleDelete(record.id)}
+                    />
+                </div>
             ),
         },
     ];
@@ -134,7 +183,7 @@ const Vehicle = () => {
             <Content style={{ margin: '16px' }}>
                 <Row gutter={16} style={{ marginBottom: '16px' }}>
                     <Col span={8}>
-                        <Input placeholder="Filter by Owner Name" value={filterName} onChange={handleFilterChange} />
+                        <Input placeholder="Filter by Name" value={filterName} onChange={handleFilterChange} />
                     </Col>
                 </Row>
                 <Table
@@ -151,33 +200,90 @@ const Vehicle = () => {
 
                 <Modal
                     title={isEditMode ? 'Edit Vehicle' : 'Add New Vehicle'}
-                    visible={isModalVisible}
+                    open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                 >
                     <Form form={form} onFinish={handleOk} layout="vertical">
                         <Form.Item
-                            name="licensePlate"
-                            label="License Plate"
-                            rules={[{ required: true, message: 'Please input the license plate!' }]}
+                            name="name"
+                            label="Name"
+                            rules={[{ required: true, message: 'Please input the vehicle name!' }]}
                         >
                             <Input />
                         </Form.Item>
                         <Form.Item
                             name="model"
                             label="Model"
-                            rules={[{ required: true, message: 'Please input the model!' }]}
+                            rules={[{ required: true, message: 'Please input the vehicle model!' }]}
                         >
                             <Input />
                         </Form.Item>
                         <Form.Item
-                            name="owner"
-                            label="Owner"
-                            rules={[{ required: true, message: "Please input the owner's name!" }]}
+                            name="version"
+                            label="Version"
+                            rules={[{ required: true, message: 'Please input the vehicle version!' }]}
                         >
                             <Input />
                         </Form.Item>
+                        <Form.Item
+                            name="type"
+                            label="Type"
+                            rules={[{ required: true, message: 'Please select the vehicle type!' }]}
+                        >
+                            <Select placeholder="Select type">
+                                <Option value="Car">Car</Option>
+                                <Option value="Motorbike">Motorbike</Option>
+                            </Select>
+                        </Form.Item>
+                        <Form.Item
+                            name="carNumber"
+                            label="Car Number"
+                            rules={[{ required: true, message: 'Please input the car number!' }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            name="userId"
+                            label="User ID"
+                            rules={[{ required: true, message: 'Please input the user ID!' }]}
+                        >
+                            <Input type="number" />
+                        </Form.Item>
                     </Form>
+                </Modal>
+
+                <Modal
+                    title="Vehicle Details"
+                    open={isDetailModalVisible}
+                    onCancel={() => setIsDetailModalVisible(false)}
+                    footer={null}
+                >
+                    {currentVehicle && (
+                        <Card>
+                            <p>
+                                <strong>ID:</strong> {currentVehicle.id}
+                            </p>
+                            <p>
+                                <strong>Name:</strong> {currentVehicle.name}
+                            </p>
+                            <p>
+                                <strong>Model:</strong> {currentVehicle.model}
+                            </p>
+                            <p>
+                                <strong>Version:</strong> {currentVehicle.version}
+                            </p>
+                            <p>
+                                <strong>Type:</strong> {currentVehicle.type}
+                            </p>
+                            <p>
+                                <strong>Car Number:</strong> {currentVehicle.carNumber}
+                            </p>
+                            <p>
+                                <strong>User ID:</strong> {currentVehicle.userId}
+                            </p>
+                        </Card>
+                    )}
                 </Modal>
             </Content>
         </Layout>

@@ -1,116 +1,129 @@
-// AddUser.js
 import React, { useState } from 'react';
-import { Layout, Form, Input, Button, Upload } from 'antd';
+import { Form, Input, Button, Upload, Select } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 
-const { Header, Content } = Layout;
+const { Option } = Select;
 
-const AddUser = () => {
-    const [fileName, setFileName] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
-    const [fileList, setFileList] = useState([]);
+const AddUser = ({ onFinish }) => {
+    const [avatarFileList, setAvatarFileList] = useState([]);
+    const [avatarUrl, setAvatarUrl] = useState('');
 
-    const onFinish = (values) => {
-        console.log('Received values:', values);
-        // Thêm logic để xử lý dữ liệu người dùng mới
-    };
-
-    const handleChange = ({ fileList }) => {
-        setFileList(fileList);
-
+    const handleUploadChange = ({ fileList }) => {
+        setAvatarFileList(fileList);
         if (fileList.length > 0) {
-            const file = fileList[fileList.length - 1].originFileObj; // Lấy đối tượng Blob từ tệp mới nhất
-            setFileName(fileList[fileList.length - 1].name); // Cập nhật tên tệp
-
-            // Tạo URL cho hình ảnh xem trước
+            const file = fileList[fileList.length - 1].originFileObj;
             const reader = new FileReader();
             reader.onload = () => {
-                setImageUrl(reader.result);
+                setAvatarUrl(reader.result);
             };
-            reader.readAsDataURL(file); // Đọc tệp hình ảnh
+            reader.readAsDataURL(file);
         } else {
-            setFileName('');
-            setImageUrl('');
+            setAvatarUrl('');
         }
     };
 
     const handleRemove = (file) => {
-        const newFileList = fileList.filter((item) => item.uid !== file.uid); // Xóa tệp khỏi fileList
-        setFileList(newFileList); // Cập nhật fileList
-
+        const newFileList = avatarFileList.filter((item) => item.uid !== file.uid);
+        setAvatarFileList(newFileList);
         if (newFileList.length === 0) {
-            setFileName(''); // Reset tên tệp
-            setImageUrl(''); // Reset URL hình ảnh
+            setAvatarUrl('');
         } else {
             const lastFile = newFileList[newFileList.length - 1];
-            setFileName(lastFile.name); // Cập nhật tên tệp mới nhất
             const reader = new FileReader();
             reader.onload = () => {
-                setImageUrl(reader.result);
+                setAvatarUrl(reader.result);
             };
-            reader.readAsDataURL(lastFile.originFileObj); // Đọc lại tệp mới nhất
+            reader.readAsDataURL(lastFile.originFileObj);
+        }
+    };
+
+    const handleSubmit = async (values) => {
+        if (avatarFileList.length > 0) {
+            const file = avatarFileList[0].originFileObj;
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                const base64String = reader.result.split(',')[1]; // Lấy phần Base64
+                onFinish({ ...values, avatar: base64String });
+            };
+            reader.readAsDataURL(file);
+        } else {
+            onFinish(values);
         }
     };
 
     return (
-        <Layout style={{ minHeight: '100vh' }}>
-            <Header style={{ background: '#006494', color: '#fff', textAlign: 'center' }}>
-                <h1>Add User</h1>
-            </Header>
-            <Content style={{ padding: '24px', background: '#fff' }}>
-                <Form name="addUser" onFinish={onFinish}>
-                    <Form.Item
-                        name="fullname"
-                        label="Full Name"
-                        rules={[{ required: true, message: 'Please input the full name!' }]}
+        <Form name="addUser" onFinish={handleSubmit}>
+            <Form.Item
+                name="username"
+                label="UserName"
+                rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
+            >
+                <Input />
+            </Form.Item>
+            <Form.Item
+                name="fullname"
+                label="Fullname"
+                rules={[{ required: true, message: 'Vui lòng nhập tên đầy đủ!' }]}
+            >
+                <Input />
+            </Form.Item>
+            <Form.Item
+                name="email"
+                label="Email"
+                rules={[
+                    { required: true, message: 'Vui lòng nhập email!' },
+                    { type: 'email', message: 'Email không hợp lệ!' },
+                ]}
+            >
+                <Input />
+            </Form.Item>
+            <Form.Item
+                name="password"
+                label="Password"
+                rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
+            >
+                <Input.Password />
+            </Form.Item>
+            <Form.Item name="address" label="Address">
+                <Input />
+            </Form.Item>
+            <Form.Item name="phone" label="Phone">
+                <Input />
+            </Form.Item>
+            <Form.Item name="Role" label="Role" rules={[{ required: true, message: 'Vui lòng chọn vai trò!' }]}>
+                <Select placeholder="Select Role">
+                    <Option value="Admin">Admin</Option>
+                    <Option value="User">User</Option>
+                    <Option value="Employee">Employee</Option>
+                </Select>
+            </Form.Item>
+            <Form.Item name="avatar" label="Upload Avatar">
+                <div>
+                    <Upload
+                        fileList={avatarFileList}
+                        showUploadList={false}
+                        beforeUpload={() => false} // Không tự động tải lên
+                        onChange={handleUploadChange}
+                        onRemove={handleRemove}
                     >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item
-                        name="email"
-                        label="Email"
-                        rules={[{ required: true, message: 'Please input the email!' }]}
-                    >
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="address" label="Address">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="phone" label="Phone">
-                        <Input />
-                    </Form.Item>
-                    <Form.Item name="avatar" label="Avatar">
-                        <div>
-                            <Upload
-                                beforeUpload={() => false} // Ngăn không tự động upload
-                                showUploadList={false} // Ẩn danh sách upload nếu không cần
-                                fileList={fileList}
-                                onChange={handleChange}
-                                onRemove={handleRemove}
-                            >
-                                <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
-                            </Upload>
-                            {/* Hiển thị tên tệp bên cạnh */}
-                            {fileName && <span style={{ marginLeft: '10px' }}>{fileName}</span>}
-                        </div>
-                    </Form.Item>
-                    {imageUrl && (
-                        <Form.Item label="Preview">
-                            <img
-                                src={imageUrl}
-                                alt="preview"
-                                style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
-                            />
-                        </Form.Item>
-                    )}
-                    <Form.Item style={{ textAlign: 'center' }}>
-                        <Button type="primary" htmlType="submit">
-                            Submit
-                        </Button>
-                    </Form.Item>
-                </Form>
-            </Content>
-        </Layout>
+                        <Button icon={<UploadOutlined />}>Tải lên Avatar</Button>
+                    </Upload>
+                    {avatarFileList.length > 0 && <span style={{ marginLeft: '10px' }}>{avatarFileList[0].name}</span>}
+                </div>
+                {avatarUrl && (
+                    <img
+                        src={avatarUrl}
+                        alt="Xem trước Avatar"
+                        style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
+                    />
+                )}
+            </Form.Item>
+            <Form.Item style={{ textAlign: 'center' }}>
+                <Button type="primary" htmlType="submit">
+                    Add User
+                </Button>
+            </Form.Item>
+        </Form>
     );
 };
 

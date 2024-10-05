@@ -12,7 +12,7 @@ import Chat from '~/pages/ChatBot/Chat';
 import Contract from '~/pages/Contract/Contract';
 
 // Admin
-import Dashboard from '~/pages/DashBoard';
+import Dashboard from '~/pages/admin/Dashboard';
 import UserAdmin from '~/pages/admin/UserAdmin';
 import Billing from '~/pages/admin/Billing';
 import Vehicle from '~/pages/admin/Vehicle';
