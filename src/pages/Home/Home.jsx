@@ -125,12 +125,46 @@ const partnersData = [
 const ContactForm = () => {
     const [form] = Form.useForm();
     const [success, setSuccess] = useState(false);
-    const onFinish = (values) => {
-        console.log('Success:', values);
-        console.log('Submitted values:', values);
-        setSuccess(true);
-        form.resetFields();
-    };
+    const [insuranceDetails, setInsuranceDetails] = useState([]);
+    const onFinish = async (values) => {
+        try {
+          const newAdvertisement = {
+            customerName: values.name,
+            customerPhone: values.phone,
+            customerEmail: values.email,
+            type: values.product === 'Car' ? 0 : 1, 
+          };
+          const adResponse = await axios.post('https://localhost:7289/api/advertisements', newAdvertisement);
+    
+          if (adResponse.status === 201) {
+            console.log('Advertisement added successfully.');
+            const response = await axios.get(`https://localhost:7289/api/insurances/type/${values.product}`);
+            setInsuranceDetails(response.data);
+    
+            const insuranceInfo = response.data.map(i => `
+              Name: ${i.name}
+              Description: ${i.description}
+              Price: ${i.price}
+            `).join('\n');
+            const emailParams = {
+              to_name: values.name,
+              from_name: 'One Team',
+              message: `Here are the available insurance packages for ${values.product}: \n${insuranceInfo}`,
+              to_email: values.email,
+            };
+    
+            emailjs.send('service_xe6f9kj', 'template_3z2uslk', emailParams, 'laGrWQghcmlQSS4rS')
+              .then((result) => {
+                console.log('Email successfully sent!');
+                setSuccess(true);
+              }, (error) => {
+                console.log('Email failed to send:', error);
+              });
+          }
+        } catch (error) {
+          console.error("Error occurred:", error);
+        }
+      };
 
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -227,7 +261,8 @@ const ContactForm = () => {
                                 </Form.Item>
                                 <Form.Item label="Sản phẩm mà bạn quan tâm" name="product">
                                     <Select>
-                                        <Option value="bao-hiem-xe-hoi">Bảo hiểm vật chất xe ô tô</Option>
+                                        <Option value="Car">Bảo hiểm vật chất xe ô tô</Option>
+                                        <Option value="Motorbike">Bảo hiểm vật chất xe máy</Option>
                                     </Select>
                                 </Form.Item>
                                 <Form.Item>
