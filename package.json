@@ -9,6 +9,7 @@
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
         "antd": "^5.21.1",
+        "jspdf": "^2.5.2",
         "@tinymce/tinymce-react": "^5.1.1",
         "@tippyjs/react": "^4.2.6",
         "bcryptjs": "^2.4.3",
