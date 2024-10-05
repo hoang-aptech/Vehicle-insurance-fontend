@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Button, Modal } from 'antd';
 import {
     WechatOutlined,
@@ -7,20 +7,16 @@ import {
     CloseCircleOutlined,
     FacebookOutlined,
 } from '@ant-design/icons';
-import axios from 'axios';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
-
 import styles from './Chat.module.scss';
 
 const ChatApp = ({ chatId, role }) => {
-    console.log({ chatId, role });
-
     const [isChatVisible, setChatVisible] = useState(true);
     const [isIconVisible, setIconVisible] = useState(false);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
-    const [conn, setConnection] = useState();
-    const messagesEndRef = useRef();
+    const [conn, setConnection] = useState(null);
+    const messagesEndRef = useRef(null);
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
@@ -28,80 +24,59 @@ const ChatApp = ({ chatId, role }) => {
         }
     };
 
-    const joinChatRoom = async () => {
-        console.log('joinChatRoom');
-
+    const joinChatRoom = useCallback(async () => {
         try {
-            const conn = new HubConnectionBuilder()
+            const connection = new HubConnectionBuilder()
                 .withUrl('https://localhost:7289/chat')
                 .configureLogging(LogLevel.Information)
                 .build();
 
-            conn.on('ReceiveMessages', (messages) => {
-                console.log(messages);
-                const formattedMessages = messages.map((msg) => ({
+            connection.on('ReceiveMessages', (receivedMessages) => {
+                const formattedMessages = receivedMessages.map((msg) => ({
                     ...msg,
                     sender: msg.role === role ? 'right' : 'left',
                 }));
                 setMessages(formattedMessages);
             });
 
-            conn.on('ReceiveMessage', (m) => {
-                console.log(m);
+            connection.on('ReceiveMessage', (message) => {
                 setMessages((prevMessages) => [
                     ...prevMessages,
                     {
-                        ...m,
-                        sender: m.role === role ? 'right' : 'left',
+                        ...message,
+                        sender: message.role === role ? 'right' : 'left',
                     },
                 ]);
+                scrollToBottom();
             });
 
-            await conn.start();
-            await conn.invoke('JoinSpecificGroup', chatId);
-
-            setConnection(conn);
+            await connection.start();
+            await connection.invoke('JoinSpecificGroup', chatId);
+            setConnection(connection);
         } catch (err) {
-            console.error(err);
+            console.error('Error joining chat room:', err);
         }
-    };
-
-    // const fetchMessages = async () => {
-    //     try {
-    //         const response = await axios.get('https://localhost:7289/api/Messages', {
-    //             params: { customersupportId: 1 },
-    //         });
-    //         const formattedMessages = response.data.map((msg) => ({
-    //             ...msg,
-    //             sender: msg.role === 'User' ? 'right' : 'left',
-    //         }));
-    //         setMessages(formattedMessages);
-    //     } catch (error) {
-    //         console.error('Lỗi khi nhận tin nhắn:', error);
-    //     }
-    // };
+    }, [chatId, role]);
 
     const sendMessage = async () => {
-        const currentTimeUTC = new Date();
-        const timeZoneOffset = 7 * 60;
-        const currentTimePlus7 = new Date(currentTimeUTC.getTime() + timeZoneOffset * 60 * 1000);
-        const currentTimePlus7ISO = currentTimePlus7.toISOString().slice(0, 19);
+        if (!newMessage.trim()) return;
 
+        const currentTimeUTC = new Date();
+        const timeZoneOffset = 7 * 60; // Adjust as needed
+        const currentTimePlus7 = new Date(currentTimeUTC.getTime() + timeZoneOffset * 60 * 1000);
         const messageToSend = {
-            time: currentTimePlus7ISO,
+            time: currentTimePlus7.toISOString(),
             message: newMessage,
             customersupportId: chatId,
             role,
         };
 
         try {
-            conn.invoke('SendMessage', messageToSend);
-            // await axios.post('https://localhost:7289/api/Messages', messageToSend);
-            // setMessages([...messages, { message: newMessage, sender: 'right', time: currentTimePlus7ISO, role }]);
+            await conn.invoke('SendMessage', messageToSend);
             setNewMessage('');
             scrollToBottom();
         } catch (error) {
-            console.error('Lỗi khi gửi tin nhắn:', error);
+            console.error('Error sending message:', error);
         }
     };
 
@@ -111,7 +86,6 @@ const ChatApp = ({ chatId, role }) => {
 
     const showChatWindow = () => {
         setChatVisible(true);
-        // fetchMessages();
     };
 
     const handleCancel = () => {
@@ -120,32 +94,22 @@ const ChatApp = ({ chatId, role }) => {
     };
 
     const handleSendMessage = () => {
-        if (newMessage.trim()) {
-            sendMessage();
-        }
+        sendMessage();
     };
 
     useEffect(() => {
         if (isChatVisible) {
             joinChatRoom();
         } else if (conn) {
-            try {
-                conn.stop()
-                    .then(() => {
-                        console.log('Connection stopped.');
-                    })
-                    .catch((err) => console.error('Error while stopping connection: ', err));
-            } catch (err) {
-                console.error('Error while stopping connection: ', err);
-            }
+            conn.stop().catch((err) => console.error('Error stopping connection:', err));
         }
 
         return () => {
             if (conn) {
-                conn.stop().catch((err) => console.error('Error while stopping connection on unmount: ', err));
+                conn.stop().catch((err) => console.error('Error while stopping connection on unmount:', err));
             }
         };
-    }, [isChatVisible]);
+    }, [isChatVisible, joinChatRoom, conn]);
 
     return (
         <div>
@@ -224,6 +188,7 @@ const ChatApp = ({ chatId, role }) => {
                                 )}
                             </div>
                         ))}
+                        <div ref={messagesEndRef} />
                     </div>
                 </div>
 

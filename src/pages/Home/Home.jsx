@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Tag, Carousel, Typography, Form, Input, Select, Button } from 'antd';
 import styles from './Home.module.scss';
 import Hero from '../../assets/Images/hero_mascot.png';
@@ -35,46 +35,48 @@ import { PhoneOutlined, MailOutlined } from '@ant-design/icons';
 import QrZalo from '../../assets/Images/qr.jpg';
 import QrFace from '../../assets/Images/prface.png';
 import MascotSp from '../../assets/Images/mascot_support.png';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const carouselImages = [carou1, carou2, carou3, carou4, carou5, carou6, carou7];
 
-const insuranceData = [
-    {
-        icon: '✈️',
-        title: 'Du lịch quốc tế',
-        tag: 'HOT',
-    },
-    {
-        icon: '🚗',
-        title: 'TNDS Ô tô',
-    },
-    {
-        icon: '🚚',
-        title: 'Vật chất Ô tô',
-        tag: 'MỚI',
-    },
-    {
-        icon: '🩺',
-        title: 'Sức khỏe',
-    },
-    {
-        icon: '🩹',
-        title: 'Tai nạn 24/24',
-    },
-    {
-        icon: '🛵',
-        title: 'TNDS Xe máy',
-    },
-    {
-        icon: '🏠',
-        title: 'Nhà tư nhân',
-    },
-    {
-        icon: '🦠',
-        title: 'Sức khỏe & Ung thư',
-        tag: 'MỚI',
-    },
-];
+// const insuranceData = [
+//     {
+//         icon: '✈️',
+//         title: 'Du lịch quốc tế',
+//         tag: 'HOT',
+//     },
+//     {
+//         icon: '🚗',
+//         title: 'TNDS Ô tô',
+//     },
+//     {
+//         icon: '🚚',
+//         title: 'Vật chất Ô tô',
+//         tag: 'MỚI',
+//     },
+//     {
+//         icon: '🩺',
+//         title: 'Sức khỏe',
+//     },
+//     {
+//         icon: '🩹',
+//         title: 'Tai nạn 24/24',
+//     },
+//     {
+//         icon: '🛵',
+//         title: 'TNDS Xe máy',
+//     },
+//     {
+//         icon: '🏠',
+//         title: 'Nhà tư nhân',
+//     },
+//     {
+//         icon: '🦠',
+//         title: 'Sức khỏe & Ung thư',
+//         tag: 'MỚI',
+//     },
+// ];
 
 const data = [
     {
@@ -258,6 +260,26 @@ const Home = () => {
         groupedImages.push(carouselImages.slice(i, i + 2));
     }
 
+    const [insuranceData, setInsuranceData] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('https://localhost:7289/api/Insurances');
+                setInsuranceData(response.data);
+            } catch (error) {
+                console.error('Error fetching data: ', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleCardClick = (id) => {
+        navigate(`/insurance-automotive-physical/${id}`);
+    };
+
     return (
         <>
             <div className={`${styles.saladinContainer}`}>
@@ -272,14 +294,14 @@ const Home = () => {
                 <Row gutter={[16, 16]} className={`${styles.saladinContent1}`}>
                     {insuranceData.map((insurance, index) => (
                         <Col key={index} xs={24} sm={12} md={8} lg={6}>
-                            <Card className={`${styles.saladinCard}`}>
-                                {insurance.tag && (
+                            <Card className={`${styles.saladinCard}`} onClick={() => handleCardClick(insurance.id)}>
+                                {insurance.isNew && (
                                     <Tag className={`${styles.saladinTag}`} color="#f50">
-                                        {insurance.tag}
+                                        New
                                     </Tag>
                                 )}
                                 <div className={`${styles.saladinIcon}`}>{insurance.icon}</div>
-                                <div className={`${styles.saladinTitle}`}>{insurance.title}</div>
+                                <div className={`${styles.saladinTitle}`}>{insurance.name}</div>
                             </Card>
                         </Col>
                     ))}
