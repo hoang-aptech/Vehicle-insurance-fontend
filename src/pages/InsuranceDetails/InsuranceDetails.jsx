@@ -7,7 +7,7 @@ import pviLogo from '../../assets/Images/pvi.png';
 import baominhLogo from '../../assets/Images/baominh_logo.png';
 import libertyLogo from '../../assets/Images/liberty_logo.png';
 import vniLogo from '../../assets/Images/pvi.png';
-import styles from './InsuranceAutomotivePhysical.module.scss';
+import styles from './InsuranceDetails.scss';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import car1 from '../../assets/Images/car-1.png';
 import car2 from '../../assets/Images/car-2.png';

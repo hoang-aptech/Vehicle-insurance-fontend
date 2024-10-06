@@ -48,8 +48,13 @@
     justify-content: space-between;
 }
 
+.company-hotline {
+    color: var(--white-color);
+}
+
 .company-details {
-    font-size: 1.6rem;
+    line-height: 1.8;
+    font-size: 1.5rem;
     width: 352px;
 
     .logo {
@@ -59,11 +64,13 @@
     }
 }
 
-.socials {
-    color: #fff;
+.company-details-body {
+    opacity: 0.9;
 }
 
-.item-box {
+.social-link {
+    margin-right: 4px;
+    color: #fff;
 }
 
 .item-box div {

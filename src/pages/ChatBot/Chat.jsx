@@ -64,8 +64,9 @@ const ChatApp = ({ chatId, role }) => {
         const currentTimeUTC = new Date();
         const timeZoneOffset = 7 * 60; // Adjust as needed
         const currentTimePlus7 = new Date(currentTimeUTC.getTime() + timeZoneOffset * 60 * 1000);
+        const currentTimePlus7ISO = currentTimePlus7.toISOString().slice(0, 19);
         const messageToSend = {
-            time: currentTimePlus7.toISOString(),
+            time: currentTimePlus7ISO,
             message: newMessage,
             customersupportId: chatId,
             role,
@@ -109,7 +110,7 @@ const ChatApp = ({ chatId, role }) => {
                 conn.stop().catch((err) => console.error('Error while stopping connection on unmount:', err));
             }
         };
-    }, [isChatVisible, joinChatRoom, conn]);
+    }, [isChatVisible, joinChatRoom]);
 
     return (
         <div>
