@@ -1,20 +1,33 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Row, Col, Typography } from 'antd';
 import jsPDF from 'jspdf';
+import { useParams } from 'react-router-dom';
+import axios from 'axios';
 
 const { Title, Paragraph } = Typography;
 
 const Contract = () => {
+    const { id } = useParams();
     const contractRef = useRef();
+    const [contractData, setContractData] = useState({});
+
+    const getContractData = async () => {
+        const res = await axios.get(process.env.REACT_APP_BACKEND_URL + '/insurances/' + id);
+        setContractData(res.data);
+    };
 
     const exportPDF = () => {
         const doc = new jsPDF();
         doc.text('Contract', 10, 10);
-        doc.text('Party A: ABC Company', 10, 20);
-        doc.text('Party B: XYZ Company', 10, 30);
-        doc.text('Contract content: ....', 10, 40);
+        doc.text('Party A: Hoang', 10, 20);
+        doc.text('Party B: XYZ Company', 10, 100);
+        doc.text(contractData.clause, 10, 200);
         doc.save('contract.pdf');
     };
+
+    useEffect(() => {
+        getContractData();
+    }, []);
 
     return (
         <div>
@@ -37,7 +50,7 @@ const Contract = () => {
                 </Row>
 
                 <Title level={4}>Contract Content</Title>
-                <Paragraph>The contract content is agreed upon by both parties with the following terms...</Paragraph>
+                <Paragraph>{contractData.clause}</Paragraph>
             </div>
 
             <Button type="default" onClick={exportPDF} style={{ marginTop: '20px' }}>
