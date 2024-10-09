@@ -8,10 +8,10 @@
         "@testing-library/jest-dom": "^5.17.0",
         "@testing-library/react": "^13.4.0",
         "@testing-library/user-event": "^13.5.0",
-        "antd": "^5.21.1",
-        "jspdf": "^2.5.2",
         "@tinymce/tinymce-react": "^5.1.1",
         "@tippyjs/react": "^4.2.6",
+        "antd": "^5.21.1",
+        "jspdf": "^2.5.2",
         "bcryptjs": "^2.4.3",
         "emailjs-com": "^3.2.0",
         "express": "^4.21.0",
@@ -24,6 +24,10 @@
         "react-to-print": "^3.0.0",
         "recharts": "^2.12.7",
         "tinymce": "^7.3.0",
+        "buffer": "^6.0.3",
+        "crypto-browserify": "^3.12.0",
+        "stream-browserify": "^3.0.0",
+        "vm-browserify": "^1.1.2",
         "web-vitals": "^2.1.4"
     },
     "devDependencies": {

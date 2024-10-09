@@ -28,6 +28,23 @@
     align-items: center;
 }
 
+.actions-with-nation {
+    .welcome {
+        font-size: 1.4rem;
+
+        .username {
+            color: var(--primary-color);
+        }
+    }
+    .menu-list {
+        width: 135px;
+
+        .menu-title {
+            font-size: 1.3rem;
+        }
+    }
+}
+
 .logo-with-nav-menu {
     .logo {
         cursor: pointer;
@@ -269,7 +286,4 @@
 
 /* Mobile */
 @media (max-width: 46.249375em) {
-    .contributor-btn {
-        display: none;
-    }
 }
