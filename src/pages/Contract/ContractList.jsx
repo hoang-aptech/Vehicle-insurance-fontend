@@ -2,7 +2,9 @@ import React, { useContext, useEffect, useState } from 'react';
 import { List, Typography, Button, Layout, notification } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+
 import { Context } from '~/Context';
+import ButtonCustom from '~/components/Button';
 import config from '~/config';
 
 const { Content } = Layout;
@@ -18,11 +20,11 @@ const ContractList = () => {
         });
     };
 
-    const { userToken } = useContext(Context);
+    const { user, userToken, handleLogoutUser } = useContext(Context);
     const [contractData, setContractData] = useState([]);
     const getDataApi = async () => {
         try {
-            const res = await axios.get(process.env.REACT_APP_BACKEND_URL + '/Billings/by-user/1', {
+            const res = await axios.get(process.env.REACT_APP_BACKEND_URL + `/Billings/by-user/${user.id}`, {
                 headers: { Authorization: 'Bearer ' + userToken },
             });
             if (res.status === 200) {
@@ -40,6 +42,11 @@ const ContractList = () => {
         } catch (err) {
             if (err.status === 401) {
                 openNotificationWithIcon('error', 'Unauthorized!', 'You do not have permission to access this page');
+                setTimeout(() => {
+                    if (handleLogoutUser()) {
+                        navigate(config.routes.login);
+                    }
+                }, 1000);
             }
         }
     };
@@ -76,6 +83,14 @@ const ContractList = () => {
                             />
                         </List.Item>
                     )}
+                    locale={{
+                        emptyText: (
+                            <h4>
+                                You do not have any contract yet.{' '}
+                                <ButtonCustom title="Buy now" to={config.routes.home} />
+                            </h4>
+                        ),
+                    }}
                 />
             </Content>
         </Layout>

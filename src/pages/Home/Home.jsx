@@ -309,7 +309,9 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('https://localhost:7289/api/Insurances');
+                const response = await axios.get('https://localhost:7289/api/Insurances/root');
+                console.log(response.data);
+
                 setInsuranceData(response.data);
             } catch (error) {
                 console.error('Error fetching data: ', error);

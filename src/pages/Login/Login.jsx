@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { Link, useNavigate } from 'react-router-dom';
 import { notification } from 'antd';
 import axios from 'axios';
 
+import { Context } from '~/Context';
 import config from '~/config';
-import background from '~/assets/img/backgroundLoginRegister.png';
 import styles from './Login.module.scss';
+import background from '~/assets/img/backgroundLoginRegister.png';
 
 const cx = classNames.bind(styles);
 
 const Login = () => {
+    const { user, setUser, setUserToken } = useContext(Context);
     const [api, contextHolder] = notification.useNotification();
     const openNotificationWithIcon = (type, message, description) => {
         api[type]({
             message: message,
             description: description,
         });
+    };
+
+    const handleLoggedIn = () => {
+        if (user) {
+            openNotificationWithIcon('info', 'user logged in', 'Redirecting to home ...');
+            setTimeout(() => {
+                navigate(config.routes.home);
+            }, 1000);
+        }
     };
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
@@ -46,6 +57,8 @@ const Login = () => {
                 const data = res.data;
                 localStorage.setItem('userToken', JSON.stringify(data.token));
                 localStorage.setItem('user', JSON.stringify(data.user));
+                setUserToken(data.token);
+                setUser(data.user);
                 openNotificationWithIcon('success', 'Login success!', 'You have successfully logged in');
                 setTimeout(() => {
                     navigate(config.routes.home);
@@ -55,6 +68,10 @@ const Login = () => {
             openNotificationWithIcon('error', 'Login fail!', 'Incorrect username or password');
         }
     };
+
+    useEffect(() => {
+        handleLoggedIn();
+    }, []);
 
     return (
         <div className={cx('background-container')} style={{ backgroundImage: `url(${background})` }}>

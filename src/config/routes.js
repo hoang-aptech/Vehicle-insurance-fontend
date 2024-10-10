@@ -12,6 +12,7 @@ const routes = {
     contractList: '/contract-list',
     chat2: '/chat2',
     insurancePackages: '/insurance-packages/:insuranceId',
+    insuranceList: '/insurance-list',
 
     admin: '/admin',
     userAdmin: '/admin/user-admin',

@@ -28,7 +28,8 @@
         "crypto-browserify": "^3.12.0",
         "stream-browserify": "^3.0.0",
         "vm-browserify": "^1.1.2",
-        "web-vitals": "^2.1.4"
+        "web-vitals": "^2.1.4",
+        "prop-types": "^15.8.1"
     },
     "devDependencies": {
         "axios": "^1.7.7",
@@ -36,7 +37,6 @@
         "classnames": "^2.5.1",
         "customize-cra": "^1.0.0",
         "normalize.css": "^8.0.1",
-        "prop-types": "^15.8.1",
         "react-app-rewired": "^2.2.1",
         "sass": "^1.79.3"
     },

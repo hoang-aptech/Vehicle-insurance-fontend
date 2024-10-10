@@ -18,7 +18,7 @@ const cx = classNames.bind(style);
 
 function Header() {
     const navigate = useNavigate();
-    const { user } = useContext(Context);
+    const { user, handleLogoutUser } = useContext(Context);
 
     let [navContent, setNavContent] = useState([]);
     const [showMenuResponsive, setShowMenuResponsive] = useState(false);
@@ -26,7 +26,7 @@ function Header() {
     const [showMenuChildren, setShowMenuChildren] = useState([]);
 
     const createHeaderNav = async () => {
-        const insuranceDataRes = await axios.get(process.env.REACT_APP_BACKEND_URL + '/Insurances');
+        const insuranceDataRes = await axios.get(process.env.REACT_APP_BACKEND_URL + '/Insurances/root');
         const insuranceData = insuranceDataRes.data;
         const insuranceMenuItems = insuranceData.map((item) => ({
             label: item.name,
@@ -92,6 +92,12 @@ function Header() {
         e.preventDefault();
         setShowMenuResponsive(false);
         navigate(route);
+    };
+    const handleLogOutBtn = (e) => {
+        e.preventDefault();
+        if (handleLogoutUser()) {
+            navigate(config.routes.home);
+        }
     };
 
     useEffect(() => {
@@ -262,6 +268,15 @@ function Header() {
                                             <li>
                                                 <Link to={config.routes.home} className={cx('menu-link')}>
                                                     <span className={cx('menu-title')}>Profile</span>
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link
+                                                    to={config.routes.home}
+                                                    className={cx('menu-link')}
+                                                    onClick={handleLogOutBtn}
+                                                >
+                                                    <span className={cx('menu-title')}>Logout</span>
                                                 </Link>
                                             </li>
                                         </ul>

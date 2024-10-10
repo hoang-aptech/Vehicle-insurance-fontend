@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback, forwardRef, useImperativeHandle } from 'react';
 import { Button, Modal } from 'antd';
 import {
     WechatOutlined,
@@ -8,15 +8,23 @@ import {
     FacebookOutlined,
 } from '@ant-design/icons';
 import { HubConnectionBuilder, LogLevel } from '@microsoft/signalr';
+import PropTypes from 'prop-types';
+
 import styles from './Chat.module.scss';
 
-const ChatApp = ({ chatId, role }) => {
+const ChatApp = forwardRef(({ chatId, role }, ref) => {
     const [isChatVisible, setChatVisible] = useState(true);
     const [isIconVisible, setIconVisible] = useState(false);
     const [messages, setMessages] = useState([]);
     const [newMessage, setNewMessage] = useState('');
     const [conn, setConnection] = useState(null);
     const messagesEndRef = useRef(null);
+
+    useImperativeHandle(ref, () => ({
+        handleShowChat() {
+            setChatVisible(true);
+        },
+    }));
 
     const scrollToBottom = () => {
         if (messagesEndRef.current) {
@@ -209,6 +217,11 @@ const ChatApp = ({ chatId, role }) => {
             </Modal>
         </div>
     );
+});
+
+ChatApp.propTypes = {
+    chatId: PropTypes.number.isRequired,
+    role: PropTypes.oneOf(['User', 'Employee']).isRequired,
 };
 
 export default ChatApp;

@@ -4,16 +4,17 @@ import config from '~/config';
 import { Context } from '~/Context';
 
 function PrivateRoute() {
-    const { isLoggedIn } = useContext(Context);
+    const { user } = useContext(Context);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (!isLoggedIn) {
+        if (!user) {
+            alert('You cannot access here without logging in');
             navigate(config.routes.login);
         }
     }, []);
 
-    return isLoggedIn ? <Outlet /> : null;
+    return user ? <Outlet /> : null;
 }
 
 export default PrivateRoute;

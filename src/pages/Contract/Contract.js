@@ -1,20 +1,45 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, Row, Col, Typography } from 'antd';
 import jsPDF from 'jspdf';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Button, Row, Col, Typography, notification } from 'antd';
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { Context } from '~/Context';
 import Wrapper from '~/components/Wrapper';
+import config from '~/config';
 
 const { Title, Paragraph } = Typography;
 
 const Contract = () => {
+    const navigate = useNavigate();
+    const [api, contextHolder] = notification.useNotification();
+    const openNotificationWithIcon = (type, message, description) => {
+        api[type]({
+            message: message,
+            description: description,
+        });
+    };
+    const { handleLogoutUser, userToken } = useContext(Context);
     const { id } = useParams();
     const contractRef = useRef();
     const [contractData, setContractData] = useState({});
 
     const getContractData = async () => {
-        const res = await axios.get(process.env.REACT_APP_BACKEND_URL + '/insurances/' + id);
-        setContractData(res.data);
+        try {
+            const res = await axios.get(process.env.REACT_APP_BACKEND_URL + '/insurances/' + id, {
+                headers: { Authorization: 'Bearer ' + userToken },
+            });
+            setContractData(res.data);
+        } catch (err) {
+            if (err.status === 401) {
+                openNotificationWithIcon('error', 'Unauthorized!', 'You do not have permission to access this page');
+                setTimeout(() => {
+                    if (handleLogoutUser()) {
+                        navigate(config.routes.login);
+                    }
+                }, 1000);
+            }
+        }
     };
 
     const exportPDF = () => {
@@ -93,6 +118,7 @@ const Contract = () => {
 
     return (
         <Wrapper>
+            {contextHolder}
             <div ref={contractRef} style={{ padding: '20px', border: '1px solid #ddd' }}>
                 <Title level={2}>Contract</Title>
 
