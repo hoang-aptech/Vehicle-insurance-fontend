@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react/headless';
-import { CaretDownOutlined, CloseOutlined } from '@ant-design/icons';
+import { CaretDownOutlined, CloseOutlined, UserAddOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -12,19 +12,20 @@ import config from '~/config';
 import ukFlag from '~/assets/img/uk-flag.png';
 import vehicleInsuranceIcon from '~/assets/img/vehicle_insurance_icon.png';
 import style from './Header.module.scss';
+import { Context } from '~/Context';
 
 const cx = classNames.bind(style);
 
 function Header() {
     const navigate = useNavigate();
+    const { user } = useContext(Context);
+
     let [navContent, setNavContent] = useState([]);
     const [showMenuResponsive, setShowMenuResponsive] = useState(false);
 
     const [showMenuChildren, setShowMenuChildren] = useState([]);
 
     const createHeaderNav = async () => {
-        // console.log(process.env.REACT_APP_BACKEND_URL);
-
         const insuranceDataRes = await axios.get(process.env.REACT_APP_BACKEND_URL + '/Insurances');
         const insuranceData = insuranceDataRes.data;
         const insuranceMenuItems = insuranceData.map((item) => ({
@@ -158,8 +159,6 @@ function Header() {
 
                                                     {showMenuChildren.map((menu) => {
                                                         if (menu.label === i.label && menu.show) {
-                                                            console.log(menu);
-
                                                             return (
                                                                 <ul key={menu.label} className={cx('menu-list')}>
                                                                     {i.children.map((item, idx) => (
@@ -251,8 +250,40 @@ function Header() {
                     </nav>
                 </div>
                 <div className={cx('actions-with-nation')}>
-                    <Button type="outline" title="Contributor" className={cx('contributor-btn')} />
-                    <Button icon={<UserIcon />} title="Log in" />
+                    {user ? (
+                        <div>
+                            <Tippy
+                                interactive
+                                delay={[0, 100]}
+                                placement="bottom-end"
+                                render={() => {
+                                    return (
+                                        <ul className={cx('menu-list')}>
+                                            <li>
+                                                <Link to={config.routes.home} className={cx('menu-link')}>
+                                                    <span className={cx('menu-title')}>Profile</span>
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    );
+                                }}
+                            >
+                                <h3 className={cx('welcome')}>
+                                    Hello <span className={cx('username')}>{user.username}</span>
+                                </h3>
+                            </Tippy>
+                        </div>
+                    ) : (
+                        <>
+                            <Button icon={<UserIcon />} title="Log in" to={config.routes.login} />
+                            <Button
+                                icon={<UserAddOutlined />}
+                                type="outline"
+                                title="Register"
+                                to={config.routes.register}
+                            />
+                        </>
+                    )}
                     <div className={cx('nation-box')}>
                         <img src={ukFlag} className={cx('flag')} alt="uk-flag" />
                         <p className={cx('nation-name')}>EN</p>

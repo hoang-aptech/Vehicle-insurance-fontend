@@ -3,10 +3,9 @@ import { createContext, useState } from 'react';
 const Context = createContext();
 
 function ContextProvider({ children }) {
-    const [token, setToken] = useState(JSON.parse(sessionStorage.getItem('token')) || '');
-    const [isLoggedIn, setIsLoggedIn] = useState(!!token || false);
-    const [userLoggedIn, setUserLoggedIn] = useState(JSON.parse(sessionStorage.getItem('userLoggedIn')) || {});
-    const contextValue = { isLoggedIn, setIsLoggedIn, userLoggedIn, setUserLoggedIn, token, setToken };
+    const userToken = JSON.parse(localStorage.getItem('userToken'));
+    const user = JSON.parse(localStorage.getItem('user'));
+    const contextValue = { userToken, user };
     return <Context.Provider value={contextValue}>{children}</Context.Provider>;
 }
 
