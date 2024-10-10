@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Button, Form, Input, Modal, Row, Col, Select, Card } from 'antd';
+import { Layout, Table, Button, Form, Input, Modal, Row, Col, Card, Select } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import axios from 'axios';
 
@@ -19,16 +19,16 @@ const Advertisement = () => {
 
     const API_URL = 'https://localhost:7289/api/Advertisements';
 
-    // Fetch advertisement data from the API
+    const fetchAdvertisementData = async () => {
+        try {
+            const response = await axios.get(API_URL);
+            setDataSource(response.data);
+        } catch (error) {
+            console.error('Unable to fetch advertisement data:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchAdvertisementData = async () => {
-            try {
-                const response = await axios.get(API_URL);
-                setDataSource(response.data);
-            } catch (error) {
-                console.error('Failed to fetch advertisement data:', error);
-            }
-        };
         fetchAdvertisementData();
     }, []);
 
@@ -45,26 +45,26 @@ const Advertisement = () => {
     };
 
     const handleOk = async () => {
-        const values = await form.validateFields();
-        if (isEditMode && currentAd) {
-            // Update advertisement
-            try {
-                const response = await axios.put(`${API_URL}/${currentAd.id}`, values);
-                setDataSource(dataSource.map((ad) => (ad.id === currentAd.id ? response.data : ad)));
-            } catch (error) {
-                console.error('Failed to update advertisement:', error);
-            }
-        } else {
-            // Add new advertisement
-            try {
+        try {
+            const values = await form.validateFields();
+
+            if (isEditMode && currentAd) {
+                const updatedAd = {
+                    id: currentAd.id,
+                    ...values,
+                };
+                await axios.put(`${API_URL}/${currentAd.id}`, updatedAd);
+                fetchAdvertisementData();
+            } else {
                 const response = await axios.post(API_URL, values);
-                setDataSource([...dataSource, response.data]);
-            } catch (error) {
-                console.error('Failed to add advertisement:', error);
+                setDataSource((prevData) => [...prevData, response.data]);
             }
+
+            setIsModalVisible(false);
+            form.resetFields();
+        } catch (error) {
+            console.error('Unable to update advertisement information:', error.response?.data || error);
         }
-        form.resetFields();
-        setIsModalVisible(false);
     };
 
     const handleCancel = () => {
@@ -73,19 +73,19 @@ const Advertisement = () => {
 
     const handleFilterChange = (e) => {
         setFilterName(e.target.value);
-        setCurrentPage(1); // Reset to first page on filter change
+        setCurrentPage(1);
     };
 
-    const filteredData = dataSource.filter((item) =>
-        item.customerName.toLowerCase().includes(filterName.toLowerCase()),
-    );
+    const filteredData = (dataSource || []).filter((item) => {
+        return item && item.customerName && item.customerName.toLowerCase().includes(filterName.toLowerCase());
+    });
 
     const handleDelete = async (id) => {
         try {
             await axios.delete(`${API_URL}/${id}`);
             setDataSource(dataSource.filter((ad) => ad.id !== id));
         } catch (error) {
-            console.error('Failed to delete advertisement:', error);
+            console.error('Unable to delete advertisement:', error);
         }
     };
 
@@ -191,7 +191,7 @@ const Advertisement = () => {
                 />
 
                 <Modal
-                    title={isEditMode ? 'Edit Advertisement' : 'Add New Advertisement'}
+                    title={isEditMode ? 'Edit Advertisement Record' : 'Add New Advertisement Record'}
                     open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}

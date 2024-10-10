@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Button, Form, Input, Modal, Row, Card } from 'antd';
+import { Layout, Table, Button, Form, Input, Modal, Row, Col, Card, Select, Checkbox } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import axios from 'axios';
 
 const { Header, Content } = Layout;
+const { Option } = Select;
 
 const Insurance = () => {
     const [dataSource, setDataSource] = useState([]);
@@ -14,21 +15,23 @@ const Insurance = () => {
     const [form] = Form.useForm();
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 5;
-    const [content, setContent] = useState('');
+    const [filterName, setFilterName] = useState('');
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+    const [descriptionContent, setDescriptionContent] = useState('');
+    const [clauseContent, setClauseContent] = useState('');
 
     const API_URL = 'https://localhost:7289/api/Insurances';
 
-    // Fetch insurance data from the API
+    const fetchInsuranceData = async () => {
+        try {
+            const response = await axios.get(API_URL);
+            setDataSource(response.data);
+        } catch (error) {
+            console.error('Unable to fetch insurance data:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchInsuranceData = async () => {
-            try {
-                const response = await axios.get(API_URL);
-                setDataSource(response.data);
-            } catch (error) {
-                console.error('Failed to fetch insurance data:', error);
-            }
-        };
         fetchInsuranceData();
     }, []);
 
@@ -38,49 +41,64 @@ const Insurance = () => {
         if (insurance) {
             setIsEditMode(true);
             form.setFieldsValue(insurance);
-            setContent(insurance.description); // Set content for TinyMCE
+            setDescriptionContent(insurance.description); // Set content for description
+            setClauseContent(insurance.clause); // Set content for clause
         } else {
             setIsEditMode(false);
             form.resetFields();
-            setContent('');
+            setDescriptionContent('');
+            setClauseContent('');
         }
     };
 
     const handleOk = async () => {
-        const values = await form.validateFields();
-        const updatedInsurance = { ...values, description: content }; // Get the content from TinyMCE
-        if (isEditMode && currentInsurance) {
-            // Update insurance
-            try {
-                const response = await axios.put(`${API_URL}/${currentInsurance.id}`, updatedInsurance);
-                setDataSource(dataSource.map((ins) => (ins.id === currentInsurance.id ? response.data : ins)));
-            } catch (error) {
-                console.error('Failed to update insurance:', error);
-            }
-        } else {
-            // Add new insurance
-            try {
-                const response = await axios.post(API_URL, updatedInsurance);
-                setDataSource([...dataSource, response.data]);
-            } catch (error) {
-                console.error('Failed to add insurance:', error);
-            }
-        }
-        form.resetFields();
-        setContent('');
-        setIsModalVisible(false);
-    };
+        try {
+            const values = await form.validateFields();
 
+            const insuranceData = {
+                ...values,
+                description: descriptionContent, // Mô tả
+                clause: clauseContent, // Điều khoản
+            };
+
+            if (isEditMode && currentInsurance) {
+                await axios.put(`${API_URL}/${currentInsurance.id}`, {
+                    id: currentInsurance.id,
+                    ...insuranceData,
+                });
+            } else {
+                const response = await axios.post(API_URL, insuranceData);
+                setDataSource((prevData) => [...prevData, response.data]);
+            }
+
+            setIsModalVisible(false);
+            form.resetFields();
+            setDescriptionContent(''); // Reset nội dung mô tả
+            setClauseContent(''); // Reset nội dung điều khoản
+            fetchInsuranceData();
+        } catch (error) {
+            console.error('Unable to update insurance information:', error.response?.data || error);
+        }
+    };
     const handleCancel = () => {
         setIsModalVisible(false);
     };
 
+    const handleFilterChange = (e) => {
+        setFilterName(e.target.value);
+        setCurrentPage(1);
+    };
+
+    const filteredData = (dataSource || []).filter((item) => {
+        return item && item.name && item.name.toLowerCase().includes(filterName.toLowerCase());
+    });
+
     const handleDelete = async (id) => {
         try {
             await axios.delete(`${API_URL}/${id}`);
-            setDataSource(dataSource.filter((ins) => ins.id !== id));
+            setDataSource(dataSource.filter((insurance) => insurance.id !== id));
         } catch (error) {
-            console.error('Failed to delete insurance:', error);
+            console.error('Unable to delete insurance:', error);
         }
     };
 
@@ -107,15 +125,21 @@ const Insurance = () => {
             render: (text) => <div dangerouslySetInnerHTML={{ __html: text }} />,
         },
         {
-            title: 'Duration (Months)',
-            dataIndex: 'duration',
-            key: 'duration',
+            title: 'Clause',
+            dataIndex: 'clause',
+            key: 'clause',
+            render: (text) => <div dangerouslySetInnerHTML={{ __html: text }} />,
         },
         {
-            title: 'Price',
-            dataIndex: 'price',
-            key: 'price',
-            render: (text) => `$${text.toFixed(2)}`,
+            title: 'Type',
+            dataIndex: 'type',
+            key: 'type',
+        },
+        {
+            title: 'Is New',
+            dataIndex: 'isNew',
+            key: 'isNew',
+            render: (text) => (text ? 'Yes' : 'No'),
         },
         {
             title: 'Action',
@@ -170,54 +194,52 @@ const Insurance = () => {
                 </Button>
             </Header>
             <Content style={{ margin: '16px' }}>
-                <Row gutter={16} style={{ marginBottom: '16px' }} />
+                <Row gutter={16} style={{ marginBottom: '16px' }}>
+                    <Col span={8}>
+                        <Input placeholder="Filter by Name" value={filterName} onChange={handleFilterChange} />
+                    </Col>
+                </Row>
                 <Table
                     columns={columns}
-                    dataSource={dataSource}
+                    dataSource={filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize)}
                     rowKey="id"
-                    pagination={{
-                        current: currentPage,
-                        pageSize: pageSize,
-                        total: dataSource.length,
-                        onChange: (page) => setCurrentPage(page),
-                    }}
                 />
 
                 <Modal
-                    title={isEditMode ? 'Edit Insurance' : 'Add New Insurance'}
+                    title={isEditMode ? 'Edit Insurance Record' : 'Add New Insurance Record'}
                     open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                 >
-                    <Form form={form} onFinish={handleOk} layout="vertical">
+                    <Form form={form} layout="vertical">
                         <Form.Item
                             name="name"
                             label="Name"
-                            rules={[{ required: true, message: 'Please input the insurance name!' }]}
+                            rules={[{ required: true, message: 'Please enter the name!' }]}
                         >
                             <Input />
                         </Form.Item>
                         <Form.Item
-                            name="duration"
-                            label="Duration (Months)"
-                            rules={[{ required: true, message: 'Please input the duration!' }]}
+                            name="type"
+                            label="Type"
+                            rules={[{ required: true, message: 'Please select the type!' }]}
                         >
-                            <Input type="number" />
+                            <Select placeholder="Select type">
+                                <Option value="Car">Car</Option>
+                                <Option value="Motorbike">Motorbike</Option>
+                            </Select>
                         </Form.Item>
-                        <Form.Item
-                            name="price"
-                            label="Price"
-                            rules={[{ required: true, message: 'Please input the price!' }]}
-                        >
-                            <Input type="number" step="0.01" />
+                        <Form.Item name="isNew" valuePropName="checked">
+                            <Checkbox>Is New</Checkbox>
                         </Form.Item>
                         <Form.Item
                             label="Description"
-                            rules={[{ required: true, message: 'Please input the description!' }]}
+                            name="description"
+                            rules={[{ required: true, message: 'Please enter a description!' }]}
                         >
                             <Editor
                                 apiKey="l1i9v8q0xwfkdzno0iih7p59m4dqchz5cdie0khvrozcztbg"
-                                initialValue={content}
+                                initialValue={descriptionContent}
                                 init={{
                                     height: 300,
                                     menubar: false,
@@ -227,16 +249,29 @@ const Insurance = () => {
                                         'bold italic backcolor | alignleft aligncenter ' +
                                         'alignright alignjustify | bullist numlist outdent indent | ' +
                                         'image | removeformat | help',
-                                    automatic_uploads: false,
-                                    images_upload_handler: (blobInfo, success) => {
-                                        const reader = new FileReader();
-                                        reader.onload = () => {
-                                            success(reader.result);
-                                        };
-                                        reader.readAsDataURL(blobInfo.blob());
-                                    },
                                 }}
-                                onEditorChange={(newContent) => setContent(newContent)}
+                                onEditorChange={(newContent) => setDescriptionContent(newContent)}
+                            />
+                        </Form.Item>
+                        <Form.Item
+                            label="Clause"
+                            name="clause"
+                            rules={[{ required: true, message: 'Please enter a clause!' }]}
+                        >
+                            <Editor
+                                apiKey="l1i9v8q0xwfkdzno0iih7p59m4dqchz5cdie0khvrozcztbg"
+                                initialValue={clauseContent}
+                                init={{
+                                    height: 300,
+                                    menubar: false,
+                                    plugins: ['image'],
+                                    toolbar:
+                                        'undo redo | formatselect | ' +
+                                        'bold italic backcolor | alignleft aligncenter ' +
+                                        'alignright alignjustify | bullist numlist outdent indent | ' +
+                                        'image | removeformat | help',
+                                }}
+                                onEditorChange={(newContent) => setClauseContent(newContent)}
                             />
                         </Form.Item>
                     </Form>
@@ -261,10 +296,14 @@ const Insurance = () => {
                                 <div dangerouslySetInnerHTML={{ __html: currentInsurance.description }} />
                             </p>
                             <p>
-                                <strong>Duration:</strong> {currentInsurance.duration} months
+                                <strong>Clause:</strong>{' '}
+                                <div dangerouslySetInnerHTML={{ __html: currentInsurance.clause }} />
                             </p>
                             <p>
-                                <strong>Price:</strong> ${currentInsurance.price.toFixed(2)}
+                                <strong>Type:</strong> {currentInsurance.type}
+                            </p>
+                            <p>
+                                <strong>Is New:</strong> {currentInsurance.isNew ? 'Yes' : 'No'}
                             </p>
                         </Card>
                     )}

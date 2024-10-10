@@ -14,7 +14,8 @@ const routes = {
     vehicleAdmin: '/admin/vehicle-admin',
     advertisementAdmin: '/admin/advertisement-admin',
     insuranceAdmin: '/admin/insurance-admin',
-    blogAmin: '/admin/blog-admin',
+    blogAdmin: '/admin/blog-admin',
+    insurancepackage: '/admin/insurancepackage-admin',
 };
 
 export default routes;
