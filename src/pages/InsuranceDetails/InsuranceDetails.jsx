@@ -7,7 +7,6 @@ import pviLogo from '../../assets/Images/pvi.png';
 import baominhLogo from '../../assets/Images/baominh_logo.png';
 import libertyLogo from '../../assets/Images/liberty_logo.png';
 import vniLogo from '../../assets/Images/pvi.png';
-import styles from './InsuranceDetails.scss';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import car1 from '../../assets/Images/car-1.png';
 import car2 from '../../assets/Images/car-2.png';
@@ -32,6 +31,7 @@ import Inspection from '../../assets/Images/inspection-support.png';
 import Garage from '../../assets/Images/garage-system.png';
 import Claim from '../../assets/Images/claim-guide.png';
 import { useParams } from 'react-router-dom';
+import styles from './Insurancedetails.module.scss';
 
 const images = {
     section1: {
@@ -187,6 +187,7 @@ const InsuranceAutomotivePhysical = () => {
                         description: filteredData.find((item) => item.contentType === 'description')?.description || '',
                         buttonText1: filteredData.find((item) => item.contentType === 'buttonText1')?.title || '',
                         buttonText2: filteredData.find((item) => item.contentType === 'buttonText2')?.title || '',
+                        image: filteredData.find((item) => item.contentType === 'title')?.image || '',
                     },
                     section2: {
                         buttons: filteredData
@@ -236,20 +237,6 @@ const InsuranceAutomotivePhysical = () => {
                     },
                 };
 
-                const convertBlobToUrl = (blobData) => {
-                    if (blobData) {
-                        const blob = new Blob([new Uint8Array(blobData.data)], { type: blobData.contentType });
-                        return URL.createObjectURL(blob);
-                    }
-                    return null;
-                };
-
-                Object.keys(updatedData).forEach((section) => {
-                    if (updatedData[section].image) {
-                        updatedData[section].image = convertBlobToUrl(updatedData[section].image);
-                    }
-                });
-
                 setDataApi(updatedData);
                 setLoading(false);
             } catch (error) {
@@ -292,6 +279,8 @@ const InsuranceAutomotivePhysical = () => {
                             display: activeButton === '4' ? 'none' : 'block',
                         }}
                     >
+                        <img src={dataApi.section1.image} alt="Thông tin bảo hiểm" />
+
                         <Row justify="space-around">
                             {dataApi.section2.buttons.map((button, index) => (
                                 <Button
