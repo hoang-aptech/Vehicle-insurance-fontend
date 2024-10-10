@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Row, Col, Card, Tag, Carousel, Typography, Form, Input, Select, Button } from 'antd';
 import styles from './Home.module.scss';
 import Hero from '../../assets/Images/hero_mascot.png';
@@ -35,46 +35,50 @@ import { PhoneOutlined, MailOutlined } from '@ant-design/icons';
 import QrZalo from '../../assets/Images/qr.jpg';
 import QrFace from '../../assets/Images/prface.png';
 import MascotSp from '../../assets/Images/mascot_support.png';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import emailjs from 'emailjs-com';
+import config from '~/config';
 
 const carouselImages = [carou1, carou2, carou3, carou4, carou5, carou6, carou7];
 
-const insuranceData = [
-    {
-        icon: '✈️',
-        title: 'Du lịch quốc tế',
-        tag: 'HOT',
-    },
-    {
-        icon: '🚗',
-        title: 'TNDS Ô tô',
-    },
-    {
-        icon: '🚚',
-        title: 'Vật chất Ô tô',
-        tag: 'MỚI',
-    },
-    {
-        icon: '🩺',
-        title: 'Sức khỏe',
-    },
-    {
-        icon: '🩹',
-        title: 'Tai nạn 24/24',
-    },
-    {
-        icon: '🛵',
-        title: 'TNDS Xe máy',
-    },
-    {
-        icon: '🏠',
-        title: 'Nhà tư nhân',
-    },
-    {
-        icon: '🦠',
-        title: 'Sức khỏe & Ung thư',
-        tag: 'MỚI',
-    },
-];
+// const insuranceData = [
+//     {
+//         icon: '✈️',
+//         title: 'Du lịch quốc tế',
+//         tag: 'HOT',
+//     },
+//     {
+//         icon: '🚗',
+//         title: 'TNDS Ô tô',
+//     },
+//     {
+//         icon: '🚚',
+//         title: 'Vật chất Ô tô',
+//         tag: 'MỚI',
+//     },
+//     {
+//         icon: '🩺',
+//         title: 'Sức khỏe',
+//     },
+//     {
+//         icon: '🩹',
+//         title: 'Tai nạn 24/24',
+//     },
+//     {
+//         icon: '🛵',
+//         title: 'TNDS Xe máy',
+//     },
+//     {
+//         icon: '🏠',
+//         title: 'Nhà tư nhân',
+//     },
+//     {
+//         icon: '🦠',
+//         title: 'Sức khỏe & Ung thư',
+//         tag: 'MỚI',
+//     },
+// ];
 
 const data = [
     {
@@ -123,11 +127,51 @@ const partnersData = [
 const ContactForm = () => {
     const [form] = Form.useForm();
     const [success, setSuccess] = useState(false);
-    const onFinish = (values) => {
-        console.log('Success:', values);
-        console.log('Submitted values:', values);
-        setSuccess(true);
-        form.resetFields();
+    const [insuranceDetails, setInsuranceDetails] = useState([]);
+    const onFinish = async (values) => {
+        try {
+            const newAdvertisement = {
+                customerName: values.name,
+                customerPhone: values.phone,
+                customerEmail: values.email,
+                type: values.product,
+            };
+            const adResponse = await axios.post('https://localhost:7289/api/advertisements', newAdvertisement);
+
+            if (adResponse.status === 201) {
+                console.log('Advertisement added successfully.');
+                const response = await axios.get(`https://localhost:7289/api/insurances/type/${values.product}`);
+                setInsuranceDetails(response.data);
+
+                const insuranceInfo = response.data
+                    .map(
+                        (i) => `
+                  Name: ${i.name}
+                  Description: ${i.description}
+                  Price: ${i.price}
+                `,
+                    )
+                    .join('\n');
+                const emailParams = {
+                    to_name: values.name,
+                    from_name: 'One Team',
+                    message: `Here are the available insurance packages for ${values.product}: \n${insuranceInfo}`,
+                    to_email: values.email,
+                };
+
+                emailjs.send('service_xe6f9kj', 'template_3z2uslk', emailParams, 'laGrWQghcmlQSS4rS').then(
+                    (result) => {
+                        console.log('Email successfully sent!');
+                        setSuccess(true);
+                    },
+                    (error) => {
+                        console.log('Email failed to send:', error);
+                    },
+                );
+            }
+        } catch (error) {
+            console.error('Error occurred:', error);
+        }
     };
 
     const onFinishFailed = (errorInfo) => {
@@ -225,7 +269,8 @@ const ContactForm = () => {
                                 </Form.Item>
                                 <Form.Item label="Sản phẩm mà bạn quan tâm" name="product">
                                     <Select>
-                                        <Option value="bao-hiem-xe-hoi">Bảo hiểm vật chất xe ô tô</Option>
+                                        <Option value="Car">Bảo hiểm vật chất xe ô tô</Option>
+                                        <Option value="Motorbike">Bảo hiểm vật chất xe máy</Option>
                                     </Select>
                                 </Form.Item>
                                 <Form.Item>
@@ -258,6 +303,26 @@ const Home = () => {
         groupedImages.push(carouselImages.slice(i, i + 2));
     }
 
+    const [insuranceData, setInsuranceData] = useState([]);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('https://localhost:7289/api/Insurances');
+                setInsuranceData(response.data);
+            } catch (error) {
+                console.error('Error fetching data: ', error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const handleCardClick = (id) => {
+        navigate(config.routes.insuranceDetails.replace(':id', id));
+    };
+
     return (
         <>
             <div className={`${styles.saladinContainer}`}>
@@ -272,14 +337,14 @@ const Home = () => {
                 <Row gutter={[16, 16]} className={`${styles.saladinContent1}`}>
                     {insuranceData.map((insurance, index) => (
                         <Col key={index} xs={24} sm={12} md={8} lg={6}>
-                            <Card className={`${styles.saladinCard}`}>
-                                {insurance.tag && (
+                            <Card className={`${styles.saladinCard}`} onClick={() => handleCardClick(insurance.id)}>
+                                {insurance.isNew && (
                                     <Tag className={`${styles.saladinTag}`} color="#f50">
-                                        {insurance.tag}
+                                        New
                                     </Tag>
                                 )}
                                 <div className={`${styles.saladinIcon}`}>{insurance.icon}</div>
-                                <div className={`${styles.saladinTitle}`}>{insurance.title}</div>
+                                <div className={`${styles.saladinTitle}`}>{insurance.name}</div>
                             </Card>
                         </Col>
                     ))}

@@ -2,13 +2,16 @@
 import config from '~/config';
 import Home from '~/pages/Home';
 import Login from '~/pages/Login';
+import Register from '~/pages/Register';
 
 import Private from '~/pages/Private';
 
 import Blog, { BlogDetails } from '~/pages/Blog';
-import InsuranceAutomotivePhysical from '~/pages/InsuranceAutomotivePhysical';
+import InsuranceDetails from '~/pages/InsuranceDetails';
 import Indemnity from '~/pages/Indemnity/Indemnity';
 import Chat from '~/pages/ChatBot/Chat';
+import InsurancePackages from '~/pages/InsurancePackages';
+import Contract, { ContractList } from '~/pages/Contract';
 
 // Admin
 import Dashboard from '~/pages/admin/Dashboard';
@@ -25,11 +28,16 @@ import InsurancePackage from '~/pages/admin/InsurancePackage';
 const publicRoutes = [
     { path: config.routes.home, component: Home },
     { path: config.routes.login, component: Login },
-    { path: config.routes.insuranceAutomotivePhysical, component: InsuranceAutomotivePhysical },
+    { path: config.routes.register, component: Register },
+    { path: config.routes.insuranceDetails, component: InsuranceDetails },
     { path: config.routes.blog, component: Blog },
     { path: config.routes.blogDetails, component: BlogDetails },
     { path: config.routes.indemnity, component: Indemnity },
-    { path: config.routes.chat, component: Chat },
+    { path: config.routes.chat, component: Chat, params: { chatId: 1, role: 'User' } },
+    { path: config.routes.chat2, component: Chat, params: { chatId: 1, role: 'Employee' } },
+    { path: config.routes.contractList, component: ContractList },
+    { path: config.routes.contract, component: Contract },
+    { path: config.routes.insurancePackages, component: InsurancePackages },
 ];
 
 // Admin routes

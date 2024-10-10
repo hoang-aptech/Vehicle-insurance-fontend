@@ -3,7 +3,7 @@ import classNames from 'classnames/bind';
 
 import logo from '~/assets/img/logo.png';
 import style from './Footer.module.scss';
-import { FacebookFilled } from '@ant-design/icons';
+import { FacebookFilled, InstagramOutlined, LinkedinOutlined } from '@ant-design/icons';
 
 const cx = classNames.bind(style);
 
@@ -55,21 +55,25 @@ function Footer() {
                 <div className={cx('company-info')}>
                     <div className={cx('company-details')}>
                         <img src={logo} alt="Logo" className={cx('logo')} />
-                        <div>
+                        <div className={cx('company-details-body')}>
                             <div className={cx('company-name')}>10x Consulting and Technology Co., Ltd</div>
                             <div>Business ID: 0316591461.</div>
                             <div>
-                                <a href="tel:1900638454">
+                                <a className={cx('company-hotline')} href="tel:1900638454">
                                     Hotline: <strong>1900 638 454</strong>
                                 </a>
                             </div>
-                        </div>
-                        <div className={cx('socials')}>
-                            <Link to="/">
-                                <FacebookFilled />
-                            </Link>
-                            <Link to="/">{/* <img src="" alt="Zalo" /> */}</Link>
-                            <Link to="/">{/* <img src="" alt="LinkedIn" /> */}</Link>
+                            <div className={cx('socials')}>
+                                <Link to="/" className={cx('social-link')}>
+                                    <FacebookFilled />
+                                </Link>
+                                <Link to="/" className={cx('social-link')}>
+                                    <LinkedinOutlined />
+                                </Link>
+                                <Link to="/" className={cx('social-link')}>
+                                    <InstagramOutlined />
+                                </Link>
+                            </div>
                         </div>
                     </div>
                     <div className={cx('item-box')}>
