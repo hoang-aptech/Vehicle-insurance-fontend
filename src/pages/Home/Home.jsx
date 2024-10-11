@@ -83,42 +83,37 @@ const carouselImages = [carou1, carou2, carou3, carou4, carou5, carou6, carou7];
 const data = [
     {
         icon: home1,
-        title: 'Nền tảng bảo hiểm công nghệ đa giải pháp',
-        features: [
-            'Đa dạng nhà cung cấp',
-            'Đa dạng sản phẩm bảo hiểm',
-            'Đa dạng đối tác liên kết',
-            'Đa dạng phương thức thanh toán',
-        ],
+        title: 'Multi-solution technology insurance platform',
+        features: ['Diverse suppliers', 'Diverse insurance products', 'Diverse partners', 'Diverse payment methods'],
     },
     {
         icon: home2,
-        title: 'Mua và bồi thường bảo hiểm trực tuyến',
+        title: 'Buy and claim insurance online',
         features: [
-            'Mua trực tuyến các gói bảo hiểm với chi phí hợp lý, cạnh tranh, minh bạch',
-            'Chủ động tạo yêu cầu bồi thường trực tuyến tiện lợi',
+            'Buy insurance packages online at reasonable, competitive, and transparent costs',
+            'Proactively create convenient online claim requests',
         ],
     },
     {
         icon: home3,
-        title: 'Đội ngũ giàu kinh nghiệm hỗ trợ tận tâm 24/7',
+        title: 'Experienced team providing dedicated support 24/7',
         features: [
-            'Hỗ trợ trong suốt quá trình Tư vấn - Chọn gói bảo hiểm - Thanh toán - Cấp chứng nhận - Bồi thường',
-            'Công cụ chat trực tiếp ngay trên website',
+            'Support throughout the process of Consulting - Choosing an insurance package - Payment - Issuing certificates - Compensation',
+            'Live chat tool right on the website',
         ],
     },
 ];
 
 const partnersData = [
     {
-        title: 'Đối tác bảo hiểm',
-        description: 'Saladin liên kết với nhà cung cấp bảo hiểm hàng đầu để mang đến cho bạn nhiều sự lựa chọn nhất',
+        title: 'Insurance Partners',
+        description: 'Saladin partners with leading insurance providers to bring you the most choices',
         images: [lg1, lg2, lg3, lg4, lg5, lg6, lg7, lg8, lg9],
     },
     {
-        title: 'Đối tác liên kết',
+        title: 'Affiliate Partners',
         description:
-            'Saladin liên kết với các doanh nghiệp để cung cấp các dịch vụ bảo hiểm bảo vệ toàn diện cho cuộc sống của bạn',
+            'Saladin partners with businesses to provide comprehensive insurance protection services for your life',
         images: [lg10, lg11, lg12, lg13, lg14, lg15, lg16, lg17, lg18],
     },
 ];
@@ -127,7 +122,7 @@ const partnersData = [
 const ContactForm = () => {
     const [form] = Form.useForm();
     const [success, setSuccess] = useState(false);
-    const [insuranceDetails, setInsuranceDetails] = useState([]);
+    const [setInsuranceDetails] = useState([]);
     const onFinish = async (values) => {
         try {
             const newAdvertisement = {
@@ -181,9 +176,10 @@ const ContactForm = () => {
     return (
         <Row gutter={[32, 32]} style={{ maxWidth: '1050px', margin: 'auto', marginTop: '32px', marginBottom: '40px' }}>
             <Col span={24}>
-                <h1 style={{ textAlign: 'center', fontSize: '3rem', color: '#4caf50' }}>Tư vấn và hỗ trợ 24/7</h1>
+                <h1 style={{ textAlign: 'center', fontSize: '3rem', color: '#4caf50' }}>24/7 Consulting and Support</h1>
                 <p style={{ textAlign: 'center', minWidth: '600px', margin: 'auto' }}>
-                    Đội ngũ Saladin luôn sẵn sàng hỗ trợ bạn trong suốt hành trình mua và sử dụng bảo hiểm.
+                    The Saladin team is always ready to support you throughout your journey of buying and using
+                    insurance.
                 </p>
             </Col>
             <Col xs={24} sm={12} md={12}>
@@ -207,7 +203,7 @@ const ContactForm = () => {
                                 borderRadius: '4px',
                             }}
                         />
-                        <p style={{ marginTop: '-20px' }}>Hàng 1: Thông tin 1</p>
+                        <p style={{ marginTop: '-20px' }}>Row 1: Information 1</p>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                         <MailOutlined
@@ -219,15 +215,15 @@ const ContactForm = () => {
                                 borderRadius: '4px',
                             }}
                         />
-                        <p style={{ marginTop: '-20px' }}>Hàng 2: Thông tin 2</p>
+                        <p style={{ marginTop: '-20px' }}>Row 2: Information 2</p>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                         <img src={QrZalo} alt="qr zalo" style={{ width: '50px', marginRight: '8px' }} />
-                        <p style={{ marginTop: '-20px' }}>Hàng 3: Thông tin 3</p>
+                        <p style={{ marginTop: '-20px' }}>Row 3: Information 3</p>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
                         <img src={QrFace} alt="qr face" style={{ width: '50px', marginRight: '8px' }} />
-                        <p style={{ marginTop: '-20px' }}>Hàng 4: Thông tin 4</p>
+                        <p style={{ marginTop: '-20px' }}>Row 4: Information 4</p>
                     </div>
                 </div>
             </Col>
@@ -248,19 +244,19 @@ const ContactForm = () => {
                                     remember: true,
                                 }}
                             >
-                                <h2>Nhận tư vấn ngay</h2>
-                                <p>Để lại thông tin để nhận tư vấn và ưu đãi từ Saladin nhé</p>
+                                <h2>Get advice now</h2>
+                                <p>Leave your information to receive advice and offers from Saladin.</p>
                                 <Form.Item
-                                    label="Họ và tên"
+                                    label="Full name"
                                     name="name"
-                                    rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
+                                    rules={[{ required: true, message: 'Please enter your full name!' }]}
                                 >
                                     <Input />
                                 </Form.Item>
                                 <Form.Item
-                                    label="Số điện thoại"
+                                    label="Phone number"
                                     name="phone"
-                                    rules={[{ required: true, message: 'Vui lòng nhập số điện thoại!' }]}
+                                    rules={[{ required: true, message: 'Please enter phone number!' }]}
                                 >
                                     <Input />
                                 </Form.Item>
@@ -269,18 +265,18 @@ const ContactForm = () => {
                                 </Form.Item>
                                 <Form.Item label="Sản phẩm mà bạn quan tâm" name="product">
                                     <Select>
-                                        <Option value="Car">Bảo hiểm vật chất xe ô tô</Option>
-                                        <Option value="Motorbike">Bảo hiểm vật chất xe máy</Option>
+                                        <Option value="Car">Car physical damage insurance</Option>
+                                        <Option value="Motorbike">Motorcycle physical damage insurance</Option>
                                     </Select>
                                 </Form.Item>
                                 <Form.Item>
                                     <Button type="primary" htmlType="submit" style={{ background: '#4caf50' }}>
-                                        Nhận tư vấn
+                                        Get advice
                                     </Button>
                                 </Form.Item>
                                 {success && (
                                     <div className="success-message">
-                                        Cảm ơn bạn đã liên hệ! Chúng tôi sẽ liên lạc với bạn sớm nhất có thể.
+                                        Thank you for contacting us! We will contact you as soon as possible.
                                     </div>
                                 )}
                             </Form>
@@ -330,8 +326,8 @@ const Home = () => {
             <div className={`${styles.saladinContainer}`}>
                 <div className={`${styles.saladinHeader}`}>
                     <div>
-                        <h1>Bảo hiểm toàn diện cho người Việt</h1>
-                        <p>Tự tin sống, tự tin yêu thương cùng Saladin</p>
+                        <h1>Comprehensive insurance for Vietnamese</h1>
+                        <p>Live confidently, love confidently with Saladin</p>
                     </div>
                     <img src={Hero} alt="hero" />
                 </div>
@@ -388,17 +384,17 @@ const Home = () => {
                     <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                         <div style={{ padding: '2rem' }}>
                             <Title level={2}>
-                                Trải nghiệm mua bảo hiểm
+                                Insurance buying experience
                                 <br />
-                                nhanh chóng và tiện lợi
+                                fast and convenient
                             </Title>
                             <Paragraph style={{ maxWidth: '500px' }}>
-                                Tại Saladin, ngoài việc tìm thấy các lựa chọn sản phẩm bảo hiểm đa dạng từ tiêu chuẩn
-                                đến nâng cao, khách hàng còn có thể tự do lựa chọn quyền lợi theo nhu cầu để tạo ra gói
-                                bảo hiểm phù hợp nhất.
+                                At Saladin, in addition to finding a variety of insurance product options from standard
+                                to advanced, customers can also freely choose benefits according to their needs to
+                                create the most suitable insurance package.
                             </Paragraph>
                             <Paragraph>
-                                Giấy chứng nhận bảo hiểm trực tuyến được cấp và lưu trữ ngay trên ứng dụng.
+                                Online insurance certificates are issued and stored directly on the application.
                             </Paragraph>
                         </div>
                     </Col>

@@ -1,0 +1,91 @@
+.contractContainer {
+    max-width: 1000px;
+    min-height: 70vh;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    transition: box-shadow 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+    h1 {
+        font-size: 4rem;
+        font-weight: bold;
+        font-family: 'Times New Roman', Times, serif;
+        color: #434343;
+        text-align: center;
+    }
+}
+
+.contractContent {
+    justify-content: center;
+    margin-bottom: 20px;
+    // min-height: 50vh;
+
+    .contractSection {
+        flex: 1;
+        margin: 0 10px;
+        padding: 20px;
+        background-color: #f9f9f9;
+        border: 1px solid #e8e8e8;
+        border-radius: 8px;
+        transition: transform 0.3s ease;
+
+        &:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+    }
+
+    .contractTitle {
+        text-align: center;
+        color: #1890ff;
+        margin-bottom: 16px;
+        font-size: 24px;
+        font-weight: 700;
+        text-transform: uppercase;
+        border-bottom: 2px solid #1890ff;
+        padding-bottom: 10px;
+    }
+
+    p {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #434343;
+        margin: 8px 0;
+    }
+}
+
+.exportPdfButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px auto;
+    width: 70px;
+    height: 70px;
+    background-color: #fff;
+    border: 2px solid #10daf9;
+    border-radius: 50%;
+    color: #10daf9;
+    font-size: 28px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+
+    &:hover {
+        background-color: #10daf9 !important;
+        transform: scale(1.05);
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+
+    .ant-progress-circle {
+        font-size: 16px;
+        color: #fff;
+    }
+}

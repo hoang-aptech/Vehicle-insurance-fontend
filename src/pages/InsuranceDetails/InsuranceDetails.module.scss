@@ -12,19 +12,20 @@
     justify-content: center;
     align-items: center;
     height: 100%;
+    color: #4caf50 !important;
 }
 
 .welcomeTitle {
-    font-size: 2rem;
+    font-size: 5rem;
     margin-bottom: 10px;
     text-align: center;
+    color: #4caf50 !important;
 }
 
 .welcomeTitle2 {
-    font-size: 1.5rem;
+    font-size: 3rem;
     margin-bottom: 10px;
     text-align: center;
-    color: #4caf50;
 }
 
 .leftColumn p {
@@ -46,7 +47,7 @@
 }
 
 .greenButton:hover {
-    background-color: #fff !important;
+    background-color: transparent !important;
     color: #4caf50 !important;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
@@ -105,6 +106,8 @@
     color: #4caf50;
     background-color: #fff;
     border-color: #d9d9d9;
+    flex: 1;
+    margin: 0 10px;
 }
 
 .themedRow:hover {
@@ -113,10 +116,28 @@
     color: #4caf50 !important;
 }
 
+.benefitHeader {
+    padding: 20px;
+    h1 {
+        color: #4caf50;
+        padding: 10px;
+        font-size: 4rem;
+    }
+    h6 {
+        max-width: 800px;
+        margin: auto;
+        font-size: 1.5rem;
+        font-weight: 400;
+    }
+}
+
 .benefitItem {
     text-align: center;
     margin: 10px;
-    max-width: 370px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .benefitImage {
@@ -126,6 +147,7 @@
     display: block;
     margin: 0 auto;
     margin-bottom: 20px;
+    flex-grow: 1;
 }
 
 .featureCard {

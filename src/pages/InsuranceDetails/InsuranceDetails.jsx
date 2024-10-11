@@ -31,165 +31,7 @@ import Inspection from '../../assets/Images/inspection-support.png';
 import Garage from '../../assets/Images/garage-system.png';
 import Claim from '../../assets/Images/claim-guide.png';
 import { useParams } from 'react-router-dom';
-import styles from './InsuranceDetails.module.scss';
-
-// const text = {
-//     section1: {
-//         title: 'Welcome to our platform',
-//         subtitle: 'Welcome to our platform',
-//         description:
-//             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.',
-//         buttonText1: 'Buy Online',
-//         buttonText2: 'Get consultation',
-//     },
-//     section2: {
-//         buttons: [
-//             { text: 'Giới thiệu bảo hiểm' },
-//             { text: 'An tâm di chuyển' },
-//             { text: 'Hướng dẫn bồi thường' },
-//             { text: 'Danh sách cơ sở sửa chữa' },
-//         ],
-//         benefitTitle: 'Giới thiệu bảo hiểm',
-//         description:
-//             'Bảo hiểm vật chất xe ô tô là bảo hiểm tự nguyện dành cho các loại xe ô tô tham gia giao thông trên lãnh thổ Việt Nam. Khi xảy ra sự cố, công ty bảo hiểm sẽ bồi thường cho những thiệt hại vật chất xe xảy ra do những tai nạn bất ngờ, và ngoài sự kiểm soát của chủ xe. Tuỳ vào nhu cầu sử dụng, khách hàng có thể lựa chọn nhiều quyền lợi bổ sung khác nhau:',
-//         benefits: [
-//             { title: 'Bảo hiểm lựa chọn nơi sửa chữa:' },
-//             { title: 'Bảo hiểm hư hỏng động cơ do thủy kích:' },
-//             { title: 'Bảo hiểm mất cắp bộ phận:' },
-//         ],
-//     },
-//     section3: {
-//         title: 'Vì sao nên chọn bảo hiểm xe ô tô của Saladin?',
-//         features: [
-//             {
-//                 title: 'Đa dạng nhà cung cấp',
-//                 description: 'Saladin là đối tác chính thức của nhiều đơn vị bảo hiểm uy tín',
-//             },
-//             {
-//                 title: 'Đa dạng thanh toán',
-//                 description: 'Thanh toán trực tuyến siêu nhanh. Thanh toán tiền mặt tại cửa hàng siêu tiện lợi.',
-//             },
-//             {
-//                 title: 'Chứng nhận điện tử',
-//                 description: 'Được cấp online bởi Công ty bảo hiểm, có giá trị tương đương bản giấy.',
-//             },
-//             {
-//                 title: 'Ưu đãi hấp dẫn',
-//                 description: 'Các chương trình ưu đãi hấp dẫn từ Saladin và các đối tác được cập nhật liên tục',
-//             },
-//             {
-//                 title: 'Đội ngũ CSKH hỗ trợ 24/7',
-//                 description:
-//                     'Hỗ trợ bạn trong suốt quá trình tư vấn, chọn mua bảo hiểm, thanh toán, cấp chứng nhận, bồi thường.',
-//             },
-//             {
-//                 title: 'Trả góp 0% siêu tiết kiệm',
-//                 description: 'Saladin hỗ trợ bạn trả góp phí bảo hiểm kỳ hạn từ 03 đến 12 tháng không lãi suất.',
-//             },
-//         ],
-//     },
-//     section4: {
-//         title: 'An tâm vì xe của bạn luôn được bảo vệ',
-//         claims: [
-//             {
-//                 title: 'Tai nạn, va chạm',
-//                 description: 'Chi trả chi phí sửa chữa, thay mới bộ phận nếu chiếc xe bị hư hỏng do xảy ra tai nạn',
-//             },
-//             {
-//                 title: 'Mất cắp do trộm cướp',
-//                 description:
-//                     'Chi trả chi phí thay mới bộ phận đó hoặc toàn bộ giá trị xe trong trường hợp mất cắp toàn bộ',
-//             },
-//             {
-//                 title: 'Cố ý phá hoại',
-//                 description: 'Chi trả chi phí khắc phục hậu quả',
-//             },
-//             {
-//                 title: 'Ngập nước',
-//                 description: 'Hỗ trợ cứu hộ và chi trả chi phí sửa chữa',
-//             },
-//             {
-//                 title: 'Sự cố bất ngờ',
-//                 description:
-//                     'Hỗ trợ chi phí khắc phục thiệt hại do thiên tai, cháy nổ và tác động ngoại lực không lường trước được',
-//             },
-//         ],
-//     },
-//     section5: {
-//         title: 'Có thể bạn cần biết',
-//         features5: [
-//             {
-//                 title: 'Cách tra cứu số khung, số máy ô tô để mua Bảo hiểm Vật chất xe',
-//             },
-//             {
-//                 title: 'Hướng dẫn chụp hình xe để mua bảo hiểm Vật chất xe',
-//             },
-//             {
-//                 title: 'Giải đáp câu hỏi thường gặp về chi phí BH thân vỏ xe ô tô',
-//             },
-//             {
-//                 title: 'Hướng dẫn chọn Nhà bảo hiểm phù hợp',
-//             },
-//             {
-//                 title: 'Cách tính các phí bảo hiểm vật chất xe ô tô',
-//             },
-//             {
-//                 title: 'Phân biệt trọng tải - tải trọng và cách tìm trọng tải xe tải',
-//             },
-//         ],
-//     },
-//     section6: {
-//         title: 'Dịch vụ hỗ trợ nhanh chóng',
-//         description: 'Các sản phẩm bảo hiểm từ các nhà cung cấp bảo hiểm hàng đầu với các dịch vụ hỗ trợ',
-//         features6: [
-//             {
-//                 title: 'Hỗ trợ 24/7',
-//                 description: 'Chúng tôi luôn sẵn sàng hỗ trợ bạn bất cứ lúc nào',
-//             },
-//             {
-//                 title: 'Dịch vụ bảo hiểm toàn diện',
-//                 description: 'Chúng tôi cung cấp các sản phẩm bảo hiểm toàn diện cho bạn',
-//             },
-//             {
-//                 title: 'Giải pháp tài chính linh hoạt',
-//                 description: 'Chúng tôi cung cấp các giải pháp tài chính linh hoạt cho bạn',
-//             },
-//         ],
-//         steps: [
-//             {
-//                 title: 'Bước 1: Liên hệ với chúng tôi',
-//                 description: 'Liên hệ với chúng tôi để được tư vấn và hỗ trợ',
-//             },
-//             {
-//                 title: 'Bước 2: Đăng ký bảo hiểm',
-//                 description: 'Đăng ký bảo hiểm với chúng tôi để được bảo vệ',
-//             },
-//             {
-//                 title: 'Bước 3: Nhận bồi thường',
-//                 description: 'Nhận bồi thường từ chúng tôi khi bạn cần',
-//             },
-//         ],
-//         title6: 'Hướng dẫn bồi thường',
-//     },
-//     section7: {
-//         title: 'Câu hỏi thường gặp',
-//         questions7: [
-//             {
-//                 header: 'Câu hỏi 1: Làm thế nào để mua bảo hiểm?',
-//                 description:
-//                     'Giải thích: Bạn có thể mua bảo hiểm qua trang web của chúng tôi hoặc liên hệ với nhân viên tư vấn.',
-//             },
-//             {
-//                 header: 'Câu hỏi 2: Thời gian xử lý yêu cầu bảo hiểm là bao lâu?',
-//                 description: 'Giải thích: Thời gian xử lý yêu cầu bảo hiểm thường mất từ 3 đến 5 ngày làm việc.',
-//             },
-//             {
-//                 header: 'Câu hỏi 3: Tôi có thể thay đổi thông tin bảo hiểm không?',
-//                 description: 'Giải thích: Có, bạn có thể thay đổi thông tin bảo hiểm bằng cách liên hệ với chúng tôi.',
-//             },
-//         ],
-//     },
-// };
+import styles from './Insurancedetails.module.scss';
 
 const images = {
     section1: {
@@ -341,35 +183,36 @@ const InsuranceAutomotivePhysical = () => {
                 const updatedData = {
                     section1: {
                         title: filteredData.find((item) => item.id)?.title || '',
-                        subtitle: filteredData.find((item) => item.id)?.title || '',
-                        description: filteredData.find((item) => item.id)?.description || '',
+                        subtitle: filteredData.find((item) => item.contentType === 'subtitle')?.title || '',
+                        description: filteredData.find((item) => item.contentType === 'description')?.description || '',
                         buttonText1: filteredData.find((item) => item.contentType === 'buttonText1')?.title || '',
                         buttonText2: filteredData.find((item) => item.contentType === 'buttonText2')?.title || '',
+                        image: filteredData.find((item) => item.contentType === 'title')?.image || '',
                     },
                     section2: {
                         buttons: filteredData
                             .filter((item) => item.contentType === 'buttons')
                             .map((item) => ({ text: item.title })),
                         benefitTitle: filteredData.find((item) => item.contentType === 'benefitTitle')?.title || '',
-                        description: filteredData.find((item) => item.id === 7)?.description || '',
+                        description: filteredData.find((item) => item.contentType === 'Description')?.description || '',
                         benefits: filteredData
                             .filter((item) => item.contentType === 'benefits')
                             .map((item) => ({ title: item.title })),
                     },
                     section3: {
-                        title: filteredData.find((item) => item.id === 15)?.title || '',
+                        title: filteredData.find((item) => item.contentType === 'title2')?.title || '',
                         features: filteredData
                             .filter((item) => item.contentType === 'features')
                             .map((item) => ({ title: item.title, description: item.description })),
                     },
                     section4: {
-                        title: filteredData.find((item) => item.id === 22)?.title || '',
+                        title: filteredData.find((item) => item.contentType === 'title3')?.title || '',
                         claims: filteredData
                             .filter((item) => item.contentType === 'claims')
                             .map((item) => ({ title: item.title, description: item.description })),
                     },
                     section5: {
-                        title: filteredData.find((item) => item.id === 28)?.title || '',
+                        title: filteredData.find((item) => item.contentType === 'title4')?.title || '',
                         features5: filteredData
                             .filter((item) => item.contentType === 'features5')
                             .map((item) => ({ title: item.title })),
@@ -394,20 +237,6 @@ const InsuranceAutomotivePhysical = () => {
                     },
                 };
 
-                const convertBlobToUrl = (blobData) => {
-                    if (blobData) {
-                        const blob = new Blob([new Uint8Array(blobData.data)], { type: blobData.contentType });
-                        return URL.createObjectURL(blob);
-                    }
-                    return null;
-                };
-
-                Object.keys(updatedData).forEach((section) => {
-                    if (updatedData[section].image) {
-                        updatedData[section].image = convertBlobToUrl(updatedData[section].image);
-                    }
-                });
-
                 setDataApi(updatedData);
                 setLoading(false);
             } catch (error) {
@@ -424,36 +253,55 @@ const InsuranceAutomotivePhysical = () => {
             {isMenuVisible && (
                 <div
                     style={{
+                        backgroundColor: '#f8fafa',
                         position: 'fixed',
-                        maxWidth: '800px',
+                        maxWidth: '100%',
                         margin: 'auto',
-                        top: 'var(--header-height)',
+                        height: '10vh',
                         left: 0,
                         right: 0,
                         zIndex: 1,
-                        backgroundColor: 'transparent',
                         padding: '10px 0',
                         display: activeButton === '4' ? 'none' : 'block',
                     }}
                 >
-                    <Row justify="space-around">
-                        {dataApi.section2.buttons.map((button, index) => (
-                            <Button
-                                type={index === 0 ? 'primary' : 'default'}
-                                size="large"
-                                style={{
-                                    backgroundColor: activeButton === (index + 1).toString() ? '#4caf50' : 'white',
-                                    color: activeButton === (index + 1).toString() ? 'white' : '#4caf50',
-                                    border: activeButton === (index + 1).toString() ? 'none' : '1px solid #4caf50',
-                                    borderRadius: '10px',
-                                }}
-                                onClick={() => handleScrollTo((index + 1).toString())}
-                                key={index}
-                            >
-                                {button.text}
-                            </Button>
-                        ))}
-                    </Row>
+                    <div
+                        style={{
+                            position: 'fixed',
+                            maxWidth: '900px',
+                            margin: 'auto',
+                            top: 'var(--header-height)',
+                            left: 0,
+                            right: 0,
+                            zIndex: 1,
+                            backgroundColor: 'transparent',
+                            padding: '10px 0',
+                            display: activeButton === '4' ? 'none' : 'block',
+                        }}
+                    >
+                        <img src={dataApi.section1.image} alt="Thông tin bảo hiểm" />
+
+                        <Row justify="space-around">
+                            {dataApi.section2.buttons.map((button, index) => (
+                                <Button
+                                    type={index === 0 ? 'primary' : 'default'}
+                                    size="large"
+                                    style={{
+                                        backgroundColor: activeButton === (index + 1).toString() ? '#4caf50' : 'white',
+                                        color: activeButton === (index + 1).toString() ? 'white' : '#4caf50',
+                                        border: activeButton === (index + 1).toString() ? 'none' : '1px solid #4caf50',
+                                        borderRadius: '10px',
+                                        flex: 1,
+                                        margin: '0 10px',
+                                    }}
+                                    onClick={() => handleScrollTo((index + 1).toString())}
+                                    key={index}
+                                >
+                                    {button.text}
+                                </Button>
+                            ))}
+                        </Row>
+                    </div>
                 </div>
             )}
 
@@ -513,7 +361,7 @@ const InsuranceAutomotivePhysical = () => {
                         </Col>
                     ))}
                 </Row>
-                <Row justify="center" style={{ maxWidth: '800px', margin: 'auto', marginTop: '50px' }}>
+                <Row justify="center" style={{ maxWidth: '900px', margin: 'auto', marginTop: '50px' }}>
                     <Col span={24}>
                         <Row justify="space-around">
                             {dataApi.section2.buttons.map((button, index) => (
@@ -533,7 +381,7 @@ const InsuranceAutomotivePhysical = () => {
             </div>
 
             {/* Benefits Section */}
-            <Row justify="center" style={{ marginTop: 30, textAlign: 'center' }}>
+            <Row justify="center" style={{ marginTop: 30, textAlign: 'center' }} className={styles.benefitHeader}>
                 <Col span={20}>
                     <h1 id="5">{dataApi.section2.benefitTitle}</h1>
                     <h6 id="5">{dataApi.section2.description}</h6>
@@ -549,7 +397,7 @@ const InsuranceAutomotivePhysical = () => {
                                     alt=""
                                     className={styles.benefitImage}
                                 />
-                                <strong>{benefit.title}</strong>
+                                <p>{benefit.title}</p>
                             </Col>
                         ))}
                     </Row>
@@ -584,11 +432,11 @@ const InsuranceAutomotivePhysical = () => {
             </div>
 
             {/* Hàng 4 */}
-            <div style={{ padding: '50px', backgroundColor: '#f4fff9' }} id="2">
+            <div style={{ padding: '50px', backgroundColor: '#f4fff9', margin: 'auto' }} id="2">
                 <h1 style={{ textAlign: 'center', fontSize: '3rem', marginBottom: '50px', color: '#4caf50' }}>
                     {dataApi.section4.title}
                 </h1>
-                <Row gutter={[32, 32]} style={{ maxWidth: '1050px', margin: 'auto' }}>
+                <Row gutter={[32, 32]} style={{ maxWidth: '1200px', margin: 'auto', justifyContent: 'center' }}>
                     {dataApi.section4.claims.map((claim, index) => (
                         <Col xs={24} sm={12} md={8} key={index}>
                             <Card
@@ -642,8 +490,16 @@ const InsuranceAutomotivePhysical = () => {
 
             {/* Hàng 6 */}
             <div style={{ padding: '50px', backgroundColor: '#f4fff9' }}>
-                <h1 style={{ textAlign: 'center', fontSize: '2rem', color: '#4caf50' }}>{dataApi.section6.title}</h1>
-                <p style={{ margin: '0 auto', minWidth: '600px', marginBottom: '30px', textAlign: 'center' }}>
+                <h1 style={{ textAlign: 'center', fontSize: '3rem', color: '#4caf50' }}>{dataApi.section6.title}</h1>
+                <p
+                    style={{
+                        margin: '0 auto',
+                        minWidth: '600px',
+                        marginBottom: '30px',
+                        textAlign: 'center',
+                        fontSize: '1.5rem',
+                    }}
+                >
                     {dataApi.section6.description}
                 </p>
 
@@ -673,7 +529,7 @@ const InsuranceAutomotivePhysical = () => {
                     id="3"
                     style={{
                         textAlign: 'center',
-                        fontSize: '2rem',
+                        fontSize: '4rem',
                         marginBottom: '50px',
                         color: '#4caf50',
                         marginTop: '70px',
@@ -709,10 +565,9 @@ const InsuranceAutomotivePhysical = () => {
                                         style={{
                                             border: '1px solid #4caf50',
                                             padding: '20px',
-                                            textAlign: 'center',
                                         }}
                                     >
-                                        <h3 style={{ fontSize: '1rem', fontWeight: 'bold', color: '#4caf50' }}>
+                                        <h3 style={{ fontSize: '2rem', fontWeight: 'bold', color: '#4caf50' }}>
                                             {`${index + 1}. ${step.title}`}
                                         </h3>
                                         <p>{step.description}</p>
@@ -725,29 +580,31 @@ const InsuranceAutomotivePhysical = () => {
             </div>
 
             {/* Hàng 7 */}
-            <div style={{ backgroundColor: 'rgb(244, 255, 249)', height: '40vh' }}>
+            <div style={{ backgroundColor: 'rgb(244, 255, 249)', height: '40vh', padding: '20px 0' }}>
                 <Row gutter={[32, 32]} style={{ maxWidth: '1050px', margin: 'auto' }}>
                     <Col
                         span={24}
                         style={{
-                            marginTop: '32px',
+                            // marginTop: '32px',
                             maxWidth: '900px',
                             flexDirection: 'column',
                             alignItems: 'center',
                             margin: '0 auto',
+                            padding: '20px',
+                            borderRadius: '10px',
                         }}
                     >
-                        <h2 style={{ textAlign: 'center' }} id="4">
+                        <h2 style={{ textAlign: 'center', marginBottom: '20px' }} id="4">
                             {dataApi.section7.title}
                         </h2>
-                        <Collapse accordion>
+                        <Collapse accordion style={{ width: '100%' }}>
                             {dataApi.section7.questions7.map((question, index) => (
                                 <Panel
                                     header={question.header}
                                     key={index}
-                                    style={{ maxHeight: '100px', overflow: 'hidden' }}
+                                    style={{ maxHeight: '100px', overflow: 'hidden', padding: '0px' }}
                                 >
-                                    <p>{question.description}</p>
+                                    <p style={{ maxWidth: '100%', marginTop: '-20px' }}>{question.description}</p>
                                 </Panel>
                             ))}
                         </Collapse>
