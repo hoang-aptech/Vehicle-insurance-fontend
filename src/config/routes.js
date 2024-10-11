@@ -13,6 +13,7 @@ const routes = {
     chat2: '/chat2',
     insurancePackages: '/insurance-packages/:insuranceId',
     insuranceList: '/insurance-list',
+    paymentSuccess: '/payment-success',
 
     admin: '/admin',
     userAdmin: '/admin/user-admin',

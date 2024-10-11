@@ -21,6 +21,7 @@ import Insurance from '~/pages/admin/Insurance';
 import BlogAmin from '~/pages/admin/Blog';
 import AdminLayout from '~/layouts/DefaultLayout/AdminLayout';
 import InsuranceList from '~/pages/Pay/InsuranceList';
+import PaymentSuccess from '~/pages/Pay/PaymentSucces';
 
 // Public routes
 const publicRoutes = [
@@ -31,9 +32,10 @@ const publicRoutes = [
     { path: config.routes.blog, component: Blog },
     { path: config.routes.blogDetails, component: BlogDetails },
     { path: config.routes.chat, component: Chat, params: { chatId: 1, role: 'User' } },
-    { path: config.routes.chat2, component: Chat, params: { chatId: 1, role: 'Employee' } },
+    { path: config.routes.chat2, component: Chat, params: { chatId: 3, role: 'Employee' } },
     { path: config.routes.insurancePackages, component: InsurancePackages },
     { path: config.routes.insuranceList, component: InsuranceList },
+    { path: config.routes.paymentSuccess, component: PaymentSuccess },
 ];
 
 // Admin routes
