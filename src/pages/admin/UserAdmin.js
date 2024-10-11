@@ -10,13 +10,15 @@ import './UserAdmin.css';
 const { Header, Content } = Layout;
 
 const UserAdmin = () => {
-    const [search, setSearch] = useState('');
     const [selectedUser, setSelectedUser] = useState(null);
+    const [deletedUsers, setDeletedUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+    const [isDeletedModalVisible, setIsDeletedModalVisible] = useState(false);
     const [dataSource, setDataSource] = useState([]);
+    const [filterName, setFilterName] = useState('');
 
     const API_URL = 'https://localhost:7289/api/Users';
 
@@ -31,15 +33,33 @@ const UserAdmin = () => {
         }
     };
 
+    // Fetch deleted users
+    const fetchDeletedUsers = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/deleted`);
+            console.log('Deleted users:', response.data); // Log the response
+            setDeletedUsers(response.data);
+        } catch (error) {
+            console.error('Failed to fetch deleted users:', error);
+        }
+    };
+
     useEffect(() => {
         fetchUsers();
     }, []);
 
-    const filteredUsers = dataSource.filter(
-        (user) =>
-            user.fullname.toLowerCase().includes(search.toLowerCase()) ||
-            user.email.toLowerCase().includes(search.toLowerCase()),
-    );
+    const handleFilterChange = (e) => {
+        setFilterName(e.target.value);
+        setCurrentPage(1); // Reset to first page on filter change
+    };
+
+    const filteredUsers = dataSource.filter((user) => {
+        const searchLower = filterName.toLowerCase();
+        const fullnameLower = user.fullname ? user.fullname.toLowerCase() : '';
+        const emailLower = user.email ? user.email.toLowerCase() : '';
+
+        return fullnameLower.includes(searchLower) || emailLower.includes(searchLower);
+    });
 
     const pageSize = 5;
     const paginatedUsers = filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
@@ -115,67 +135,116 @@ const UserAdmin = () => {
         },
     ];
 
-    const handleUserClick = (user) => {
-        setSelectedUser(user);
-    };
-
+    // Handle user edit
     const handleEdit = (user) => {
         setSelectedUser(user);
         setIsEditModalVisible(true);
     };
 
+    // Handle user delete
     const handleDelete = async (id) => {
         try {
             await axios.delete(`${API_URL}/${id}`);
             setDataSource(dataSource.filter((user) => user.id !== id));
+            // setDeletedUsers(id);
+            fetchDeletedUsers(); // Add this line to refresh the deleted users
         } catch (error) {
             console.error('Failed to delete user:', error);
         }
     };
 
+    // Handle modal close
+    const handleModalCancel = () => {
+        setIsAddModalVisible(false);
+        setIsEditModalVisible(false);
+        setIsDetailModalVisible(false);
+        setIsDeletedModalVisible(false);
+    };
+
+    // Handle adding user
     const handleAddOk = async (values) => {
+        console.log('Values before adding user:', values); // Log the values
+        const updatedValues = { ...values };
+
+        if (updatedValues.avatar) {
+            updatedValues.avatar = updatedValues.avatar.replace('data:image/png;base64,', '');
+        }
+
         try {
-            const hashedPassword = await bcrypt.hash(values.password, 10);
+            if (values.password) {
+                const hashedPassword = await bcrypt.hash(values.password, 10);
+                updatedValues.password = hashedPassword;
+            }
+
+            console.log('Updated values before API call:', updatedValues);
+
             const response = await axios.post(API_URL, {
-                ...values,
-                password: hashedPassword,
-                verified: 0,
+                ...updatedValues,
+                verified: false, // Adjusted this to boolean
             });
+
             setDataSource([...dataSource, response.data]);
             setIsAddModalVisible(false);
         } catch (error) {
-            console.error('Failed to add user:', error);
+            console.error('Failed to add user:', error.response?.data?.errors || error.response?.data || error);
         }
     };
 
+    // Handle editing user
     const handleEditOk = async (values) => {
+        const updatedValues = { ...values };
+        if (updatedValues.avatar) {
+            updatedValues.avatar = updatedValues.avatar.replace('data:image/png;base64,', '');
+        }
+
         try {
-            const updatedValues = { ...values };
             if (values.password) {
                 updatedValues.password = await bcrypt.hash(values.password, 10);
             }
 
-            const response = await axios.put(`${API_URL}/${selectedUser.id}`, {
+            await axios.put(`${API_URL}/${selectedUser.id}`, {
                 id: selectedUser.id,
                 ...updatedValues,
             });
 
-            setDataSource(dataSource.map((user) => (user.id === selectedUser.id ? response.data : user)));
+            fetchUsers();
             setIsEditModalVisible(false);
         } catch (error) {
             console.error('Failed to edit user:', error);
         }
     };
 
+    // View user details
     const handleDetail = (user) => {
         setSelectedUser(user);
         setIsDetailModalVisible(true);
     };
 
-    const handleModalCancel = () => {
-        setIsAddModalVisible(false);
-        setIsEditModalVisible(false);
-        setIsDetailModalVisible(false);
+    // View deleted users
+    const showDeletedUsersModal = () => {
+        fetchDeletedUsers();
+        setIsDeletedModalVisible(true);
+    };
+
+    // Restore deleted user
+    const handleRestore = async (id) => {
+        try {
+            await axios.put(`${API_URL}/restore/${id}`); // Assuming you have a restore endpoint
+            fetchUsers();
+            fetchDeletedUsers();
+        } catch (error) {
+            console.error('Failed to restore user:', error);
+        }
+    };
+
+    // Permanently delete user
+    const handlePermanentDelete = async (id) => {
+        try {
+            await axios.delete(`${API_URL}/deleted/${id}`); // Assuming you have a permanently delete endpoint
+            fetchDeletedUsers();
+        } catch (error) {
+            console.error('Failed to permanently delete user:', error);
+        }
     };
 
     return (
@@ -192,7 +261,13 @@ const UserAdmin = () => {
                 <Button type="primary" icon={<UserAddOutlined />} onClick={() => setIsAddModalVisible(true)}>
                     Add User
                 </Button>
-                <h1 style={{ margin: 0 }}>User Management</h1>
+                <h1 style={{ margin: 120 }}>User Management</h1>
+                <Button
+                    type="default"
+                    icon={<DeleteOutlined />}
+                    onClick={showDeletedUsersModal}
+                    style={{ backgroundColor: '#f60308', borderColor: '#f60308' }}
+                ></Button>
                 <Button type="default" icon={<LogoutOutlined />}>
                     Logout
                 </Button>
@@ -202,8 +277,8 @@ const UserAdmin = () => {
                 <div style={{ padding: 24, background: '#fff' }}>
                     <Input
                         placeholder="Search for user by fullname or email"
-                        value={search}
-                        onChange={(e) => setSearch(e.target.value)}
+                        value={filterName}
+                        onChange={handleFilterChange}
                         style={{ marginBottom: 16 }}
                     />
 
@@ -213,9 +288,6 @@ const UserAdmin = () => {
                                 dataSource={paginatedUsers}
                                 columns={columns}
                                 rowKey="id"
-                                onRow={(record) => ({
-                                    onClick: () => handleUserClick(record),
-                                })}
                                 pagination={{
                                     current: currentPage,
                                     pageSize: pageSize,
@@ -267,6 +339,42 @@ const UserAdmin = () => {
                     <p>Phone: {selectedUser?.phone}</p>
                     <p>Role: {selectedUser?.role}</p>
                 </Card>
+            </Modal>
+
+            <Modal title="Deleted Users" open={isDeletedModalVisible} onCancel={handleModalCancel} footer={null}>
+                {deletedUsers.length > 0 ? (
+                    deletedUsers.map((user) => (
+                        <Card key={user.id} style={{ marginBottom: 16, padding: 16 }}>
+                            <p>
+                                <strong>ID:</strong> {user.id}
+                            </p>
+                            <p>
+                                <strong>Full Name:</strong> {user.fullname}
+                            </p>
+                            <p>
+                                <strong>Email:</strong> {user.email}
+                            </p>
+                            <Popconfirm
+                                title="Are you sure to restore this user?"
+                                onConfirm={() => handleRestore(user.id)}
+                            >
+                                <Button type="primary" style={{ marginRight: 8 }}>
+                                    Restore
+                                </Button>
+                            </Popconfirm>
+                            <Popconfirm
+                                title="Are you sure to permanently delete this user?"
+                                onConfirm={() => handlePermanentDelete(user.id)}
+                            >
+                                <Button type="default" style={{ marginRight: 8 }}>
+                                    Delete Permanently
+                                </Button>
+                            </Popconfirm>
+                        </Card>
+                    ))
+                ) : (
+                    <p>No deleted users found.</p>
+                )}
             </Modal>
         </Layout>
     );

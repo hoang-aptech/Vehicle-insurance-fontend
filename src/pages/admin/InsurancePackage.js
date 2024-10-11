@@ -4,39 +4,38 @@ import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from
 import axios from 'axios';
 
 const { Header, Content } = Layout;
+// const { Option } = Select;
 
-const Billing = () => {
+const InsurancePackage = () => {
     const [dataSource, setDataSource] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
-    const [currentBilling, setCurrentBilling] = useState(null);
+    const [currentPackage, setCurrentPackage] = useState(null);
     const [form] = Form.useForm();
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 5;
-    const [filterPrice, setFilterPrice] = useState('');
+    const [filterName, setFilterName] = useState('');
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
-    const API_URL = 'https://localhost:7289/api/Billings';
+    const API_URL = 'https://localhost:7289/api/InsurancePackages';
 
-    const fetchBillingData = async () => {
+    const fetchInsurancePackageData = async () => {
         try {
             const response = await axios.get(API_URL);
             setDataSource(response.data);
         } catch (error) {
-            console.error('Unable to fetch billing data:', error);
+            console.error('Unable to fetch insurance package data:', error);
         }
     };
 
     useEffect(() => {
-        fetchBillingData();
+        fetchInsurancePackageData();
     }, []);
 
-    const showModal = (billing = null) => {
+    const showModal = (insurancePackage = null) => {
         setIsModalVisible(true);
-        setCurrentBilling(billing);
-        if (billing) {
+        setCurrentPackage(insurancePackage);
+        if (insurancePackage) {
             setIsEditMode(true);
-            form.setFieldsValue(billing);
+            form.setFieldsValue(insurancePackage);
         } else {
             setIsEditMode(false);
             form.resetFields();
@@ -47,13 +46,11 @@ const Billing = () => {
         try {
             const values = await form.validateFields();
 
-            if (isEditMode && currentBilling) {
-                const updatedBilling = {
-                    id: currentBilling.id,
+            if (isEditMode && currentPackage) {
+                await axios.put(`${API_URL}/${currentPackage.id}`, {
+                    id: currentPackage.id,
                     ...values,
-                };
-                await axios.put(`${API_URL}/${currentBilling.id}`, updatedBilling);
-                fetchBillingData();
+                });
             } else {
                 const response = await axios.post(API_URL, values);
                 setDataSource((prevData) => [...prevData, response.data]);
@@ -61,8 +58,9 @@ const Billing = () => {
 
             setIsModalVisible(false);
             form.resetFields();
+            fetchInsurancePackageData();
         } catch (error) {
-            console.error('Unable to update billing information:', error.response?.data || error);
+            console.error('Unable to update insurance package information:', error.response?.data || error);
         }
     };
 
@@ -71,25 +69,24 @@ const Billing = () => {
     };
 
     const handleFilterChange = (e) => {
-        setFilterPrice(e.target.value);
-        setCurrentPage(1); // Reset to the first page when the filter changes
+        setFilterName(e.target.value);
     };
 
     const filteredData = (dataSource || []).filter((item) => {
-        return item && item.price !== undefined && item.price.toString().includes(filterPrice);
+        return item && item.name && item.name.toLowerCase().includes(filterName.toLowerCase());
     });
 
     const handleDelete = async (id) => {
         try {
             await axios.delete(`${API_URL}/${id}`);
-            setDataSource(dataSource.filter((billing) => billing.id !== id));
+            setDataSource(dataSource.filter((insurancePackage) => insurancePackage.id !== id));
         } catch (error) {
-            console.error('Unable to delete billing:', error);
+            console.error('Unable to delete insurance package:', error);
         }
     };
 
-    const handleDetail = (billing) => {
-        setCurrentBilling(billing);
+    const handleDetail = (insurancePackage) => {
+        setCurrentPackage(insurancePackage);
         setIsDetailModalVisible(true);
     };
 
@@ -100,15 +97,25 @@ const Billing = () => {
             key: 'id',
         },
         {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Duration (Months)',
+            dataIndex: 'duration',
+            key: 'duration',
+        },
+        {
             title: 'Price',
             dataIndex: 'price',
             key: 'price',
             render: (text) => `$${text.toFixed(2)}`,
         },
         {
-            title: 'Customer Insurance ID',
-            dataIndex: 'customerinsuranceId',
-            key: 'customerinsuranceId',
+            title: 'Insurance ID',
+            dataIndex: 'insuranceId',
+            key: 'insuranceId',
         },
         {
             title: 'Action',
@@ -138,7 +145,7 @@ const Billing = () => {
                         style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
                         onClick={() => handleDelete(record.id)}
                     />
-                </div>
+                </div> 
             ),
         },
     ];
@@ -155,9 +162,9 @@ const Billing = () => {
                 }}
             >
                 <Button type="primary" icon={<PlusCircleOutlined />} onClick={() => showModal()}>
-                    Add Billing
+                    Add Insurance Package
                 </Button>
-                <h1 style={{ margin: 0 }}>Billing Management</h1>
+                <h1 style={{ margin: 0 }}>Insurance Package Management</h1>
                 <Button type="default" icon={<LogoutOutlined />}>
                     Logout
                 </Button>
@@ -165,39 +172,43 @@ const Billing = () => {
             <Content style={{ margin: '16px' }}>
                 <Row gutter={16} style={{ marginBottom: '16px' }}>
                     <Col span={8}>
-                        <Input placeholder="Filter by Price" value={filterPrice} onChange={handleFilterChange} />
+                        <Input placeholder="Filter by Name" value={filterName} onChange={handleFilterChange} />
                     </Col>
                 </Row>
-                <Table
-                    columns={columns}
-                    dataSource={filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-                    rowKey="id"
-                    pagination={{
-                        current: currentPage,
-                        pageSize: pageSize,
-                        total: filteredData.length,
-                        onChange: (page) => setCurrentPage(page),
-                    }}
-                />
+                <Table columns={columns} dataSource={filteredData} rowKey="id" />
 
                 <Modal
-                    title={isEditMode ? 'Edit Billing Record' : 'Add New Billing Record'}
+                    title={isEditMode ? 'Edit Insurance Package' : 'Add New Insurance Package'}
                     open={isModalVisible}
                     onOk={handleOk}
                     onCancel={handleCancel}
                 >
                     <Form form={form} layout="vertical">
                         <Form.Item
+                            name="name"
+                            label="Name"
+                            rules={[{ required: true, message: 'Please enter the name!' }]}
+                        >
+                            <Input />
+                        </Form.Item>
+                        <Form.Item
+                            name="duration"
+                            label="Duration (Months)"
+                            rules={[{ required: true, message: 'Please enter the duration!' }]}
+                        >
+                            <Input type="number" />
+                        </Form.Item>
+                        <Form.Item
                             name="price"
                             label="Price"
-                            rules={[{ required: true, message: 'Please input the price!' }]}
+                            rules={[{ required: true, message: 'Please enter the price!' }]}
                         >
                             <Input type="number" step="0.01" />
                         </Form.Item>
                         <Form.Item
-                            name="customerinsuranceId"
-                            label="Customer Insurance ID"
-                            rules={[{ required: true, message: 'Please input Customer Insurance ID!' }]}
+                            name="insuranceId"
+                            label="Insurance ID"
+                            rules={[{ required: true, message: 'Please enter the insurance ID!' }]}
                         >
                             <Input type="number" />
                         </Form.Item>
@@ -205,21 +216,27 @@ const Billing = () => {
                 </Modal>
 
                 <Modal
-                    title="Billing Details"
+                    title="Insurance Package Details"
                     open={isDetailModalVisible}
                     onCancel={() => setIsDetailModalVisible(false)}
                     footer={null}
                 >
-                    {currentBilling && (
+                    {currentPackage && (
                         <Card>
                             <p>
-                                <strong>ID:</strong> {currentBilling.id}
+                                <strong>ID:</strong> {currentPackage.id}
                             </p>
                             <p>
-                                <strong>Price:</strong> ${currentBilling.price.toFixed(2)}
+                                <strong>Name:</strong> {currentPackage.name}
                             </p>
                             <p>
-                                <strong>Customer Insurance ID:</strong> {currentBilling.customerinsuranceId}
+                                <strong>Duration:</strong> {currentPackage.duration} Months
+                            </p>
+                            <p>
+                                <strong>Price:</strong> ${currentPackage.price.toFixed(2)}
+                            </p>
+                            <p>
+                                <strong>Insurance ID:</strong> {currentPackage.insuranceId}
                             </p>
                         </Card>
                     )}
@@ -229,4 +246,4 @@ const Billing = () => {
     );
 };
 
-export default Billing;
+export default InsurancePackage;

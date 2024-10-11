@@ -1,142 +1,64 @@
 import React, { useState, useEffect } from 'react';
-import { Layout, Table, Button, Form, Input, Modal, Row, Col, Upload, Card } from 'antd';
-import { EditOutlined, DeleteOutlined, LogoutOutlined, PlusCircleOutlined, UploadOutlined } from '@ant-design/icons';
-import { Editor } from '@tinymce/tinymce-react';
+import { Layout, Table, Button, Input, Row, Col, Card, Popconfirm, Modal, Form } from 'antd';
+import { PlusCircleOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import AddBlog from './add/AddBlog';
+import EditBlog from './edit/EditBlog';
 
 const { Header, Content } = Layout;
 
-const Blog = () => {
-    const [dataSource, setDataSource] = useState([]);
-    const [isModalVisible, setIsModalVisible] = useState(false);
-    const [isEditMode, setIsEditMode] = useState(false);
-    const [currentPost, setCurrentPost] = useState(null);
-    const [form] = Form.useForm();
+const BlogAdmin = () => {
+    const [selectedBlog, setSelectedBlog] = useState(null);
+    const [deletedBlogs, setDeletedBlogs] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 5;
-    const [filterName, setFilterName] = useState('');
-    const [description, setDescription] = useState('');
-    const [fileList, setFileList] = useState([]);
-    const [imageUrl, setImageUrl] = useState('');
+    const [isAddModalVisible, setIsAddModalVisible] = useState(false);
+    const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
+    const [isDeletedModalVisible, setIsDeletedModalVisible] = useState(false);
+    const [dataSource, setDataSource] = useState([]);
+    const [filterName, setFilterName] = useState('');
+    const [form] = Form.useForm();
 
     const API_URL = 'https://localhost:7289/api/News';
 
-    // Fetch blog posts from the API
-    useEffect(() => {
-        const fetchBlogPosts = async () => {
-            try {
-                const response = await axios.get(API_URL);
-                setDataSource(response.data);
-            } catch (error) {
-                console.error('Failed to fetch blog posts:', error);
-            }
-        };
-        fetchBlogPosts();
-    }, []);
-
-    const showModal = (post = null) => {
-        setIsModalVisible(true);
-        setCurrentPost(post);
-        setImageUrl(''); // Reset image URL
-        setFileList([]); // Reset file list
-        if (post) {
-            setIsEditMode(true);
-            form.setFieldsValue(post);
-            setDescription(post.description); // Set description for TinyMCE
-            setImageUrl(post.image_path); // Set image URL if editing
-        } else {
-            setIsEditMode(false);
-            form.resetFields();
-            setDescription('');
-        }
-    };
-
-    const handleDetail = (post) => {
-        setCurrentPost(post);
-        setIsDetailModalVisible(true);
-    };
-
-    const handleOk = async () => {
-        const values = await form.validateFields();
-        const updatedPost = {
-            ...values,
-            description,
-            image_path: imageUrl,
-        };
-
-        if (isEditMode && currentPost) {
-            // Update blog post
-            try {
-                const response = await axios.put(`${API_URL}/${currentPost.id}`, updatedPost);
-                setDataSource(dataSource.map((post) => (post.id === currentPost.id ? response.data : post)));
-            } catch (error) {
-                console.error('Failed to update blog post:', error);
-            }
-        } else {
-            // Add new blog post
-            try {
-                const response = await axios.post(API_URL, updatedPost);
-                setDataSource([...dataSource, response.data]);
-            } catch (error) {
-                console.error('Failed to add blog post:', error);
-            }
-        }
-
-        form.resetFields();
-        setDescription('');
-        setImageUrl('');
-        setIsModalVisible(false);
-    };
-
-    const handleCancel = () => {
-        setIsModalVisible(false);
-    };
-
-    const handleDelete = async (id) => {
+    // Fetch blog data
+    const fetchBlogs = async () => {
         try {
-            await axios.delete(`${API_URL}/${id}`);
-            setDataSource(dataSource.filter((post) => post.id !== id));
+            const response = await axios.get(API_URL);
+            setDataSource(response.data);
         } catch (error) {
-            console.error('Failed to delete blog post:', error);
+            console.error('Failed to fetch blogs:', error);
         }
     };
+
+    // Fetch deleted blogs
+    const fetchDeletedBlogs = async () => {
+        try {
+            const response = await axios.get(`${API_URL}/deleted`);
+            setDeletedBlogs(response.data);
+        } catch (error) {
+            console.error('Failed to fetch deleted blogs:', error);
+        }
+    };
+
+    useEffect(() => {
+        fetchBlogs();
+    }, []);
 
     const handleFilterChange = (e) => {
         setFilterName(e.target.value);
-        setCurrentPage(1); // Reset to first page on filter change
+        setCurrentPage(1);
     };
 
-    const filteredData = dataSource.filter((item) => item.name.toLowerCase().includes(filterName.toLowerCase()));
+    const filteredBlogs = dataSource.filter((blog) => {
+        const searchLower = filterName.toLowerCase();
+        const nameLower = blog.name ? blog.name.toLowerCase() : '';
+        return nameLower.includes(searchLower);
+    });
 
-    const handleChange = ({ fileList }) => {
-        setFileList(fileList);
-        if (fileList.length > 0) {
-            const file = fileList[fileList.length - 1].originFileObj;
-            const reader = new FileReader();
-            reader.onload = () => {
-                setImageUrl(reader.result); // Save binary string
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setImageUrl('');
-        }
-    };
-
-    const handleRemove = (file) => {
-        const newFileList = fileList.filter((item) => item.uid !== file.uid);
-        setFileList(newFileList);
-        if (newFileList.length === 0) {
-            setImageUrl('');
-        } else {
-            const lastFile = newFileList[newFileList.length - 1];
-            const reader = new FileReader();
-            reader.onload = () => {
-                setImageUrl(reader.result);
-            };
-            reader.readAsDataURL(lastFile.originFileObj);
-        }
-    };
+    const pageSize = 5;
+    const paginatedBlogs = filteredBlogs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    const totalBlogs = filteredBlogs.length;
 
     const columns = [
         {
@@ -159,7 +81,16 @@ const Blog = () => {
             title: 'Image',
             dataIndex: 'image_path',
             key: 'image_path',
-            render: (text) => <img src={text} alt="Blog" style={{ width: 100 }} />,
+            render: (text) =>
+                text ? (
+                    <img
+                        src={`data:image/png;base64,${text}`}
+                        alt="Blog"
+                        style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
+                    />
+                ) : (
+                    <span>No Image</span>
+                ),
         },
         {
             title: 'Action',
@@ -170,7 +101,7 @@ const Blog = () => {
                         type="primary"
                         icon={<EditOutlined />}
                         style={{ marginRight: 8, backgroundColor: '#32CD32', borderColor: '#32CD32' }}
-                        onClick={() => showModal(record)}
+                        onClick={() => handleEdit(record)}
                     />
                     <Button
                         type="default"
@@ -183,16 +114,112 @@ const Blog = () => {
                             style={{ width: 16, height: 16 }}
                         />
                     </Button>
-                    <Button
-                        type="danger"
-                        icon={<DeleteOutlined />}
-                        style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
-                        onClick={() => handleDelete(record.id)}
-                    />
+                    <Popconfirm title="Are you sure to delete this blog?" onConfirm={() => handleDelete(record.id)}>
+                        <Button
+                            type="danger"
+                            icon={<DeleteOutlined />}
+                            style={{ backgroundColor: '#f60308', borderColor: '#f60308' }}
+                        />
+                    </Popconfirm>
                 </div>
             ),
         },
     ];
+
+    const handleEdit = (blog) => {
+        setSelectedBlog(blog);
+        form.setFieldsValue({
+            name: blog.name,
+            description: blog.description,
+        });
+        setIsEditModalVisible(true);
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`${API_URL}/${id}`);
+            setDataSource(dataSource.filter((blog) => blog.id !== id));
+        } catch (error) {
+            console.error('Failed to delete blog:', error);
+        }
+    };
+
+    const handleModalCancel = () => {
+        setIsAddModalVisible(false);
+        setIsEditModalVisible(false);
+        setIsDetailModalVisible(false);
+        setIsDeletedModalVisible(false);
+        form.resetFields();
+        setSelectedBlog(null);
+    };
+
+    const handleAddOk = async (values) => {
+        const updatedValues = { ...values };
+
+        if (updatedValues.image_path) {
+            updatedValues.image_path = updatedValues.image_path.replace('data:image/png;base64,', '');
+        }
+
+        try {
+            const response = await axios.post(API_URL, {
+                ...updatedValues,
+                verified: false,
+            });
+
+            setDataSource([...dataSource, response.data]);
+            setIsAddModalVisible(false);
+        } catch (error) {
+            console.error('Failed to add blog:', error.response?.data?.errors || error.response?.data || error);
+        }
+    };
+
+    const handleEditOk = async (values) => {
+        const updatedValues = { ...values };
+        if (updatedValues.image_path) {
+            updatedValues.image_path = updatedValues.image_path.replace('data:image/png;base64,', '');
+        }
+
+        try {
+            await axios.put(`${API_URL}/${selectedBlog.id}`, {
+                id: selectedBlog.id,
+                ...updatedValues,
+            });
+
+            fetchBlogs();
+            setIsEditModalVisible(false);
+        } catch (error) {
+            console.error('Failed to edit user:', error);
+        }
+    };
+
+    const handleDetail = (blog) => {
+        setSelectedBlog(blog);
+        setIsDetailModalVisible(true);
+    };
+
+    const showDeletedBlogsModal = () => {
+        fetchDeletedBlogs();
+        setIsDeletedModalVisible(true);
+    };
+
+    const handleRestore = async (id) => {
+        try {
+            await axios.put(`${API_URL}/restore/${id}`);
+            fetchBlogs();
+            fetchDeletedBlogs();
+        } catch (error) {
+            console.error('Failed to restore blog:', error);
+        }
+    };
+
+    const handlePermanentDelete = async (id) => {
+        try {
+            await axios.delete(`${API_URL}/deleted/${id}`);
+            fetchDeletedBlogs();
+        } catch (error) {
+            console.error('Failed to permanently delete blog:', error);
+        }
+    };
 
     return (
         <Layout style={{ minHeight: '100vh' }}>
@@ -205,127 +232,97 @@ const Blog = () => {
                     color: '#fff',
                 }}
             >
-                <Button type="primary" icon={<PlusCircleOutlined />} onClick={() => showModal()}>
-                    Add Post
+                <Button type="primary" icon={<PlusCircleOutlined />} onClick={() => setIsAddModalVisible(true)}>
+                    Add Blog
                 </Button>
                 <h1 style={{ margin: 0 }}>Blog Management</h1>
-                <Button type="default" icon={<LogoutOutlined />}>
-                    Logout
+                <Button
+                    type="default"
+                    icon={<DeleteOutlined />}
+                    onClick={showDeletedBlogsModal}
+                    style={{ backgroundColor: '#f60308', borderColor: '#f60308' }}
+                >
+                    Show Deleted Blogs
                 </Button>
             </Header>
+
             <Content style={{ margin: '16px' }}>
-                <Row gutter={16} style={{ marginBottom: '16px' }}>
-                    <Col span={8}>
-                        <Input placeholder="Filter by Name" value={filterName} onChange={handleFilterChange} />
-                    </Col>
-                </Row>
-                <Table
-                    columns={columns}
-                    dataSource={filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-                    rowKey="id"
-                    pagination={{
-                        current: currentPage,
-                        pageSize: pageSize,
-                        total: filteredData.length,
-                        onChange: (page) => setCurrentPage(page),
-                    }}
-                />
+                <div style={{ padding: 24, background: '#fff' }}>
+                    <Input
+                        placeholder="Search for blog by name"
+                        value={filterName}
+                        onChange={handleFilterChange}
+                        style={{ marginBottom: 16 }}
+                    />
 
-                <Modal
-                    title={isEditMode ? 'Edit Blog Post' : 'Add New Blog Post'}
-                    open={isModalVisible}
-                    onOk={handleOk}
-                    onCancel={handleCancel}
-                >
-                    <Form form={form} onFinish={handleOk} layout="vertical">
-                        <Form.Item
-                            name="name"
-                            label="Name"
-                            rules={[{ required: true, message: 'Please input the blog post name!' }]}
-                        >
-                            <Input />
-                        </Form.Item>
-                        <Form.Item
-                            label="Description"
-                            rules={[{ required: true, message: 'Please input the description!' }]}
-                        >
-                            <Editor
-                                apiKey="l1i9v8q0xwfkdzno0iih7p59m4dqchz5cdie0khvrozcztbg"
-                                initialValue={description}
-                                init={{
-                                    height: 300,
-                                    menubar: false,
-                                    plugins: ['image'],
-                                    toolbar:
-                                        'undo redo | formatselect | ' +
-                                        'bold italic backcolor | alignleft aligncenter ' +
-                                        'alignright alignjustify | bullist numlist outdent indent | ' +
-                                        'image | removeformat | help',
-                                    automatic_uploads: false, // Tắt tự động upload
-                                    images_upload_handler: (blobInfo, success) => {
-                                        const reader = new FileReader();
-                                        reader.onload = () => {
-                                            // Chèn hình ảnh dưới dạng base64
-                                            success(reader.result);
-                                        };
-                                        reader.readAsDataURL(blobInfo.blob()); // Đọc blob thành chuỗi nhị phân
-                                    },
+                    <Row gutter={16}>
+                        <Col span={24}>
+                            <Table
+                                dataSource={paginatedBlogs}
+                                columns={columns}
+                                rowKey="id"
+                                pagination={{
+                                    current: currentPage,
+                                    pageSize: pageSize,
+                                    total: totalBlogs,
+                                    onChange: (page) => setCurrentPage(page),
                                 }}
-                                onEditorChange={(newDescription) => setDescription(newDescription)}
                             />
-                        </Form.Item>
-                        <Form.Item label="Upload Image">
-                            <div>
-                                <Upload
-                                    beforeUpload={() => false} // Ngăn không tự động tải lên
-                                    showUploadList={false} // Ẩn danh sách upload nếu không cần
-                                    fileList={fileList}
-                                    onChange={handleChange}
-                                    onRemove={handleRemove}
-                                >
-                                    <Button icon={<UploadOutlined />}>Chọn ảnh</Button>
-                                </Upload>
-                                {fileList.length > 0 && <span style={{ marginLeft: '10px' }}>{fileList[0].name}</span>}
-                            </div>
-                            {imageUrl && (
-                                <img
-                                    src={imageUrl}
-                                    alt="Preview"
-                                    style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
-                                />
-                            )}
-                        </Form.Item>
-                    </Form>
-                </Modal>
-
-                <Modal
-                    title="Blog Post Details"
-                    open={isDetailModalVisible}
-                    onCancel={() => setIsDetailModalVisible(false)}
-                    footer={null}
-                >
-                    {currentPost && (
-                        <Card>
-                            <p>
-                                <strong>ID:</strong> {currentPost.id}
-                            </p>
-                            <p>
-                                <strong>Name:</strong> {currentPost.name}
-                            </p>
-                            <p>
-                                <strong>Description:</strong>{' '}
-                                <div dangerouslySetInnerHTML={{ __html: currentPost.description }} />
-                            </p>
-                            <p>
-                                <strong>Image:</strong>{' '}
-                                <img src={currentPost.image_path} alt="Blog" style={{ width: 100 }} />
-                            </p>
-                        </Card>
-                    )}
-                </Modal>
+                        </Col>
+                    </Row>
+                </div>
             </Content>
+
+            <Modal title="Add Blog" open={isAddModalVisible} onCancel={handleModalCancel} footer={null}>
+                <AddBlog onFinish={handleAddOk} />
+            </Modal>
+
+            <Modal title="Edit Blog" open={isEditModalVisible} onCancel={handleModalCancel} footer={null}>
+                <EditBlog blog={selectedBlog} onFinish={handleEditOk} />
+            </Modal>
+
+            <Modal title="Blog Details" open={isDetailModalVisible} onCancel={handleModalCancel} footer={null}>
+                {selectedBlog && (
+                    <Card style={{ padding: 16 }}>
+                        <h3>{selectedBlog.name}</h3>
+                        <div dangerouslySetInnerHTML={{ __html: selectedBlog.description }} />
+                        <p>
+                            <strong>Image:</strong>
+                        </p>
+                        <img
+                            src={`data:image/png;base64,${selectedBlog.image_path}`}
+                            alt="Blog"
+                            style={{ width: '100%', height: 'auto' }}
+                        />
+                    </Card>
+                )}
+            </Modal>
+
+            <Modal title="Deleted Blogs" open={isDeletedModalVisible} onCancel={handleModalCancel} footer={null}>
+                {deletedBlogs.map((blog) => (
+                    <Card key={blog.id} style={{ marginBottom: 16, padding: 16 }}>
+                        <p>
+                            <strong>ID:</strong> {blog.id}
+                        </p>
+                        <p>
+                            <strong>Name:</strong> {blog.name}
+                        </p>
+                        <Popconfirm title="Are you sure to restore this blog?" onConfirm={() => handleRestore(blog.id)}>
+                            <Button type="primary" style={{ marginRight: 8 }}>
+                                Restore
+                            </Button>
+                        </Popconfirm>
+                        <Popconfirm
+                            title="Are you sure to permanently delete this blog?"
+                            onConfirm={() => handlePermanentDelete(blog.id)}
+                        >
+                            <Button type="danger">Delete Permanently</Button>
+                        </Popconfirm>
+                    </Card>
+                ))}
+            </Modal>
         </Layout>
     );
 };
 
-export default Blog;
+export default BlogAdmin;

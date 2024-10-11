@@ -22,6 +22,7 @@ import BlogAmin from '~/pages/admin/Blog';
 import AdminLayout from '~/layouts/DefaultLayout/AdminLayout';
 import InsuranceList from '~/pages/Pay/InsuranceList';
 import PaymentSuccess from '~/pages/Pay/PaymentSucces';
+import InsurancePackage from '~/pages/admin/InsurancePackage';
 
 // Public routes
 const publicRoutes = [
@@ -46,7 +47,8 @@ const adminRoutes = [
     { path: config.routes.vehicleAdmin, component: Vehicle, layout: AdminLayout },
     { path: config.routes.advertisementAdmin, component: Advertisement, layout: AdminLayout },
     { path: config.routes.insuranceAdmin, component: Insurance, layout: AdminLayout },
-    { path: config.routes.blogAmin, component: BlogAmin, layout: AdminLayout },
+    { path: config.routes.blogAdmin, component: BlogAmin, layout: AdminLayout },
+    { path: config.routes.insurancepackage, component: InsurancePackage, layout: AdminLayout },
 ];
 
 // Private routes

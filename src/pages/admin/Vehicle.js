@@ -20,15 +20,16 @@ const Vehicle = () => {
     const API_URL = 'https://localhost:7289/api/Vehicles';
 
     // Fetch vehicle data from the API
+    const fetchVehicleData = async () => {
+        try {
+            const response = await axios.get(API_URL);
+            setDataSource(response.data);
+        } catch (error) {
+            console.error('Failed to fetch vehicle data:', error);
+        }
+    };
+
     useEffect(() => {
-        const fetchVehicleData = async () => {
-            try {
-                const response = await axios.get(API_URL);
-                setDataSource(response.data);
-            } catch (error) {
-                console.error('Failed to fetch vehicle data:', error);
-            }
-        };
         fetchVehicleData();
     }, []);
 
@@ -45,26 +46,26 @@ const Vehicle = () => {
     };
 
     const handleOk = async () => {
-        const values = await form.validateFields();
-        if (isEditMode && currentVehicle) {
-            // Update vehicle
-            try {
-                const response = await axios.put(`${API_URL}/${currentVehicle.id}`, values);
-                setDataSource(dataSource.map((veh) => (veh.id === currentVehicle.id ? response.data : veh)));
-            } catch (error) {
-                console.error('Failed to update vehicle:', error);
-            }
-        } else {
-            // Add new vehicle
-            try {
+        try {
+            const values = await form.validateFields();
+
+            if (isEditMode && currentVehicle) {
+                const updatedVehicle = {
+                    id: currentVehicle.id,
+                    ...values,
+                };
+                await axios.put(`${API_URL}/${currentVehicle.id}`, updatedVehicle);
+                fetchVehicleData(); // Refresh data after update
+            } else {
                 const response = await axios.post(API_URL, values);
-                setDataSource([...dataSource, response.data]);
-            } catch (error) {
-                console.error('Failed to add vehicle:', error);
+                setDataSource((prevData) => [...prevData, response.data]);
             }
+
+            setIsModalVisible(false);
+            form.resetFields();
+        } catch (error) {
+            console.error('Cannot update vehicle information:', error.response?.data || error);
         }
-        form.resetFields();
-        setIsModalVisible(false);
     };
 
     const handleCancel = () => {
@@ -74,7 +75,7 @@ const Vehicle = () => {
     const handleDelete = async (id) => {
         try {
             await axios.delete(`${API_URL}/${id}`);
-            setDataSource(dataSource.filter((veh) => veh.id !== id));
+            fetchVehicleData(); // Refresh data after deletion
         } catch (error) {
             console.error('Failed to delete vehicle:', error);
         }
@@ -119,9 +120,9 @@ const Vehicle = () => {
             key: 'type',
         },
         {
-            title: 'Car Number',
-            dataIndex: 'carNumber',
-            key: 'carNumber',
+            title: 'License Plate',
+            dataIndex: 'licensePlate',
+            key: 'licensePlate',
         },
         {
             title: 'User ID',
@@ -204,7 +205,7 @@ const Vehicle = () => {
                     onOk={handleOk}
                     onCancel={handleCancel}
                 >
-                    <Form form={form} onFinish={handleOk} layout="vertical">
+                    <Form form={form} layout="vertical">
                         <Form.Item
                             name="name"
                             label="Name"
@@ -237,9 +238,9 @@ const Vehicle = () => {
                             </Select>
                         </Form.Item>
                         <Form.Item
-                            name="carNumber"
-                            label="Car Number"
-                            rules={[{ required: true, message: 'Please input the car number!' }]}
+                            name="licensePlate"
+                            label="License Plate"
+                            rules={[{ required: true, message: 'Please input the license plate!' }]}
                         >
                             <Input />
                         </Form.Item>
@@ -277,7 +278,7 @@ const Vehicle = () => {
                                 <strong>Type:</strong> {currentVehicle.type}
                             </p>
                             <p>
-                                <strong>Car Number:</strong> {currentVehicle.carNumber}
+                                <strong>License Plate:</strong> {currentVehicle.licensePlate}
                             </p>
                             <p>
                                 <strong>User ID:</strong> {currentVehicle.userId}
