@@ -23,6 +23,7 @@ import AdminLayout from '~/layouts/DefaultLayout/AdminLayout';
 import InsuranceList from '~/pages/Pay/InsuranceList';
 import PaymentSuccess from '~/pages/Pay/PaymentSucces';
 import InsurancePackage from '~/pages/admin/InsurancePackage';
+import AdminLogin from '~/pages/AdminLogin';
 
 // Public routes
 const publicRoutes = [
@@ -37,6 +38,7 @@ const publicRoutes = [
     { path: config.routes.insurancePackages, component: InsurancePackages },
     { path: config.routes.insuranceList, component: InsuranceList },
     { path: config.routes.paymentSuccess, component: PaymentSuccess },
+    { path: config.routes.loginAdmin, component: AdminLogin, layout: null },
 ];
 
 // Admin routes
@@ -55,7 +57,6 @@ const adminRoutes = [
 const privateRoutes = [
     { path: config.routes.contractList, component: ContractList },
     { path: config.routes.indemnity, component: Indemnity },
-    { path: config.routes.contract, component: Contract },
 ];
 
 export { publicRoutes, adminRoutes, privateRoutes };

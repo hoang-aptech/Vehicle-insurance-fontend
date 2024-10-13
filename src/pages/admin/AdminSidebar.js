@@ -1,6 +1,6 @@
 // AdminSidebar.js
-import React from 'react';
-import { Layout, Menu } from 'antd';
+import React, { useContext } from 'react';
+import { Button, Layout, Menu } from 'antd';
 import {
     HomeOutlined,
     UserOutlined,
@@ -8,11 +8,13 @@ import {
     InsuranceOutlined,
     CarOutlined,
     UserAddOutlined,
+    LogoutOutlined,
 } from '@ant-design/icons';
 import logo from './assetadmin/logo.png';
 import blogIcon from './assetadmin/ảnhblog.png'; // Import hình ảnh cho Blog
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './AdminSidebar.css';
+import { Context } from '~/Context';
 import config from '~/config';
 
 const { Sider } = Layout;
@@ -58,6 +60,11 @@ const items = [
         label: <Link to={config.routes.insurancepackage}>InsurancePackage</Link>,
         icon: <InsuranceOutlined style={{ color: 'black' }} />,
     },
+    {
+        key: config.routes.insurancepackage,
+        label: <Button onClick={{}}>InsurancePackage</Button>,
+        icon: <InsuranceOutlined style={{ color: 'black' }} />,
+    },
     // {
     //     key: config.routes.blogAdmin,
     //     label: <Link to={config.routes.blogAdmin}>Blog</Link>,
@@ -67,9 +74,88 @@ const items = [
 
 const AdminSidebar = () => {
     const location = useLocation();
+    const navigate = useNavigate();
+    const { admin, handleLogoutAdmin } = useContext(Context);
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        const loggedOut = handleLogoutAdmin();
+        if (loggedOut) {
+            navigate(config.routes.loginAdmin);
+        }
+    };
+
+    const items = [
+        {
+            key: config.routes.admin,
+            label: <Link to={config.routes.admin}>Dashboard</Link>,
+            icon: <HomeOutlined style={{ color: 'black' }} />,
+        },
+        {
+            key: config.routes.userAdmin,
+            label: <Link to={config.routes.userAdmin}>Users</Link>,
+            icon: <UserOutlined style={{ color: 'black' }} />,
+        },
+        {
+            key: config.routes.billingAdmin,
+            label: <Link to={config.routes.billingAdmin}>Billing</Link>,
+            icon: <BilibiliOutlined style={{ color: 'black' }} />,
+        },
+        {
+            key: config.routes.advertisementAdmin,
+            label: <Link to={config.routes.advertisementAdmin}>Advertisement</Link>,
+            icon: <UserAddOutlined style={{ color: 'black' }} />,
+        },
+        {
+            key: config.routes.insuranceAdmin,
+            label: <Link to={config.routes.insuranceAdmin}>Insurance</Link>,
+            icon: <InsuranceOutlined style={{ color: 'black' }} />,
+        },
+        {
+            key: config.routes.vehicleAdmin,
+            label: <Link to={config.routes.vehicleAdmin}>Vehicle</Link>,
+            icon: <CarOutlined style={{ color: 'black' }} />,
+        },
+        {
+            key: config.routes.blogAdmin,
+            label: <Link to={config.routes.blogAdmin}>Blog</Link>,
+            icon: <img src={blogIcon} alt="Blog Icon" style={{ width: '20px', height: '20px' }} />,
+        },
+        {
+            key: config.routes.insurancePackage,
+            label: <Link to={config.routes.insurancePackage}>InsurancePackage</Link>,
+            icon: <InsuranceOutlined style={{ color: 'black' }} />,
+        },
+        {
+            key: '/logout',
+            label: (
+                <Link to="/" onClick={handleLogout}>
+                    Logout
+                </Link>
+            ),
+            icon: <LogoutOutlined style={{ color: 'black' }} />,
+        },
+        // {
+        //     key: config.routes.blogAdmin,
+        //     label: <Link to={config.routes.blogAdmin}>Blog</Link>,
+        //     icon: <img src={blogIcon} alt="Blog Icon" style={{ width: '20px', height: '20px' }} />,
+        // },
+    ];
+
+    console.log(admin);
+
+    if (admin.role === 'Employee') {
+        delete items[1];
+        delete items[2];
+        delete items[5];
+        delete items[7];
+    }
 
     // Xác định key hiện tại dựa trên đường dẫn
-    const selectedKey = items.find((item) => location.pathname === item.key)?.key || config.routes.admin;
+    // const selectedKey = items.find((item) => location.pathname === item.key)?.key || config.routes.admin;
+    const selectedKey = config.routes.admin;
+    console.log(selectedKey);
+    console.log(location.pathname);
 
     return (
         <Sider width={280} style={{ background: '#006494' }}>

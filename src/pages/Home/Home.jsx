@@ -42,44 +42,6 @@ import config from '~/config';
 
 const carouselImages = [carou1, carou2, carou3, carou4, carou5, carou6, carou7];
 
-// const insuranceData = [
-//     {
-//         icon: '✈️',
-//         title: 'Du lịch quốc tế',
-//         tag: 'HOT',
-//     },
-//     {
-//         icon: '🚗',
-//         title: 'TNDS Ô tô',
-//     },
-//     {
-//         icon: '🚚',
-//         title: 'Vật chất Ô tô',
-//         tag: 'MỚI',
-//     },
-//     {
-//         icon: '🩺',
-//         title: 'Sức khỏe',
-//     },
-//     {
-//         icon: '🩹',
-//         title: 'Tai nạn 24/24',
-//     },
-//     {
-//         icon: '🛵',
-//         title: 'TNDS Xe máy',
-//     },
-//     {
-//         icon: '🏠',
-//         title: 'Nhà tư nhân',
-//     },
-//     {
-//         icon: '🦠',
-//         title: 'Sức khỏe & Ung thư',
-//         tag: 'MỚI',
-//     },
-// ];
-
 const data = [
     {
         icon: home1,
@@ -118,177 +80,6 @@ const partnersData = [
     },
 ];
 
-// form của trang 7
-const ContactForm = () => {
-    const [form] = Form.useForm();
-    const [success, setSuccess] = useState(false);
-    const [setInsuranceDetails] = useState([]);
-    const onFinish = async (values) => {
-        try {
-            const newAdvertisement = {
-                customerName: values.name,
-                customerPhone: values.phone,
-                customerEmail: values.email,
-                type: values.product,
-            };
-            const adResponse = await axios.post('https://localhost:7289/api/advertisements', newAdvertisement);
-
-            if (adResponse.status === 201) {
-                console.log('Advertisement added successfully.');
-                const response = await axios.get(`https://localhost:7289/api/insurances/type/${values.product}`);
-                setInsuranceDetails(response.data);
-
-                const insuranceInfo = response.data
-                    .map(
-                        (i) => `
-                  Name: ${i.name}
-                  Description: ${i.description}
-                  Price: ${i.price}
-                `,
-                    )
-                    .join('\n');
-                const emailParams = {
-                    to_name: values.name,
-                    from_name: 'One Team',
-                    message: `Here are the available insurance packages for ${values.product}: \n${insuranceInfo}`,
-                    to_email: values.email,
-                };
-
-                emailjs.send('service_xe6f9kj', 'template_3z2uslk', emailParams, 'laGrWQghcmlQSS4rS').then(
-                    (result) => {
-                        console.log('Email successfully sent!');
-                        setSuccess(true);
-                    },
-                    (error) => {
-                        console.log('Email failed to send:', error);
-                    },
-                );
-            }
-        } catch (error) {
-            console.error('Error occurred:', error);
-        }
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
-    return (
-        <Row gutter={[32, 32]} style={{ maxWidth: '1050px', margin: 'auto', marginTop: '32px', marginBottom: '40px' }}>
-            <Col span={24}>
-                <h1 style={{ textAlign: 'center', fontSize: '3rem', color: '#4caf50' }}>24/7 Consulting and Support</h1>
-                <p style={{ textAlign: 'center', minWidth: '600px', margin: 'auto' }}>
-                    The Saladin team is always ready to support you throughout your journey of buying and using
-                    insurance.
-                </p>
-            </Col>
-            <Col xs={24} sm={12} md={12}>
-                <div
-                    style={{
-                        padding: '20px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        textAlign: 'center',
-                    }}
-                >
-                    <h3>Thông tin bổ sung</h3>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', paddingTop: '20px' }}>
-                        <PhoneOutlined
-                            style={{
-                                marginRight: '8px',
-                                background: '#4caf50',
-                                padding: '14px',
-                                color: 'white',
-                                borderRadius: '4px',
-                            }}
-                        />
-                        <p style={{ marginTop: '-20px' }}>Row 1: Information 1</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <MailOutlined
-                            style={{
-                                marginRight: '8px',
-                                background: '#4caf50',
-                                padding: '14px',
-                                color: 'white',
-                                borderRadius: '4px',
-                            }}
-                        />
-                        <p style={{ marginTop: '-20px' }}>Row 2: Information 2</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <img src={QrZalo} alt="qr zalo" style={{ width: '50px', marginRight: '8px' }} />
-                        <p style={{ marginTop: '-20px' }}>Row 3: Information 3</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <img src={QrFace} alt="qr face" style={{ width: '50px', marginRight: '8px' }} />
-                        <p style={{ marginTop: '-20px' }}>Row 4: Information 4</p>
-                    </div>
-                </div>
-            </Col>
-            <Col xs={24} sm={12} md={12}>
-                <div
-                    className="contact-form"
-                    style={{ padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}
-                >
-                    <Row justify="center" align="middle" style={{ height: '100%' }}>
-                        <Col span={24}>
-                            <Form
-                                form={form}
-                                name="basic"
-                                layout="vertical"
-                                onFinish={onFinish}
-                                onFinishFailed={onFinishFailed}
-                                initialValues={{
-                                    remember: true,
-                                }}
-                            >
-                                <h2>Get advice now</h2>
-                                <p>Leave your information to receive advice and offers from Saladin.</p>
-                                <Form.Item
-                                    label="Full name"
-                                    name="name"
-                                    rules={[{ required: true, message: 'Please enter your full name!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item
-                                    label="Phone number"
-                                    name="phone"
-                                    rules={[{ required: true, message: 'Please enter phone number!' }]}
-                                >
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item label="Email" name="email">
-                                    <Input />
-                                </Form.Item>
-                                <Form.Item label="Sản phẩm mà bạn quan tâm" name="product">
-                                    <Select>
-                                        <Option value="Car">Car physical damage insurance</Option>
-                                        <Option value="Motorbike">Motorcycle physical damage insurance</Option>
-                                    </Select>
-                                </Form.Item>
-                                <Form.Item>
-                                    <Button type="primary" htmlType="submit" style={{ background: '#4caf50' }}>
-                                        Get advice
-                                    </Button>
-                                </Form.Item>
-                                {success && (
-                                    <div className="success-message">
-                                        Thank you for contacting us! We will contact you as soon as possible.
-                                    </div>
-                                )}
-                            </Form>
-                        </Col>
-                    </Row>
-                </div>
-            </Col>
-            <img src={MascotSp} alt="" style={{ maxWidth: '800px', height: '30vh', margin: '0 auto' }}></img>
-        </Row>
-    );
-};
-
 const { Option } = Select;
 
 const { Title, Paragraph } = Typography;
@@ -301,6 +92,220 @@ const Home = () => {
 
     const [insuranceData, setInsuranceData] = useState([]);
     const navigate = useNavigate();
+
+    const ContactForm = () => {
+        const [form] = Form.useForm();
+        const [success, setSuccess] = useState(false);
+        const [insurancesData, setInsurancesData] = useState([]);
+        // const [setInsuranceDetails] = useState([]);
+        const onFinish = async (values) => {
+            try {
+                const newAdvertisement = {
+                    customerName: values.name,
+                    customerPhone: values.phone,
+                    customerEmail: values.email,
+                    type: values.product,
+                };
+                const adResponse = await axios.post('https://localhost:7289/api/advertisements', newAdvertisement);
+
+                if (adResponse.status === 201) {
+                    console.log('Advertisement added successfully.');
+                    const response = await axios.get(`https://localhost:7289/api/insurances/type/${values.product}`);
+                    // setInsuranceDetails(response.data);
+
+                    const insuranceInfo = response.data
+                        .map(
+                            (i) => `
+                      Name: ${i.name}
+                      Package name: ${i.packageName}
+                      Description: ${i.description}
+                      Price: ${i.price}
+                    `,
+                        )
+                        .join('\n');
+                    const emailParams = {
+                        to_name: values.name,
+                        from_name: 'One Team',
+                        message: `Here are the available insurance packages for ${values.product}: \n${insuranceInfo}`,
+                        to_email: values.email,
+                    };
+
+                    emailjs.send('service_xe6f9kj', 'template_3z2uslk', emailParams, 'laGrWQghcmlQSS4rS').then(
+                        (result) => {
+                            console.log('Email successfully sent!');
+                            setSuccess(true);
+                        },
+                        (error) => {
+                            console.log('Email failed to send:', error);
+                        },
+                    );
+                }
+            } catch (error) {
+                console.error('Error occurred:', error);
+            }
+        };
+
+        const onFinishFailed = (errorInfo) => {
+            console.log('Failed:', errorInfo);
+        };
+
+        return (
+            <Row
+                gutter={[32, 32]}
+                style={{ maxWidth: '1050px', margin: 'auto', marginTop: '32px', marginBottom: '40px' }}
+            >
+                <Col span={24}>
+                    <h1 style={{ textAlign: 'center', fontSize: '3rem', color: '#4caf50' }}>
+                        24/7 Consulting and Support
+                    </h1>
+                    <p style={{ textAlign: 'center', minWidth: '600px', margin: 'auto' }}>
+                        The Saladin team is always ready to support you throughout your journey of buying and using
+                        insurance.
+                    </p>
+                </Col>
+                <Col xs={24} sm={12} md={12}>
+                    <div
+                        style={{
+                            padding: '20px',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            textAlign: 'center',
+                        }}
+                    >
+                        <h3>Additional information</h3>
+                        <div
+                            style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', paddingTop: '20px' }}
+                        >
+                            <PhoneOutlined
+                                style={{
+                                    marginRight: '8px',
+                                    background: '#4caf50',
+                                    padding: '14px',
+                                    color: 'white',
+                                    borderRadius: '4px',
+                                }}
+                            />
+                            <p style={{ marginTop: '-20px' }}>Row 1: Information 1</p>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <MailOutlined
+                                style={{
+                                    marginRight: '8px',
+                                    background: '#4caf50',
+                                    padding: '14px',
+                                    color: 'white',
+                                    borderRadius: '4px',
+                                }}
+                            />
+                            <p style={{ marginTop: '-20px' }}>Row 2: Information 2</p>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <img src={QrZalo} alt="qr zalo" style={{ width: '50px', marginRight: '8px' }} />
+                            <p style={{ marginTop: '-20px' }}>Row 3: Information 3</p>
+                        </div>
+                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                            <img src={QrFace} alt="qr face" style={{ width: '50px', marginRight: '8px' }} />
+                            <p style={{ marginTop: '-20px' }}>Row 4: Information 4</p>
+                        </div>
+                    </div>
+                </Col>
+                <Col xs={24} sm={12} md={12}>
+                    <div
+                        className="contact-form"
+                        style={{ padding: '20px', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', borderRadius: '8px' }}
+                    >
+                        <Row justify="center" align="middle" style={{ height: '100%' }}>
+                            <Col span={24}>
+                                <Form
+                                    form={form}
+                                    name="basic"
+                                    layout="vertical"
+                                    onFinish={onFinish}
+                                    onFinishFailed={onFinishFailed}
+                                    initialValues={{
+                                        remember: true,
+                                    }}
+                                >
+                                    <h2>Get advice now</h2>
+                                    <p>Leave your information to receive advice and offers from Saladin.</p>
+                                    <Form.Item
+                                        label="Full name"
+                                        name="name"
+                                        rules={[
+                                            { required: true, message: 'Please enter your full name!' },
+                                            {
+                                                min: 3,
+                                                message: 'Full name must be at least 3 characters!',
+                                            },
+                                            {
+                                                max: 50,
+                                                message: 'Full name must not exceed 50 characters!',
+                                            },
+                                        ]}
+                                    >
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Phone number"
+                                        name="phone"
+                                        rules={[
+                                            { required: true, message: 'Please enter phone number!' },
+                                            {
+                                                pattern: /^\+?\d{10,11}$/,
+                                                message: 'Please enter a valid phone number!',
+                                            },
+                                        ]}
+                                    >
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Email"
+                                        name="email"
+                                        rules={[
+                                            { required: true, message: 'Please enter your email!' },
+                                            { type: 'email', message: 'Please enter a valid email address!' },
+                                        ]}
+                                    >
+                                        <Input />
+                                    </Form.Item>
+                                    <Form.Item
+                                        label="Type of insurance you are interested in"
+                                        name="product"
+                                        rules={[
+                                            {
+                                                required: true,
+                                                message: 'Please enter type of insurance you are interested in!',
+                                            },
+                                        ]}
+                                    >
+                                        <Select>
+                                            {insuranceData.map((i) => (
+                                                <Option key={i.id} value={i.type}>
+                                                    {i.name}
+                                                </Option>
+                                            ))}
+                                        </Select>
+                                    </Form.Item>
+                                    <Form.Item>
+                                        <Button type="primary" htmlType="submit" style={{ background: '#4caf50' }}>
+                                            Get advice
+                                        </Button>
+                                    </Form.Item>
+                                    {success && (
+                                        <div className="success-message">
+                                            Thank you for contacting us! We will contact you as soon as possible.
+                                        </div>
+                                    )}
+                                </Form>
+                            </Col>
+                        </Row>
+                    </div>
+                </Col>
+                <img src={MascotSp} alt="" style={{ maxWidth: '800px', height: '30vh', margin: '0 auto' }}></img>
+            </Row>
+        );
+    };
 
     useEffect(() => {
         const fetchData = async () => {

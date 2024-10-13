@@ -4,7 +4,7 @@ const routes = {
     register: '/register',
     private: '/private-test',
     blog: '/blog',
-    blogDetails: '/blog-details',
+    blogDetails: '/blog-details/:id',
     insuranceDetails: '/insurance-details/:id',
     indemnity: '/indemnity',
     chat: '/chat',
@@ -15,6 +15,7 @@ const routes = {
     insuranceList: '/insurance-list',
     paymentSuccess: '/payment-success',
 
+    loginAdmin: '/admin-login',
     admin: '/admin',
     userAdmin: '/admin/user-admin',
     billingAdmin: '/admin/billing-admin',
@@ -22,7 +23,7 @@ const routes = {
     advertisementAdmin: '/admin/advertisement-admin',
     insuranceAdmin: '/admin/insurance-admin',
     blogAdmin: '/admin/blog-admin',
-    insurancepackage: '/admin/insurancepackage-admin',
+    insurancePackage: '/admin/insurancepackage-admin',
 };
 
 export default routes;

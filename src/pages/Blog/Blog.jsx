@@ -4,6 +4,8 @@ import { SearchOutlined } from '@ant-design/icons';
 import styles from './Blog.module.scss';
 import Cute from '../../assets/Images/cute1.png';
 import axios from 'axios';
+import config from '~/config';
+import { Link } from 'react-router-dom';
 
 const { Title, Paragraph } = Typography;
 
@@ -27,11 +29,11 @@ const Blog = () => {
     const createData = useCallback(async () => {
         const dataFromAPI = await getDataFromAPI();
         const newData = dataFromAPI.map((item) => {
-            const image = item.image_path ? `data:image/png;base64,${item.image_path}` : '';
+            const image = item.image ? `data:image/png;base64,${item.image}` : '';
             return {
                 title: item.name,
                 description: item.description,
-                link: '#',
+                link: config.routes.blogDetails.replace(':id', item.id),
                 image,
             };
         });
@@ -97,7 +99,10 @@ const Blog = () => {
                                     />
                                 }
                             >
-                                <Meta title={<a href={item.link}>{item.title}</a>} description={item.description} />
+                                <Meta
+                                    title={<Link to={item.link}>{item.title}</Link>}
+                                    description={<p className={styles.descriptionBlog}>{item.description}</p>}
+                                />
                             </Card>
                         </Col>
                     ))}

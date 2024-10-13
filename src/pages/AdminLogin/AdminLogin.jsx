@@ -6,13 +6,13 @@ import axios from 'axios';
 
 import { Context } from '~/Context';
 import config from '~/config';
-import styles from './Login.module.scss';
+import styles from './AdminLogin.module.scss';
 import background from '~/assets/img/backgroundLoginRegister.png';
 
 const cx = classNames.bind(styles);
 
-const Login = () => {
-    const { user, setUser, setUserToken } = useContext(Context);
+const AdminLogin = () => {
+    const { admin, setAdmin, setAdminToken } = useContext(Context);
     const [api, contextHolder] = notification.useNotification();
     const openNotificationWithIcon = (type, message, description) => {
         api[type]({
@@ -22,10 +22,10 @@ const Login = () => {
     };
 
     const handleLoggedIn = () => {
-        if (user) {
-            openNotificationWithIcon('info', 'user logged in', 'Redirecting to home ...');
+        if (admin) {
+            openNotificationWithIcon('info', 'Admin logged in', 'Redirecting to home ...');
             setTimeout(() => {
-                navigate(config.routes.home);
+                navigate(config.routes.admin);
             }, 1000);
         }
     };
@@ -33,7 +33,7 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
+    const handleAdminLogin = async (e) => {
         e.preventDefault();
         const checkNoSpaces = (str) => {
             return !str.includes(' ');
@@ -49,23 +49,23 @@ const Login = () => {
             return;
         }
         try {
-            const res = await axios.post(process.env.REACT_APP_BACKEND_URL + '/Users/authenticate/user', {
+            const res = await axios.post(process.env.REACT_APP_BACKEND_URL + '/Users/authenticate/admin', {
                 username,
                 password,
             });
             if (res.status === 200) {
                 const data = res.data;
-                localStorage.setItem('userToken', JSON.stringify(data.token));
-                localStorage.setItem('user', JSON.stringify(data.user));
-                setUserToken(data.token);
-                setUser(data.user);
+                localStorage.setItem('adminToken', JSON.stringify(data.token));
+                localStorage.setItem('admin', JSON.stringify(data.user));
+                setAdminToken(data.token);
+                setAdmin(data.user);
                 openNotificationWithIcon('success', 'Login success!', 'You have successfully logged in');
                 setTimeout(() => {
-                    navigate(config.routes.home);
+                    navigate(config.routes.admin);
                 }, 1000);
             }
         } catch (e) {
-            openNotificationWithIcon('error', 'Login fail!', 'Incorrect username or password');
+            openNotificationWithIcon('error', 'Admin login fail!', 'Incorrect username or password');
         }
     };
 
@@ -78,8 +78,8 @@ const Login = () => {
             {contextHolder}
             <div className={cx('login-container')}>
                 <div className={cx('content')}>
-                    <h1 className={cx('title')}>LOGIN</h1>
-                    <form onSubmit={handleLogin}>
+                    <h1 className={cx('title')}>ADMIN LOGIN</h1>
+                    <form onSubmit={handleAdminLogin}>
                         <div className={cx('form-group')}>
                             <label className={cx('label')}>Username:</label>
                             <input
@@ -118,4 +118,4 @@ const Login = () => {
         </div>
     );
 };
-export default Login;
+export default AdminLogin;

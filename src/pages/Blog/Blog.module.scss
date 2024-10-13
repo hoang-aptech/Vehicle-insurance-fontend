@@ -84,3 +84,9 @@
 .btn:hover {
     background-color: #008a40 !important;
 }
+
+.descriptionBlog {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+}

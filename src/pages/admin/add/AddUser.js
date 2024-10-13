@@ -53,17 +53,13 @@ const AddUser = ({ onFinish }) => {
 
     return (
         <Form name="addUser" onFinish={handleSubmit}>
-            <Form.Item
-                name="username"
-                label="UserName"
-                rules={[{ required: true, message: 'Vui lòng nhập tên đăng nhập!' }]}
-            >
+            <Form.Item name="username" label="UserName" rules={[{ required: true, message: 'Please enter username!' }]}>
                 <Input />
             </Form.Item>
             <Form.Item
                 name="fullname"
                 label="Fullname"
-                rules={[{ required: true, message: 'Vui lòng nhập tên đầy đủ!' }]}
+                rules={[{ required: true, message: 'Please enter full name!' }]}
             >
                 <Input />
             </Form.Item>
@@ -71,26 +67,22 @@ const AddUser = ({ onFinish }) => {
                 name="email"
                 label="Email"
                 rules={[
-                    { required: true, message: 'Vui lòng nhập email!' },
-                    { type: 'email', message: 'Email không hợp lệ!' },
+                    { required: true, message: 'Please enter email!' },
+                    { type: 'email', message: 'Invalid email!' },
                 ]}
             >
                 <Input />
             </Form.Item>
-            <Form.Item
-                name="password"
-                label="Password"
-                rules={[{ required: true, message: 'Vui lòng nhập mật khẩu!' }]}
-            >
+            <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please enter password!' }]}>
                 <Input.Password />
             </Form.Item>
-            <Form.Item name="address" label="Address">
+            <Form.Item name="address" label="Address" rules={[{ required: true, message: 'Please enter address!' }]}>
                 <Input />
             </Form.Item>
-            <Form.Item name="phone" label="Phone">
+            <Form.Item name="phone" label="Phone" rules={[{ required: true, message: 'Please enter phone!' }]}>
                 <Input />
             </Form.Item>
-            <Form.Item name="Role" label="Role" rules={[{ required: true, message: 'Vui lòng chọn vai trò!' }]}>
+            <Form.Item name="role" label="Role" rules={[{ required: true, message: 'Please enter role!' }]}>
                 <Select placeholder="Select Role">
                     <Option value="Admin">Admin</Option>
                     <Option value="User">User</Option>

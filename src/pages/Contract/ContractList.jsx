@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { List, Typography, Button, Layout, notification } from 'antd';
+import { List, Typography, Button, Layout, notification, Modal } from 'antd';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -12,12 +12,42 @@ const { Title } = Typography;
 
 const ContractList = () => {
     const navigate = useNavigate();
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [insuranceRenewals, setInsuranceRenewals] = useState([]);
     const [api, contextHolder] = notification.useNotification();
     const openNotificationWithIcon = (type, message, description) => {
         api[type]({
             message: message,
             description: description,
         });
+    };
+
+    const handleShowDetails = async (id) => {
+        try {
+            const res = await axios.get(process.env.REACT_APP_BACKEND_URL + `/Billings/transactions/${id}`, {
+                headers: { Authorization: 'Bearer ' + userToken },
+            });
+            console.log(res);
+            setInsuranceRenewals(res.data);
+            setIsModalOpen(true);
+        } catch (err) {
+            if (err.status === 401) {
+                openNotificationWithIcon('error', 'Unauthorized!', 'You do not have permission to access this page');
+                setTimeout(() => {
+                    if (handleLogoutUser()) {
+                        navigate(config.routes.login);
+                    }
+                }, 1000);
+            } else {
+                console.error(err);
+            }
+        }
+    };
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
     };
 
     const { user, userToken, handleLogoutUser } = useContext(Context);
@@ -30,9 +60,10 @@ const ContractList = () => {
             if (res.status === 200) {
                 setContractData(
                     res.data.map((i) => ({
-                        id: i.insurancePackage.insuranceId,
+                        id: i.id,
+                        insuranceId: i.insurancePackage.insuranceId,
                         name: `${i.insurancePackage.name} - ${i.insurancePackage.insurance.name}`,
-                        description: `Start date: ${i.startDate.slice(0, 10)} ---> expire date: ${i.expireDate.slice(
+                        description: `Start date: ${i.createdAt.slice(0, 10)} ---> expire date: ${i.expireDate.slice(
                             0,
                             10,
                         )}`,
@@ -47,6 +78,8 @@ const ContractList = () => {
                         navigate(config.routes.login);
                     }
                 }, 1000);
+            } else {
+                console.error(err);
             }
         }
     };
@@ -72,7 +105,17 @@ const ContractList = () => {
                             key={item.id}
                             style={{ backgroundColor: '#e5ffde', border: '1px solid #A3D900' }}
                             actions={[
-                                <Button type="primary" onClick={() => handleClick(item.id)}>
+                                <Button
+                                    type="dashed"
+                                    style={{ backgroundColor: 'green', color: '#fff' }}
+                                    onClick={() => {}}
+                                >
+                                    Extend
+                                </Button>,
+                                <Button danger onClick={() => handleShowDetails(item.id)}>
+                                    Details
+                                </Button>,
+                                <Button type="primary" onClick={() => handleClick(item.insuranceId)}>
                                     View
                                 </Button>,
                             ]}
@@ -92,6 +135,27 @@ const ContractList = () => {
                         ),
                     }}
                 />
+                <Modal title="Extend content" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                    <List
+                        bordered
+                        dataSource={insuranceRenewals}
+                        renderItem={(item) => (
+                            <List.Item
+                                key={item.id}
+                                style={{ backgroundColor: '#e5ffde', border: '1px solid #A3D900' }}
+                            >
+                                <List.Item.Meta
+                                    title={`Renewal date: ${item.createdAt.slice(0, 10)}`}
+                                    description={`Price: $${item.price} ${
+                                        item.oldExpiredDate
+                                            ? ` - Old expired date: ${item.oldExpiredDate.slice(0, 10)}`
+                                            : ''
+                                    }`}
+                                />
+                            </List.Item>
+                        )}
+                    />
+                </Modal>
             </Content>
         </Layout>
     );

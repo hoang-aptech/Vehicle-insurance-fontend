@@ -1,15 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Layout, Table, Button, Input, Row, Col, Card, Avatar, Popconfirm, Modal } from 'antd';
 import { UserAddOutlined, LogoutOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import AddUser from './add/AddUser';
 import EditUser from './edit/EditUser';
 import bcrypt from 'bcryptjs';
 import axios from 'axios';
+import { Context } from '~/Context';
 import './UserAdmin.css';
+import config from '~/config';
 
 const { Header, Content } = Layout;
 
 const UserAdmin = () => {
+    const navigate = useNavigate();
     const [selectedUser, setSelectedUser] = useState(null);
     const [deletedUsers, setDeletedUsers] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
@@ -21,6 +25,8 @@ const UserAdmin = () => {
     const [filterName, setFilterName] = useState('');
 
     const API_URL = 'https://localhost:7289/api/Users';
+
+    const { adminToken, handleLogoutAdmin } = useContext(Context);
 
     // Fetch user data
     const fetchUsers = async () => {
@@ -144,12 +150,25 @@ const UserAdmin = () => {
     // Handle user delete
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`${API_URL}/${id}`);
+            await axios.patch(
+                `${API_URL}/${id}`,
+                { deleted: true },
+                { headers: { Authorization: 'Bearer ' + adminToken } },
+            );
+            console.log(dataSource.filter((user) => user.id !== id));
+
             setDataSource(dataSource.filter((user) => user.id !== id));
             // setDeletedUsers(id);
             fetchDeletedUsers(); // Add this line to refresh the deleted users
         } catch (error) {
             console.error('Failed to delete user:', error);
+            if (error.status === 401) {
+                alert('Unauthorized. Please log in again.');
+                const Logouted = handleLogoutAdmin();
+                if (Logouted) {
+                    navigate(config.routes.loginAdmin); // Refresh the page to log out
+                }
+            }
         }
     };
 
@@ -229,7 +248,11 @@ const UserAdmin = () => {
     // Restore deleted user
     const handleRestore = async (id) => {
         try {
-            await axios.put(`${API_URL}/restore/${id}`); // Assuming you have a restore endpoint
+            await axios.patch(
+                `${API_URL}/${id}`,
+                { deleted: false },
+                { headers: { Authorization: 'Bearer ' + adminToken } },
+            ); // Assuming you have a restore endpoint
             fetchUsers();
             fetchDeletedUsers();
         } catch (error) {
@@ -240,7 +263,7 @@ const UserAdmin = () => {
     // Permanently delete user
     const handlePermanentDelete = async (id) => {
         try {
-            await axios.delete(`${API_URL}/deleted/${id}`); // Assuming you have a permanently delete endpoint
+            await axios.delete(`${API_URL}/${id}`); // Assuming you have a permanently delete endpoint
             fetchDeletedUsers();
         } catch (error) {
             console.error('Failed to permanently delete user:', error);

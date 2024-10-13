@@ -30,8 +30,9 @@ import Rescue from '../../assets/Images/rescue-hotline.png';
 import Inspection from '../../assets/Images/inspection-support.png';
 import Garage from '../../assets/Images/garage-system.png';
 import Claim from '../../assets/Images/claim-guide.png';
-import { useParams } from 'react-router-dom';
-import styles from './Insurancedetails.module.scss';
+import { Link, useParams } from 'react-router-dom';
+import styles from './InsuranceDetails.module.scss';
+import config from '~/config';
 
 const images = {
     section1: {
@@ -179,7 +180,6 @@ const InsuranceAutomotivePhysical = () => {
                     throw new Error('Network response was not ok');
                 }
                 const filteredData = await response.json();
-
                 const updatedData = {
                     section1: {
                         title: filteredData.find((item) => item.id)?.title || '',
@@ -324,10 +324,16 @@ const InsuranceAutomotivePhysical = () => {
                     <p>{dataApi.section1.description}</p>
                     <Row gutter={16} className={styles.buttonGroup}>
                         <Col>
-                            <Button className={styles.greenButton}>{dataApi.section1.buttonText1}</Button>
+                            <Button className={styles.greenButton}>
+                                <Link to={config.routes.insurancePackages.replace(':insuranceId', id)}>
+                                    {dataApi.section1.buttonText1}
+                                </Link>
+                            </Button>
                         </Col>
                         <Col>
-                            <Button className={styles.backButton}>{dataApi.section1.buttonText2}</Button>
+                            <Button className={styles.backButton}>
+                                <Link to={config.routes.contract.replace(':id', id)}>View sample contract</Link>
+                            </Button>
                         </Col>
                     </Row>
                 </Col>

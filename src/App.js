@@ -1,11 +1,11 @@
 // App.js
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Fragment } from 'react';
-import PrivateRoute from './routes';
+
+import { privateRoutes, publicRoutes, adminRoutes, AdminPrivateRoute, UserPrivateRoute } from './routes';
 import NotFound from './pages/NotFound';
 import DefaultLayout from './layouts/DefaultLayout';
 import AdminLayout from './layouts/DefaultLayout/AdminLayout';
-import { privateRoutes, publicRoutes, adminRoutes } from './routes';
 
 function App() {
     return (
@@ -39,20 +39,21 @@ function App() {
                             />
                         );
                     })}
-                    {adminRoutes.map((route, index) => {
+                    {adminRoutes.map((route) => {
                         const Page = route.component;
                         let Layout = route.layout || AdminLayout;
 
                         return (
-                            <Route
-                                key={index}
-                                path={route.path}
-                                element={
-                                    <Layout>
-                                        <Page />
-                                    </Layout>
-                                }
-                            />
+                            <Route key={route.path} element={<AdminPrivateRoute />}>
+                                <Route
+                                    path={route.path}
+                                    element={
+                                        <Layout>
+                                            <Page />
+                                        </Layout>
+                                    }
+                                />
+                            </Route>
                         );
                     })}
                     {privateRoutes.map((route, idx) => {
@@ -60,7 +61,7 @@ function App() {
                         let Layout = route.layout || DefaultLayout;
 
                         return (
-                            <Route key={route.path} element={<PrivateRoute />}>
+                            <Route key={route.path} element={<UserPrivateRoute />}>
                                 <Route
                                     path={route.path}
                                     element={
