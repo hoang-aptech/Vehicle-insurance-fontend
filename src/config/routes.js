@@ -20,6 +20,8 @@ const routes = {
     advertisementAdmin: '/admin/advertisement-admin',
     insuranceAdmin: '/admin/insurance-admin',
     blogAmin: '/admin/blog-admin',
+    insurances: '/insurances',
+    payment: '/payment-success'
 };
 
 export default routes;

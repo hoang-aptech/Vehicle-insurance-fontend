@@ -12,6 +12,8 @@ import Indemnity from '~/pages/Indemnity/Indemnity';
 import Chat from '~/pages/ChatBot/Chat';
 import InsurancePackages from '~/pages/InsurancePackages';
 import Contract, { ContractList } from '~/pages/Contract';
+import InsuranceList from '~/pages/Pay/InsuranceList';
+import PaymentSuccess from '~/pages/Pay/PaymentSuccess';
 
 // Admin
 import Dashboard from '~/pages/admin/Dashboard';
@@ -37,6 +39,8 @@ const publicRoutes = [
     { path: config.routes.contractList, component: ContractList },
     { path: config.routes.contract, component: Contract },
     { path: config.routes.insurancePackages, component: InsurancePackages },
+    { path: config.routes.insurances, component: InsuranceList },
+    { path: config.routes.payment, component: PaymentSuccess },
 ];
 
 // Admin routes
