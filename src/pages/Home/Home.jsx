@@ -42,44 +42,6 @@ import config from '~/config';
 
 const carouselImages = [carou1, carou2, carou3, carou4, carou5, carou6, carou7];
 
-// const insuranceData = [
-//     {
-//         icon: '✈️',
-//         title: 'Du lịch quốc tế',
-//         tag: 'HOT',
-//     },
-//     {
-//         icon: '🚗',
-//         title: 'TNDS Ô tô',
-//     },
-//     {
-//         icon: '🚚',
-//         title: 'Vật chất Ô tô',
-//         tag: 'MỚI',
-//     },
-//     {
-//         icon: '🩺',
-//         title: 'Sức khỏe',
-//     },
-//     {
-//         icon: '🩹',
-//         title: 'Tai nạn 24/24',
-//     },
-//     {
-//         icon: '🛵',
-//         title: 'TNDS Xe máy',
-//     },
-//     {
-//         icon: '🏠',
-//         title: 'Nhà tư nhân',
-//     },
-//     {
-//         icon: '🦠',
-//         title: 'Sức khỏe & Ung thư',
-//         tag: 'MỚI',
-//     },
-// ];
-
 const data = [
     {
         icon: home1,
@@ -88,7 +50,7 @@ const data = [
     },
     {
         icon: home2,
-        title: 'Buy and claim insurance online',
+        title: 'Buy and compensate online insurance',
         features: [
             'Buy insurance packages online at reasonable, competitive, and transparent costs',
             'Proactively create convenient online claim requests',
@@ -263,7 +225,7 @@ const ContactForm = () => {
                                 <Form.Item label="Email" name="email">
                                     <Input />
                                 </Form.Item>
-                                <Form.Item label="Sản phẩm mà bạn quan tâm" name="product">
+                                <Form.Item label="Products you are interested in" name="product">
                                     <Select>
                                         <Option value="Car">Car physical damage insurance</Option>
                                         <Option value="Motorbike">Motorcycle physical damage insurance</Option>
@@ -323,36 +285,40 @@ const Home = () => {
 
     return (
         <>
-            <div className={`${styles.saladinContainer}`}>
-                <div className={`${styles.saladinHeader}`}>
-                    <div>
-                        <h1>Comprehensive insurance for Vietnamese</h1>
-                        <p>Live confidently, love confidently with Saladin</p>
-                    </div>
-                    <img src={Hero} alt="hero" />
+            <div className={`${styles.saladinMainContainer}`}>
+                {/* Header section */}
+                <div className={`${styles.saladinContainer}`}>
+                    <Row justify="center" align="middle" className={styles.saladinHeader}>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={12} className={styles.textContainer}>
+                            <h1>Comprehensive insurance for Vietnamese</h1>
+                            <p>Live confidently, love confidently with Saladin</p>
+                        </Col>
+                        <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                            <img src={Hero} alt="hero" />
+                        </Col>
+                    </Row>
+
+                    {/* Insurance cards section */}
+                    <Row gutter={[16, 16]} className={`${styles.saladinContent1}`}>
+                        {insuranceData.map((insurance, index) => (
+                            <Col key={index} xs={24} sm={12} md={8} lg={6}>
+                                <Card className={`${styles.saladinCard}`} onClick={() => handleCardClick(insurance.id)}>
+                                    {insurance.isNew && (
+                                        <Tag className={`${styles.saladinTag}`} color="#f50">
+                                            New
+                                        </Tag>
+                                    )}
+                                    <div className={`${styles.saladinIcon}`}>{insurance.icon}</div>
+                                    <div className={`${styles.saladinTitle}`}>{insurance.name}</div>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
                 </div>
 
-                <Row gutter={[16, 16]} className={`${styles.saladinContent1}`}>
-                    {insuranceData.map((insurance, index) => (
-                        <Col key={index} xs={24} sm={12} md={8} lg={6}>
-                            <Card className={`${styles.saladinCard}`} onClick={() => handleCardClick(insurance.id)}>
-                                {insurance.isNew && (
-                                    <Tag className={`${styles.saladinTag}`} color="#f50">
-                                        New
-                                    </Tag>
-                                )}
-                                <div className={`${styles.saladinIcon}`}>{insurance.icon}</div>
-                                <div className={`${styles.saladinTitle}`}>{insurance.name}</div>
-                            </Card>
-                        </Col>
-                    ))}
-                </Row>
-            </div>
-
-            {/* Carousel separated from the container */}
-            <div style={{ height: '60vh' }}>
+                {/* Carousel section */}
                 <div className={`${styles.saladinCarouselContainer}`}>
-                    <h2>Saladin có gì mới?</h2>
+                    <h2>What's new in Saladin?</h2>
                     <Carousel autoplay dots={false}>
                         {groupedImages.map((group, index) => (
                             <div key={index} className={`${styles.saladinCarouselItem}`}>
@@ -370,80 +336,86 @@ const Home = () => {
                         ))}
                     </Carousel>
                 </div>
-            </div>
-            {/* trang 3 */}
-            <div style={{ height: '90vh', backgroundColor: '#f8f8fa' }}>
-                <Row justify="center" align="middle">
-                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                        <img
-                            src={mascos2}
-                            alt="mascos2"
-                            style={{ width: '350px', height: '40vh', marginLeft: '50%' }}
-                        />
-                    </Col>
-                    <Col xs={24} sm={24} md={12} lg={12} xl={12}>
-                        <div style={{ padding: '2rem' }}>
-                            <Title level={2}>
-                                Insurance buying experience
-                                <br />
-                                fast and convenient
-                            </Title>
-                            <Paragraph style={{ maxWidth: '500px' }}>
-                                At Saladin, in addition to finding a variety of insurance product options from standard
-                                to advanced, customers can also freely choose benefits according to their needs to
-                                create the most suitable insurance package.
-                            </Paragraph>
-                            <Paragraph>
-                                Online insurance certificates are issued and stored directly on the application.
-                            </Paragraph>
-                        </div>
-                    </Col>
-                </Row>
-                <Row gutter={16} style={{ margin: 'auto', maxWidth: '900px' }}>
-                    {data.map((item) => (
-                        <Col xs={24} sm={8} key={item.title}>
-                            <Card style={{ border: 'none' }}>
-                                <div style={{ textAlign: 'center', marginBottom: 16 }}>
-                                    <img src={item.icon} alt={item.title} style={{ width: 64, height: 64 }} />
-                                </div>
-                                <h3>{item.title}</h3>
-                                <ul>
-                                    {item.features.map((feature) => (
-                                        <li key={feature} style={{ fontSize: '12px' }}>
-                                            {feature}
-                                        </li>
-                                    ))}
-                                </ul>
-                            </Card>
+
+                {/* Trang 3 section */}
+                <div className={`${styles.saladinTrang3Container}`}>
+                    <Row justify="center" align="middle">
+                        <Col xs={24} sm={12} className={styles.imageContainer}>
+                            <img
+                                src={mascos2}
+                                alt="mascos2"
+                                style={{ width: '100%', height: 'auto', maxWidth: '350px' }}
+                            />
                         </Col>
-                    ))}
-                </Row>
-            </div>
-            {/* trang 4 */}
-            <div style={{ backgroundColor: '#f6fbf8', height: '60vh', margin: '0 auto' }}>
-                <div className={`${styles.saladinContainer2}`}>
-                    {partnersData.map((partner, index) => (
-                        <div key={index} className={`${styles.saladinBlock}`}>
-                            <h2>{partner.title}</h2>
-                            <p style={{ fontSize: '12px' }}>{partner.description}</p>
-                            <Row gutter={[16, 16]} style={{ paddingTop: '20px' }}>
-                                {partner.images.map((image, imgIndex) => (
-                                    <Col key={imgIndex} span={8} className={`${styles.saladinCol}`}>
-                                        <Card className={`${styles.saladinCard2}`}>
+                        <Col xs={24} sm={12}>
+                            <div style={{ padding: '2rem' }}>
+                                <Title level={2} style={{ fontSize: '4rem', fontWeight: 'bold', maxWidth: '700px' }}>
+                                    Insurance buying experience fast and convenient
+                                </Title>
+                                <Paragraph style={{ maxWidth: '500px', fontSize: '2rem' }}>
+                                    At Saladin, in addition to finding a variety of insurance product options from
+                                    standard to advanced, customers can also freely choose benefits according to their
+                                    needs to create the most suitable insurance package.
+                                </Paragraph>
+                                <Paragraph style={{ maxWidth: '500px', fontSize: '2rem' }}>
+                                    Online insurance certificates are issued and stored directly on the application.
+                                </Paragraph>
+                            </div>
+                        </Col>
+                    </Row>
+                    <Row gutter={16} style={{ margin: 'auto', maxWidth: '1200px' }}>
+                        {data.map((item) => (
+                            <Col xs={24} sm={8} key={item.title}>
+                                <Card style={{ border: 'none' }}>
+                                    <div className={styles.cardContainer}>
+                                        <div style={{ marginBottom: 16 }}>
                                             <img
-                                                src={image}
-                                                alt={image.split('.')[0]}
-                                                className={`${styles.saladinImage}`}
+                                                src={item.icon}
+                                                alt={item.title}
+                                                style={{ width: 100, height: 100, margin: '0 auto' }}
                                             />
-                                        </Card>
-                                    </Col>
-                                ))}
-                            </Row>
-                        </div>
-                    ))}
+                                        </div>
+                                        <h3>{item.title}</h3>
+                                        <ul>
+                                            {item.features.map((feature) => (
+                                                <li key={feature}>{feature}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                </Card>
+                            </Col>
+                        ))}
+                    </Row>
+                </div>
+
+                {/* Trang 4 section */}
+                <div className={`${styles.saladinTrang4Container}`}>
+                    <div className={`${styles.saladinContainer2}`}>
+                        {partnersData.map((partner, index) => (
+                            <div key={index} className={`${styles.saladinBlock}`}>
+                                <h2>{partner.title}</h2>
+                                <p>{partner.description}</p>
+                                <Row gutter={[16, 16]} style={{ paddingTop: '20px' }}>
+                                    {partner.images.map((image, imgIndex) => (
+                                        <Col key={imgIndex} span={8} className={`${styles.saladinCol}`}>
+                                            <Card className={`${styles.saladinCard2}`}>
+                                                <img
+                                                    src={image}
+                                                    alt={image.split('.')[0]}
+                                                    className={`${styles.saladinImage}`}
+                                                />
+                                            </Card>
+                                        </Col>
+                                    ))}
+                                </Row>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+                <div style={{ backgroundColor: '#f8f8fa' }}>
+                    <ContactForm />
                 </div>
             </div>
-            <ContactForm />
         </>
     );
 };

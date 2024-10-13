@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Typography, Button, Input, Row, Col, Card, Pagination } from 'antd';
+import { Typography, Input, Row, Col, Card, Pagination } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 import styles from './Blog.module.scss';
-import Cute from '../../assets/Images/cute1.png';
 import axios from 'axios';
 
-const { Title, Paragraph } = Typography;
+const { Title } = Typography;
 
 const { Meta } = Card;
 
@@ -63,23 +62,6 @@ const Blog = () => {
                 </Title>
             </div>
             <div className={styles.blogContent}>
-                <div className={styles.blogBanner}>
-                    <div className={styles.bannerText}>
-                        <Title level={3} style={{ color: 'white', fontSize: '34px' }}>
-                            Từ điển bảo hiểm
-                        </Title>
-                        <Paragraph style={{ color: 'white', fontSize: '20px' }}>
-                            Bạn thắc mắc về ý nghĩa của các thuật ngữ bảo hiểm? Hãy để Saladin giúp bạn!
-                        </Paragraph>
-                        <Button type="primary" size="large" className={styles.btn}>
-                            Khám phá
-                        </Button>
-                    </div>
-                    <div className={styles.bannerImage}>
-                        <img src={Cute} alt="Girl with question mark" />
-                    </div>
-                </div>
-
                 <div className={styles.searchBar}>
                     <Input placeholder="Tìm kiếm bài báo" suffix={<SearchOutlined />} />
                 </div>

@@ -24,9 +24,11 @@ const getBlogData = () => {
                 <Title level={3} className={styles.mainTitle}>
                     I. Những điều không nên làm khi gặp tai nạn giao thông
                 </Title>
-                <Paragraph className={styles.itemTitle}>
-                    <strong>1. Phớt lờ tình trạng sức khỏe của người liên quan trong vụ tai nạn</strong>
-                </Paragraph>
+                <div className={styles.itemTitleContainer}>
+                    <h4 className={styles.itemTitle}>
+                        1. Phớt lờ tình trạng sức khỏe của người liên quan trong vụ tai nạn
+                    </h4>
+                </div>
                 <Paragraph>Khi gặp tai nạn giao thông, tài xế thường bị ảnh hưởng tâm lý rất lớn.</Paragraph>
                 <Paragraph>
                     Dù bạn là người gây tai nạn hay gặp tai nạn, trước tiên bạn cần giữ bình tĩnh rồi kiểm tra sức khỏe
@@ -49,17 +51,23 @@ const getBlogData = () => {
                     Nắm rõ những việc nên và không nên làm khi gặp tai nạn giao thông để đảm bảo an toàn và quyền lợi
                     cho tất cả mọi người.
                 </Paragraph>
-                <Paragraph className={styles.itemTitle}>
-                    <strong>2. Tiếp cận xe ô tô gặp tai nạn trước khi quan sát</strong>
-                </Paragraph>
+                <div className={styles.itemTitleContainer}>
+                    <Paragraph className={styles.itemTitle}>
+                        <h4>2. Tiếp cận xe ô tô gặp tai nạn trước khi quan sát</h4>
+                    </Paragraph>
+                </div>
+
                 <Paragraph>
                     Trong trường hợp bị va chạm nhẹ, bạn có thể chuyển đến bước kiểm tra tình trạng của xe. Còn trong
                     tình huống xe bị hư hỏng nặng nề và bị rò rỉ nhiên liệu, điều đầu tiên bạn nên làm là hỗ trợ hành
                     khách trên xe nên rời khỏi và giữ khoảng cách an toàn so với hiện trường vụ tai nạn.
                 </Paragraph>
-                <Paragraph className={styles.itemTitle}>
-                    <strong>3. Chậm trễ trong việc thông báo với phía nhà bảo hiểm</strong>
-                </Paragraph>
+                <div className={styles.itemTitleContainer}>
+                    <Paragraph className={styles.itemTitle}>
+                        <h4>3. Chậm trễ trong việc thông báo với phía nhà bảo hiểm</h4>
+                    </Paragraph>
+                </div>
+
                 <Paragraph>
                     Thường mỗi bên bảo hiểm vật chất xe ô tô sẽ quy định một mốc thời gian cố định mà bạn có thể thông
                     báo cho phía công ty để được hỗ trợ bồi thường. Tuy nhiên, bạn nên thông báo với công ty bảo hiểm
@@ -71,17 +79,23 @@ const getBlogData = () => {
                     xe đi giám định thì công ty bảo hiểm hoàn toàn có quyền từ chối bồi thường cho bạn vì có thể xảy ra
                     các tổn thất phát sinh trong quá trình bạn sử dụng.
                 </Paragraph>
-                <Paragraph className={styles.itemTitle}>
-                    <strong>4. Tự ý thay đổi hiện trường, dời xe ra khỏi hiện trường</strong>
-                </Paragraph>
+                <div className={styles.itemTitleContainer}>
+                    <Paragraph className={styles.itemTitle}>
+                        <h4>4. Tự ý thay đổi hiện trường, dời xe ra khỏi hiện trường</h4>
+                    </Paragraph>
+                </div>
+
                 <Paragraph>
                     Quy tắc bất di bất dịch của bảo hiểm là phải giữ nguyên hiện trạng của vụ tai nạn. Tùy thuộc vào mức
                     độ nghiêm trọng mà bạn có thể bị từ chối bảo hiểm TNDS ô tô, bảo hiểm vật chất xe ô tô và vụ tai nạn
                     có thể được truy tố ở mức hình sự, thậm chí phạt hành chính lên đến 18 triệu đồng.
                 </Paragraph>
-                <Paragraph className={styles.itemTitle}>
-                    <strong>5. Bỏ qua bước ghi lại hình ảnh hiện trường vụ tai nạn</strong>
-                </Paragraph>
+                <div className={styles.itemTitleContainer}>
+                    <Paragraph className={styles.itemTitle}>
+                        <h4>5. Bỏ qua bước ghi lại hình ảnh hiện trường vụ tai nạn</h4>
+                    </Paragraph>
+                </div>
+
                 <Paragraph>
                     Bạn nên ghi lại hình ảnh, video về vụ tai nạn càng chi tiết và đầy đủ càng tốt. Hãy lưu giữ cả thông
                     tin về những người liên quan trong vụ tai nạn, có thể bao gồm tên, tuổi, số căn cước, bằng lái xe,…
@@ -98,13 +112,17 @@ const getBlogData = () => {
                 </Paragraph>
                 <Paragraph>Trong các vụ tai nạn, bảo hiểm xe ô tô sẽ phát huy tối đa tác dụng.</Paragraph>
                 {/* Nút MUA NGAY */}
-                <div className={styles.btn}>
-                    <img src={Si} alt="si" />
-                    <h6>Nhận báo giá từ 6 Công ty Bảo hiểm vật chất ô tô</h6>
-                    <Button type="primary" style={{ backgroundColor: '#52c41a', borderColor: '#52c41a' }}>
+                <div className={styles.btn} style={{ textAlign: 'center' }}>
+                    <img src={Si} alt="si" style={{ maxWidth: '100%', height: 'auto' }} />
+                    <h6 style={{ margin: '10px 0' }}>Nhận báo giá từ 6 Công ty Bảo hiểm vật chất ô tô</h6>
+                    <Button
+                        type="primary"
+                        style={{ backgroundColor: '#52c41a', borderColor: '#52c41a', marginTop: '10px' }}
+                    >
                         MUA NGAY
                     </Button>
                 </div>
+
                 <Title level={3} className={styles.mainTitle}>
                     Các loại bảo hiểm ô tô
                 </Title>
@@ -245,7 +263,7 @@ const BlogDetails = () => {
                                 showArrow={false}
                                 style={{ fontSize: '18px', fontWeight: 'bold' }}
                             >
-                                <ul style={{ marginLeft: '-40px', fontSize: '12px' }}>
+                                <ul style={{ fontSize: '12px' }}>
                                     <p>I. Những điều không nên làm khi gặp tai nạn giao thông</p>
                                     <p>II. Sở hữu bảo hiểm ô tô để bảo vệ tài sản và sức khỏe bản thân</p>
                                 </ul>

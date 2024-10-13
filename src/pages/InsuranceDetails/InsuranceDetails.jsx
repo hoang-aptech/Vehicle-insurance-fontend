@@ -31,7 +31,7 @@ import Inspection from '../../assets/Images/inspection-support.png';
 import Garage from '../../assets/Images/garage-system.png';
 import Claim from '../../assets/Images/claim-guide.png';
 import { useParams } from 'react-router-dom';
-import styles from './Insurancedetails.module.scss';
+import styles from './InsuranceDetails.module.scss';
 
 const images = {
     section1: {

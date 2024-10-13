@@ -34,23 +34,23 @@ const Contract = () => {
     return (
         <div className={styles.contractContainer}>
             <div ref={contractRef} className={styles.contractContent}>
-                <h1>Insurance contract</h1>
+                <h1>Hợp đồng bảo hiểm</h1>
                 <Row gutter={32}>
-                    <Col span={12} className={styles.contractSection}>
+                    <Col xs={24} sm={12} className={styles.contractSection}>
                         <Title level={3} className={styles.contractTitle}>
-                            Party A
+                            Bên A
                         </Title>
-                        <Paragraph>Name: ABC Company</Paragraph>
-                        <Paragraph>Address: 123 ABC Street, Hanoi</Paragraph>
-                        <Paragraph>Phone number: 0909123456</Paragraph>
+                        <Paragraph>Tên: ABC Company</Paragraph>
+                        <Paragraph>Địa chỉ: 123 ABC Street, Hà Nội</Paragraph>
+                        <Paragraph>Số điện thoại: 0909123456</Paragraph>
                     </Col>
-                    <Col span={12} className={styles.contractSection}>
+                    <Col xs={24} sm={12} className={styles.contractSection}>
                         <Title level={3} className={styles.contractTitle}>
-                            Party B
+                            Bên B
                         </Title>
-                        <Paragraph>Name: XYZ Company</Paragraph>
-                        <Paragraph>Address: 456 XYZ Street, Ho Chi Minh City</Paragraph>
-                        <Paragraph>Phone number: 0988765432</Paragraph>
+                        <Paragraph>Tên: XYZ Company</Paragraph>
+                        <Paragraph>Địa chỉ: 456 XYZ Street, TP. Hồ Chí Minh</Paragraph>
+                        <Paragraph>Số điện thoại: 0988765432</Paragraph>
                     </Col>
                 </Row>
             </div>
