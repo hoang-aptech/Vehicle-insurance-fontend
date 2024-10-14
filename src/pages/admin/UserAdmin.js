@@ -306,7 +306,7 @@ const UserAdmin = () => {
                     />
 
                     <Row gutter={16}>
-                        <Col span={20}>
+                        <Col span={24}>
                             <Table
                                 dataSource={paginatedUsers}
                                 columns={columns}
@@ -319,7 +319,7 @@ const UserAdmin = () => {
                                 }}
                             />
                         </Col>
-                        <Col span={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {/* <Col span={4} style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             {selectedUser ? (
                                 <Card style={{ padding: 16, textAlign: 'center', width: '100%' }}>
                                     <Avatar
@@ -336,7 +336,7 @@ const UserAdmin = () => {
                             ) : (
                                 <div>Click on a user to see their profile</div>
                             )}
-                        </Col>
+                        </Col> */}
                     </Row>
                 </div>
             </Content>

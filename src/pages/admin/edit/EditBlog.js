@@ -79,7 +79,7 @@ const EditBlog = ({ blog, onFinish }) => {
                         toolbar:
                             'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image | removeformat | help',
                     }}
-                    initialValue={description}
+                    value={description}
                     onEditorChange={(newContent) => setDescription(newContent)}
                 />
             </Form.Item>
