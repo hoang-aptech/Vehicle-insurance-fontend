@@ -25,36 +25,53 @@
 
 .saladinHeader {
     display: flex;
+    flex-direction: column;
+    align-items: center;
     max-width: 1200px;
     margin: 0 auto;
-    align-items: center;
-    justify-content: center;
-    position: relative;
+    padding: 20px;
 
     img {
-        max-width: 65%;
+        max-width: 100%;
         height: auto;
-        margin-left: 300px;
-        position: relative;
-        z-index: 0;
+        margin: 20px auto;
+        display: block;
     }
+}
+
+.textContainer {
+    text-align: center;
+    width: 100%;
 
     h1 {
-        position: absolute;
-        top: 70px;
-        left: 170px;
         color: #4caf50;
-        font-size: 42px;
-        z-index: 1;
-        max-width: 400px;
+        font-size: 5rem;
+        margin-right: -20px;
     }
 
     p {
-        position: absolute;
-        top: 190px;
-        left: 170px;
-        font-size: 18px;
-        z-index: 1;
+        font-size: 20px;
+        margin: 10px 0;
+        margin-right: -20px;
+    }
+}
+
+@media (min-width: 768px) {
+    .saladinHeader {
+        flex-direction: row;
+        justify-content: space-between;
+
+        img {
+            max-width: 130%;
+            margin-left: -150px;
+        }
+
+        .textContainer {
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
     }
 }
 
@@ -111,7 +128,7 @@
 
     h2 {
         margin-bottom: 20px;
-        font-size: 24px;
+        font-size: 4rem;
         color: #4caf50;
     }
 }
@@ -134,19 +151,15 @@
 
 .saladinContainer2 {
     display: flex;
-    margin: 0 auto;
-    max-width: 750px;
 }
 
 .saladinBlock {
     margin-bottom: 40px;
-    max-width: 300px;
     margin: 0 auto;
 }
 
 .saladinBlock h2,
 p {
-    max-width: 400px;
     width: 100%;
     padding-top: 20px;
 }
@@ -172,4 +185,64 @@ p {
     height: 52px;
     object-fit: contain;
     border-radius: 10px;
+}
+
+.imageContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.cardContainer {
+    max-width: 400px;
+    img {
+        width: 100px;
+        height: 100px;
+        // margin: 0 auto;
+        display: block;
+    }
+    h3 {
+        font-size: 2.5rem;
+        margin: 16px 0;
+    }
+
+    ul {
+        li {
+            font-size: 2rem;
+        }
+    }
+}
+
+.saladinTrang4Container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+
+    .saladinContainer2 {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .saladinBlock {
+        flex: 1 1 calc(50%);
+        max-width: 500px;
+
+        h2 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 2rem;
+            margin: 0;
+        }
+    }
+
+    @media (max-width: 1200px) {
+        .saladinBlock {
+            flex: 1 1 100%;
+        }
+    }
 }

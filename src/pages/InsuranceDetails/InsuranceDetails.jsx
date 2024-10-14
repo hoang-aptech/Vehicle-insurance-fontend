@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Row, Col, Card, Button, Collapse } from 'antd';
+import { Link, useParams } from 'react-router-dom';
+import config from '~/config';
 import backgroundImage from '../../assets/Images/landing_car_bg.jpg';
 import exampleImage from '../../assets/Images/mascot_car_com.png';
 import baovietLogo from '../../assets/Images/baoviet_logo.png';
@@ -30,9 +32,7 @@ import Rescue from '../../assets/Images/rescue-hotline.png';
 import Inspection from '../../assets/Images/inspection-support.png';
 import Garage from '../../assets/Images/garage-system.png';
 import Claim from '../../assets/Images/claim-guide.png';
-import { Link, useParams } from 'react-router-dom';
 import styles from './InsuranceDetails.module.scss';
-import config from '~/config';
 
 const images = {
     section1: {
