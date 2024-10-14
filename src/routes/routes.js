@@ -10,6 +10,8 @@ import Indemnity from '~/pages/Indemnity/Indemnity';
 import Chat from '~/pages/ChatBot/Chat';
 import InsurancePackages from '~/pages/InsurancePackages';
 import Contract, { ContractList } from '~/pages/Contract';
+import InsuranceList from '~/pages/Pay/InsuranceList';
+import PaymentSuccess from '~/pages/Pay/PaymentSuccess';
 
 // Admin
 import Dashboard from '~/pages/admin/Dashboard';
@@ -20,8 +22,6 @@ import Advertisement from '~/pages/admin/Advertisement';
 import Insurance from '~/pages/admin/Insurance';
 import BlogAmin from '~/pages/admin/Blog';
 import AdminLayout from '~/layouts/DefaultLayout/AdminLayout';
-import InsuranceList from '~/pages/Pay/InsuranceList';
-import PaymentSuccess from '~/pages/Pay/PaymentSucces';
 import InsurancePackage from '~/pages/admin/InsurancePackage';
 import AdminLogin from '~/pages/AdminLogin';
 
@@ -36,6 +36,9 @@ const publicRoutes = [
     { path: config.routes.chat, component: Chat, params: { chatId: 1, role: 'User' } },
     { path: config.routes.chat2, component: Chat, params: { chatId: 3, role: 'Employee' } },
     { path: config.routes.insurancePackages, component: InsurancePackages },
+    { path: config.routes.contract, component: Contract },
+    { path: config.routes.insurances, component: InsuranceList },
+    { path: config.routes.payment, component: PaymentSuccess },
     { path: config.routes.insuranceList, component: InsuranceList },
     { path: config.routes.paymentSuccess, component: PaymentSuccess },
     { path: config.routes.loginAdmin, component: AdminLogin, layout: null },

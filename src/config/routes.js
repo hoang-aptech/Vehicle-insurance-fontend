@@ -24,6 +24,8 @@ const routes = {
     insuranceAdmin: '/admin/insurance-admin',
     blogAdmin: '/admin/blog-admin',
     insurancePackage: '/admin/insurancepackage-admin',
+    insurances: '/insurances',
+    payment: '/payment-success',
 };
 
 export default routes;
