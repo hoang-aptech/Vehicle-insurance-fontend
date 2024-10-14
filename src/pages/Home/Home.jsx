@@ -138,8 +138,8 @@ const ContactForm = () => {
     return (
         <Row gutter={[32, 32]} style={{ maxWidth: '1050px', margin: 'auto', marginTop: '32px', marginBottom: '40px' }}>
             <Col span={24}>
-                <h1 style={{ textAlign: 'center', fontSize: '3rem', color: '#4caf50' }}>24/7 Consulting and Support</h1>
-                <p style={{ textAlign: 'center', minWidth: '600px', margin: 'auto' }}>
+                <h1 style={{ textAlign: 'center', fontSize: '4rem', color: '#4caf50' }}>24/7 Consulting and Support</h1>
+                <p style={{ textAlign: 'center', maxWidth: '600px', margin: 'auto', fontSize: '2rem' }}>
                     The Saladin team is always ready to support you throughout your journey of buying and using
                     insurance.
                 </p>
@@ -153,40 +153,67 @@ const ContactForm = () => {
                         alignItems: 'center',
                         textAlign: 'center',
                     }}
+                ></div>
+                <h3>Additional information</h3>
+                <div
+                    style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        marginBottom: '10px',
+                        paddingTop: '20px',
+                        marginLeft: '9px',
+                    }}
                 >
-                    <h3>Thông tin bổ sung</h3>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', paddingTop: '20px' }}>
-                        <PhoneOutlined
-                            style={{
-                                marginRight: '8px',
-                                background: '#4caf50',
-                                padding: '14px',
-                                color: 'white',
-                                borderRadius: '4px',
-                            }}
-                        />
-                        <p style={{ marginTop: '-20px' }}>Row 1: Information 1</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <MailOutlined
-                            style={{
-                                marginRight: '8px',
-                                background: '#4caf50',
-                                padding: '14px',
-                                color: 'white',
-                                borderRadius: '4px',
-                            }}
-                        />
-                        <p style={{ marginTop: '-20px' }}>Row 2: Information 2</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <img src={QrZalo} alt="qr zalo" style={{ width: '50px', marginRight: '8px' }} />
-                        <p style={{ marginTop: '-20px' }}>Row 3: Information 3</p>
-                    </div>
-                    <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <img src={QrFace} alt="qr face" style={{ width: '50px', marginRight: '8px' }} />
-                        <p style={{ marginTop: '-20px' }}>Row 4: Information 4</p>
-                    </div>
+                    <PhoneOutlined
+                        style={{
+                            marginRight: '15px',
+                            background: '#4caf50',
+                            padding: '20px',
+                            color: 'white',
+                            borderRadius: '4px',
+                            fontSize: '60px',
+                            width: '85px',
+                            height: '90px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    />
+                    <p style={{ marginTop: '-20px' }}>Row 1: Information 1</p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', marginLeft: '9px' }}>
+                    <MailOutlined
+                        style={{
+                            marginRight: '15px',
+                            background: '#4caf50',
+                            padding: '20px',
+                            color: 'white',
+                            borderRadius: '4px',
+                            fontSize: '60px',
+                            width: '85px',
+                            height: '90px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                    />
+                    <p style={{ marginTop: '-20px' }}>Row 2: Information 2</p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                    <img
+                        src={QrZalo}
+                        alt="qr zalo"
+                        style={{ width: '100px', height: '100px', marginRight: '8px', objectFit: 'cover' }}
+                    />
+                    <p style={{ marginTop: '-20px' }}>Row 3: Information 3</p>
+                </div>
+                <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                    <img
+                        src={QrFace}
+                        alt="qr face"
+                        style={{ width: '100px', height: '100px', marginRight: '8px', objectFit: 'cover' }}
+                    />
+                    <p style={{ marginTop: '-20px' }}>Row 4: Information 4</p>
                 </div>
             </Col>
             <Col xs={24} sm={12} md={12}>
