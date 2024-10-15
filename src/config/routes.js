@@ -12,8 +12,6 @@ const routes = {
     contractList: '/contract-list',
     chat2: '/chat2',
     insurancePackages: '/insurance-packages/:insuranceId',
-    insuranceList: '/insurance-list',
-    paymentSuccess: '/payment-success',
 
     loginAdmin: '/admin-login',
     admin: '/admin',
@@ -23,9 +21,8 @@ const routes = {
     advertisementAdmin: '/admin/advertisement-admin',
     insuranceAdmin: '/admin/insurance-admin',
     blogAdmin: '/admin/blog-admin',
-    insurancePackage: '/admin/insurancepackage-admin',
+    insurancePackage: '/admin/insurance-package-admin',
     insurances: '/insurances',
-    payment: '/payment-success',
 };
 
 export default routes;

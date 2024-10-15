@@ -7,11 +7,8 @@ import Register from '~/pages/Register';
 import Blog, { BlogDetails } from '~/pages/Blog';
 import InsuranceDetails from '~/pages/InsuranceDetails';
 import Indemnity from '~/pages/Indemnity/Indemnity';
-import Chat from '~/pages/ChatBot/Chat';
 import InsurancePackages from '~/pages/InsurancePackages';
 import Contract, { ContractList } from '~/pages/Contract';
-import InsuranceList from '~/pages/Pay/InsuranceList';
-import PaymentSuccess from '~/pages/Pay/PaymentSuccess';
 
 // Admin
 import Dashboard from '~/pages/admin/Dashboard';
@@ -33,14 +30,10 @@ const publicRoutes = [
     { path: config.routes.insuranceDetails, component: InsuranceDetails },
     { path: config.routes.blog, component: Blog },
     { path: config.routes.blogDetails, component: BlogDetails },
-    { path: config.routes.chat, component: Chat, params: { chatId: 1, role: 'User' } },
-    { path: config.routes.chat2, component: Chat, params: { chatId: 3, role: 'Employee' } },
+    // { path: config.routes.chat, component: Chat, params: { chatId: 1, role: 'User' } },
+    // { path: config.routes.chat2, component: Chat, params: { chatId: 3, role: 'Employee' } },
     { path: config.routes.insurancePackages, component: InsurancePackages },
     { path: config.routes.contract, component: Contract },
-    { path: config.routes.insurances, component: InsuranceList },
-    { path: config.routes.payment, component: PaymentSuccess },
-    { path: config.routes.insuranceList, component: InsuranceList },
-    { path: config.routes.paymentSuccess, component: PaymentSuccess },
     { path: config.routes.loginAdmin, component: AdminLogin, layout: null },
 ];
 
@@ -53,7 +46,7 @@ const adminRoutes = [
     { path: config.routes.advertisementAdmin, component: Advertisement, layout: AdminLayout },
     { path: config.routes.insuranceAdmin, component: Insurance, layout: AdminLayout },
     { path: config.routes.blogAdmin, component: BlogAmin, layout: AdminLayout },
-    { path: config.routes.insurancepackage, component: InsurancePackage, layout: AdminLayout },
+    { path: config.routes.insurancePackage, component: InsurancePackage, layout: AdminLayout },
 ];
 
 // Private routes

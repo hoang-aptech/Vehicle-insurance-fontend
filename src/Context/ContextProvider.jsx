@@ -7,6 +7,7 @@ function ContextProvider({ children }) {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
     const [adminToken, setAdminToken] = useState(JSON.parse(localStorage.getItem('adminToken')));
     const [admin, setAdmin] = useState(JSON.parse(localStorage.getItem('admin')));
+
     const handleLogoutUser = () => {
         localStorage.removeItem('userToken');
         localStorage.removeItem('user');

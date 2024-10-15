@@ -1,18 +1,19 @@
+import { CaretDownOutlined, CloseOutlined, UserAddOutlined } from '@ant-design/icons';
 import { useContext, useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { notification } from 'antd';
 import classNames from 'classnames/bind';
 import Tippy from '@tippyjs/react/headless';
-import { CaretDownOutlined, CloseOutlined, UserAddOutlined } from '@ant-design/icons';
-import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
+import { Context } from '~/Context';
+import { DownOutlinedIcon, MenuBtnIcon, UserIcon } from '~/components/Icon';
+import vehicleInsuranceIcon from '~/assets/img/vehicle_insurance_icon.png';
 import Button from '~/components/Button';
 import logo from '~/assets/img/logo.png';
-import { DownOutlinedIcon, MenuBtnIcon, UserIcon } from '~/components/Icon';
 import config from '~/config';
 import ukFlag from '~/assets/img/uk-flag.png';
-import vehicleInsuranceIcon from '~/assets/img/vehicle_insurance_icon.png';
 import style from './Header.module.scss';
-import { Context } from '~/Context';
 
 const cx = classNames.bind(style);
 
@@ -24,6 +25,13 @@ function Header() {
     const [showMenuResponsive, setShowMenuResponsive] = useState(false);
 
     const [showMenuChildren, setShowMenuChildren] = useState([]);
+    const [api, contextHolder] = notification.useNotification();
+    const openNotificationWithIcon = (type, message, description) => {
+        api[type]({
+            message: message,
+            description: description,
+        });
+    };
 
     const createHeaderNav = async () => {
         const insuranceDataRes = await axios.get(process.env.REACT_APP_BACKEND_URL + '/Insurances/root');
@@ -96,7 +104,10 @@ function Header() {
     const handleLogOutBtn = (e) => {
         e.preventDefault();
         if (handleLogoutUser()) {
-            navigate(config.routes.home);
+            openNotificationWithIcon('success', 'Logout', 'You have successfully logged out.');
+            setTimeout(() => {
+                navigate(config.routes.home);
+            }, 500);
         }
     };
 
@@ -106,6 +117,7 @@ function Header() {
 
     return (
         <div className={cx('header')}>
+            {contextHolder}
             <div className={cx('wrapper')}>
                 <div className={cx('logo-with-nav-menu')}>
                     <MenuBtnIcon onClick={() => setShowMenuResponsive(true)} className={cx('menu-btn')} />

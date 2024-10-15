@@ -12,7 +12,7 @@ function App() {
         <Router>
             <div className="App">
                 <Routes>
-                    {publicRoutes.map((route, index) => {
+                    {publicRoutes.map((route) => {
                         const Page = route.component;
                         let Layout = DefaultLayout;
                         let params = {};
@@ -29,7 +29,7 @@ function App() {
 
                         return (
                             <Route
-                                key={index}
+                                key={route.path}
                                 path={route.path}
                                 element={
                                     <Layout>
@@ -56,7 +56,7 @@ function App() {
                             </Route>
                         );
                     })}
-                    {privateRoutes.map((route, idx) => {
+                    {privateRoutes.map((route) => {
                         const Page = route.component;
                         let Layout = route.layout || DefaultLayout;
 

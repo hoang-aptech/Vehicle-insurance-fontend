@@ -9,7 +9,6 @@ function NotFound() {
         const timer = setTimeout(() => {
             navigate(config.routes.home);
         }, 2000);
-
         return () => clearTimeout(timer);
     }, [navigate]);
 

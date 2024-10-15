@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { List, Typography, Button, Layout, notification, Modal } from 'antd';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 import { Context } from '~/Context';
@@ -12,6 +12,12 @@ const { Title } = Typography;
 
 const ContractList = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const txnRef = queryParams.get('vnp_TxnRef');
+    const responseCode = queryParams.get('vnp_ResponseCode');
+    const orderInfo = queryParams.get('vnp_OrderInfo');
+    const vehicleId = JSON.parse(localStorage.getItem('vehicleIdToBuyInsurance'));
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [insuranceRenewals, setInsuranceRenewals] = useState([]);
     const [api, contextHolder] = notification.useNotification();
@@ -62,11 +68,13 @@ const ContractList = () => {
                     res.data.map((i) => ({
                         id: i.id,
                         insuranceId: i.insurancePackage.insuranceId,
-                        name: `${i.insurancePackage.name} - ${i.insurancePackage.insurance.name}`,
-                        description: `Start date: ${i.createdAt.slice(0, 10)} ---> expire date: ${i.expireDate.slice(
+                        insurancePackageId: i.insurancePackage.id,
+                        name: `${i.insurancePackage.name} - ${i.insurancePackage.insurance.name} - Current price: $${i.insurancePackage.price}`,
+                        description: `For vehicle: ${i.vehicle.name} - Start date: ${i.createdAt.slice(
                             0,
                             10,
-                        )}`,
+                        )} ---> expire date: ${i.expireDate.slice(0, 10)}`,
+                        vehicleId: i.vehicleId,
                     })),
                 );
             }
@@ -87,8 +95,40 @@ const ContractList = () => {
     const handleClick = (id) => {
         navigate(config.routes.contract.replace(':id', id));
     };
+    const handleExtendInsurance = async (insurancePackageId, vehicleId) => {
+        localStorage.setItem('vehicleIdToBuyInsurance', JSON.stringify(vehicleId));
+        if (insurancePackageId) {
+            axios
+                .get(`https://localhost:7289/api/insurances/pay/${insurancePackageId}`)
+                .then((response) => {
+                    const { paymentUrl } = response.data;
+                    window.location.href = paymentUrl;
+                })
+                .catch((error) => {
+                    console.error('Error initiating payment:', error);
+                });
+        }
+    };
 
     useEffect(() => {
+        if (txnRef && responseCode && orderInfo && vehicleId) {
+            axios
+                .get(
+                    `https://localhost:7289/api/insurances/payment-success?vnp_TxnRef=${txnRef}&vnp_ResponseCode=${responseCode}&vnp_OrderInfo=${encodeURIComponent(
+                        orderInfo,
+                    )}&vehicleId=${vehicleId}`,
+                )
+                .then((response) => {
+                    openNotificationWithIcon('success', 'Payment successfully', response.data.message);
+                    setTimeout(() => {
+                        navigate(location.pathname, { replace: true });
+                    }, 1000);
+                })
+                .catch((error) => {
+                    openNotificationWithIcon('error', 'Error verifying payment', 'Please try again later.');
+                    console.error('Error verifying payment:', error);
+                });
+        }
         getDataApi();
     }, []);
 
@@ -108,7 +148,7 @@ const ContractList = () => {
                                 <Button
                                     type="dashed"
                                     style={{ backgroundColor: 'green', color: '#fff' }}
-                                    onClick={() => {}}
+                                    onClick={() => handleExtendInsurance(item.insurancePackageId, item.vehicleId)}
                                 >
                                     Extend
                                 </Button>,

@@ -24,6 +24,7 @@ const InsurancePackages = () => {
     const [form] = Form.useForm();
     const [insurancePackageData, setInsurancePackageData] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [insurancePackageId, setInsurancePackageId] = useState(null);
 
     const handleCancel = () => {
         setIsModalVisible(false);
@@ -37,11 +38,26 @@ const InsurancePackages = () => {
                 userId: user.id,
             });
             if (res.status === 201) {
+                localStorage.setItem('vehicleIdToBuyInsurance', JSON.stringify(res.data.id));
                 openNotificationWithIcon(
                     'success',
                     'Vehicle Registered Successfully',
                     `You have registered your vehicle successfully with License Plate: ${values.licensePlate}`,
                 );
+
+                setTimeout(() => {
+                    if (insurancePackageId) {
+                        axios
+                            .get(`https://localhost:7289/api/insurances/pay/${insurancePackageId}`)
+                            .then((response) => {
+                                const { paymentUrl } = response.data;
+                                window.location.href = paymentUrl;
+                            })
+                            .catch((error) => {
+                                console.error('Error initiating payment:', error);
+                            });
+                    }
+                }, 500);
             }
         } catch (e) {
             console.error(e);
@@ -71,7 +87,7 @@ const InsurancePackages = () => {
         if (user) {
             form.resetFields();
             setIsModalVisible(true);
-            console.log();
+            setInsurancePackageId(id);
         } else {
             openNotificationWithIcon('error', 'Login!', 'You must log in before purchasing insurance.');
             setTimeout(() => {

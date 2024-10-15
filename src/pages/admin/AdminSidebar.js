@@ -152,10 +152,7 @@ const AdminSidebar = () => {
     }
 
     // Xác định key hiện tại dựa trên đường dẫn
-    // const selectedKey = items.find((item) => location.pathname === item.key)?.key || config.routes.admin;
-    const selectedKey = config.routes.admin;
-    console.log(selectedKey);
-    console.log(location.pathname);
+    const selectedKey = items.find((item) => location.pathname === item.key)?.key || config.routes.admin;
 
     return (
         <Sider width={280} style={{ background: '#006494' }}>
