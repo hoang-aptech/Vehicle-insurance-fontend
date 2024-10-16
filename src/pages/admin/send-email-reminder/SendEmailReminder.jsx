@@ -4,67 +4,67 @@ import axios from 'axios';
 import moment from 'moment';
 
 const SendReminderEmails = () => {
-  const [customers, setCustomers] = useState([]);
+  const [billings, setBillings] = useState([]);
 
-  const sendEmail = (customer, daysLeft) => {
+  const sendEmail = (billing, daysLeft) => {
     emailjs
       .send(
         'service_ftfm6pi',
         'template_5133339',
         {
-          to_name: customer.vehicle.user.fullname,
-          user_email: customer.vehicle.user.email,
-          expire_date: customer.expireDate,
+          to_name: billing.vehicle.user.fullname,
+          to_email: billing.vehicle.user.email,
+          expire_date: billing.expireDate,
           days_left: daysLeft,
-          message: `Your insurance will expire in ${daysLeft} days on ${moment(customer.expireDate).format('LL')}.`,
+          message: `Your insurance will expire in ${daysLeft} days on ${moment(billing.expireDate).format('LL')}.`,
         },
         'laGrWQghcmlQSS4rS'
       )
       .then((result) => {
-        console.log(`Email sent to ${customer.vehicle.user.email}: ${result.text}`);
+        console.log(`Email sent to ${billing.vehicle.user.email}: ${result.text}`);
       })
       .catch((error) => {
-        console.error(`Failed to send email to ${customer.vehicle.user.email}: ${error.text}`);
+        console.error(`Failed to send email to ${billing.vehicle.user.email}: ${error.text}`);
       });
   };
 
   useEffect(() => {
-    const fetchCustomers = async () => {
+    const fetchBillings = async () => {
       try {
-        const response = await axios.get('https://localhost:7289/api/CustomerInsurances');
-        const customersData = response.data;
+        const response = await axios.get('https://localhost:7289/api/Billings');
+        const billingsData = response.data;
 
         const today = moment();
 
-        const reminders = customersData.filter((customer) => {
-          const expireDate = moment(customer.expireDate);
+        const reminders = billingsData.filter((billing) => {
+          const expireDate = moment(billing.expireDate);
           const daysLeft = expireDate.diff(today, 'days');
           return daysLeft >= 0 && daysLeft <= 7;
         });
 
-        setCustomers(reminders);
+        setBillings(reminders);
 
-        reminders.forEach((customer) => {
-          const expireDate = moment(customer.expireDate);
+        reminders.forEach((billing) => {
+          const expireDate = moment(billing.expireDate);
           const daysLeft = expireDate.diff(today, 'days');
-          sendEmail(customer, daysLeft);
+          sendEmail(billing, daysLeft);
         });
       } catch (error) {
-        console.error('Error fetching customer data:', error);
+        console.error('Error fetching billings data:', error);
       }
     };
 
-    fetchCustomers();
+    fetchBillings();
   }, []);
 
   return (
     <div>
       <h1>Gửi Email Nhắc Nhở Gia Hạn Bảo Hiểm</h1>
-      {customers.length > 0 ? (
+      {billings.length > 0 ? (
         <ul>
-          {customers.map((customer, index) => (
+          {billings.map((billing, index) => (
             <li key={index}>
-              Email sẽ được gửi đến: {customer.vehicle.user.fullname} - {customer.vehicle.user.email} - Hết hạn vào: {customer.expireDate}
+              Email sẽ được gửi đến: {billing.vehicle.user.fullname} - {billing.vehicle.user.email} - Hết hạn vào: {moment(billing.expireDate).format('LL')}
             </li>
           ))}
         </ul>
