@@ -28,25 +28,41 @@ const UserAdmin = () => {
 
     const { adminToken, handleLogoutAdmin } = useContext(Context);
 
+    const handleError = (err) => {
+        if (err.status === 401) {
+            alert('Unauthorized. Please log in again.');
+            const Logouted = handleLogoutAdmin();
+            if (Logouted) {
+                navigate(config.routes.loginAdmin); // Refresh the page to log out
+            }
+        } else if (err.status === 400) {
+            alert(err.response.data.message);
+        }
+    };
+
     // Fetch user data
     const fetchUsers = async () => {
         try {
-            const response = await axios.get(API_URL);
+            const response = await axios.get(API_URL, { headers: { Authorization: 'Bearer ' + adminToken } });
             setDataSource(response.data);
             console.log(response.data);
         } catch (error) {
             console.error('Failed to fetch users:', error);
+            handleError(error);
         }
     };
 
     // Fetch deleted users
     const fetchDeletedUsers = async () => {
         try {
-            const response = await axios.get(`${API_URL}/deleted`);
+            const response = await axios.get(`${API_URL}/deleted`, {
+                headers: { Authorization: 'Bearer ' + adminToken },
+            });
             console.log('Deleted users:', response.data); // Log the response
             setDeletedUsers(response.data);
         } catch (error) {
             console.error('Failed to fetch deleted users:', error);
+            handleError(error);
         }
     };
 
@@ -162,13 +178,7 @@ const UserAdmin = () => {
             fetchDeletedUsers(); // Add this line to refresh the deleted users
         } catch (error) {
             console.error('Failed to delete user:', error);
-            if (error.status === 401) {
-                alert('Unauthorized. Please log in again.');
-                const Logouted = handleLogoutAdmin();
-                if (Logouted) {
-                    navigate(config.routes.loginAdmin); // Refresh the page to log out
-                }
-            }
+            handleError(error);
         }
     };
 
@@ -197,15 +207,20 @@ const UserAdmin = () => {
 
             console.log('Updated values before API call:', updatedValues);
 
-            const response = await axios.post(API_URL, {
-                ...updatedValues,
-                verified: false, // Adjusted this to boolean
-            });
+            const response = await axios.post(
+                API_URL,
+                {
+                    ...updatedValues,
+                    verified: false, // Adjusted this to boolean
+                },
+                { headers: { Authorization: 'Bearer ' + adminToken } },
+            );
 
             setDataSource([...dataSource, response.data]);
             setIsAddModalVisible(false);
         } catch (error) {
-            console.error('Failed to add user:', error.response?.data?.errors || error.response?.data || error);
+            console.error('Failed to add user:', error);
+            handleError(error);
         }
     };
 
@@ -263,10 +278,11 @@ const UserAdmin = () => {
     // Permanently delete user
     const handlePermanentDelete = async (id) => {
         try {
-            await axios.delete(`${API_URL}/${id}`); // Assuming you have a permanently delete endpoint
+            await axios.delete(`${API_URL}/${id}`, { headers: { Authorization: 'Bearer ' + adminToken } }); // Assuming you have a permanently delete endpoint
             fetchDeletedUsers();
         } catch (error) {
             console.error('Failed to permanently delete user:', error);
+            handleError(error);
         }
     };
 
@@ -312,10 +328,7 @@ const UserAdmin = () => {
                                 columns={columns}
                                 rowKey="id"
                                 pagination={{
-                                    current: currentPage,
-                                    pageSize: pageSize,
-                                    total: totalUsers,
-                                    onChange: (page) => setCurrentPage(page),
+                                    pageSize: 5,
                                 }}
                             />
                         </Col>

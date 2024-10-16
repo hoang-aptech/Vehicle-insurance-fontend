@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Layout, Table, Button, Form, Input, Modal, Row, Col, Card, Select } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Context } from '~/Context';
+import config from '~/config';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
 
 const Advertisement = () => {
+    const navigate = useNavigate();
+    const { adminToken, handleLogoutAdmin } = useContext(Context);
     const [dataSource, setDataSource] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -82,16 +87,28 @@ const Advertisement = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`${API_URL}/${id}`);
+            await axios.delete(`${API_URL}/${id}`, { headers: { Authorization: 'Bearer ' + adminToken } });
             setDataSource(dataSource.filter((ad) => ad.id !== id));
         } catch (error) {
-            console.error('Unable to delete advertisement:', error);
+            handleError(error);
         }
     };
 
     const handleDetail = (ad) => {
         setCurrentAd(ad);
         setIsDetailModalVisible(true);
+    };
+
+    const handleError = (err) => {
+        if (err.status === 401) {
+            alert('Unauthorized. Please log in again.');
+            const Logouted = handleLogoutAdmin();
+            if (Logouted) {
+                navigate(config.routes.loginAdmin);
+            }
+        } else if (err.status === 400) {
+            alert(err.response.data.message);
+        }
     };
 
     const columns = [
@@ -180,13 +197,10 @@ const Advertisement = () => {
                 </Row>
                 <Table
                     columns={columns}
-                    dataSource={filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize)}
+                    dataSource={filteredData}
                     rowKey="id"
                     pagination={{
-                        current: currentPage,
-                        pageSize: pageSize,
-                        total: filteredData.length,
-                        onChange: (page) => setCurrentPage(page),
+                        pageSize: 5,
                     }}
                 />
 

@@ -56,9 +56,7 @@ const BlogAdmin = () => {
         return nameLower.includes(searchLower);
     });
 
-    const pageSize = 5;
-    const paginatedBlogs = filteredBlogs.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-    const totalBlogs = filteredBlogs.length;
+    const paginatedBlogs = filteredBlogs;
 
     const columns = [
         {
@@ -79,8 +77,8 @@ const BlogAdmin = () => {
         },
         {
             title: 'Image',
-            dataIndex: 'image_path',
-            key: 'image_path',
+            dataIndex: 'image',
+            key: 'image',
             render: (text) =>
                 text ? (
                     <img
@@ -156,8 +154,10 @@ const BlogAdmin = () => {
     const handleAddOk = async (values) => {
         const updatedValues = { ...values };
 
-        if (updatedValues.image_path) {
-            updatedValues.image_path = updatedValues.image_path.replace('data:image/png;base64,', '');
+        if (updatedValues.image) {
+            updatedValues.image = updatedValues.image.replace('data:image/png;base64,', '');
+        } else {
+            alert('Please select image of blog');
         }
 
         try {
@@ -236,14 +236,7 @@ const BlogAdmin = () => {
                     Add Blog
                 </Button>
                 <h1 style={{ margin: 0 }}>Blog Management</h1>
-                <Button
-                    type="default"
-                    icon={<DeleteOutlined />}
-                    onClick={showDeletedBlogsModal}
-                    style={{ backgroundColor: '#f60308', borderColor: '#f60308' }}
-                >
-                    Show Deleted Blogs
-                </Button>
+                <div></div>
             </Header>
 
             <Content style={{ margin: '16px' }}>
@@ -262,10 +255,7 @@ const BlogAdmin = () => {
                                 columns={columns}
                                 rowKey="id"
                                 pagination={{
-                                    current: currentPage,
-                                    pageSize: pageSize,
-                                    total: totalBlogs,
-                                    onChange: (page) => setCurrentPage(page),
+                                    pageSize: 5,
                                 }}
                             />
                         </Col>

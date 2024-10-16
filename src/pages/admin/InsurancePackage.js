@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Layout, Table, Button, Form, Input, Modal, Row, Col, Card } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { Context } from '~/Context';
+import config from '~/config';
 
 const { Header, Content } = Layout;
 // const { Option } = Select;
 
 const InsurancePackage = () => {
+    const navigate = useNavigate();
+    const { adminToken, handleLogoutAdmin } = useContext(Context);
     const [dataSource, setDataSource] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -17,12 +22,25 @@ const InsurancePackage = () => {
 
     const API_URL = 'https://localhost:7289/api/InsurancePackages';
 
+    const handleError = (err) => {
+        if (err.status === 401) {
+            alert('Unauthorized. Please log in again.');
+            const Logouted = handleLogoutAdmin();
+            if (Logouted) {
+                navigate(config.routes.loginAdmin);
+            }
+        } else if (err.status === 400) {
+            alert(err.response.data.message);
+        }
+    };
+
     const fetchInsurancePackageData = async () => {
         try {
-            const response = await axios.get(API_URL);
+            const response = await axios.get(API_URL, { headers: { Authorization: 'Bearer ' + adminToken } });
             setDataSource(response.data);
         } catch (error) {
             console.error('Unable to fetch insurance package data:', error);
+            handleError(error);
         }
     };
 
@@ -145,7 +163,7 @@ const InsurancePackage = () => {
                         style={{ marginLeft: 8, backgroundColor: '#f60308', borderColor: '#f60308' }}
                         onClick={() => handleDelete(record.id)}
                     />
-                </div> 
+                </div>
             ),
         },
     ];
@@ -165,9 +183,7 @@ const InsurancePackage = () => {
                     Add Insurance Package
                 </Button>
                 <h1 style={{ margin: 0 }}>Insurance Package Management</h1>
-                <Button type="default" icon={<LogoutOutlined />}>
-                    Logout
-                </Button>
+                <div></div>
             </Header>
             <Content style={{ margin: '16px' }}>
                 <Row gutter={16} style={{ marginBottom: '16px' }}>
@@ -175,7 +191,7 @@ const InsurancePackage = () => {
                         <Input placeholder="Filter by Name" value={filterName} onChange={handleFilterChange} />
                     </Col>
                 </Row>
-                <Table columns={columns} dataSource={filteredData} rowKey="id" />
+                <Table columns={columns} dataSource={filteredData} rowKey="id" pagination={{ pageSize: 5 }} />
 
                 <Modal
                     title={isEditMode ? 'Edit Insurance Package' : 'Add New Insurance Package'}

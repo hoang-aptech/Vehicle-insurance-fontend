@@ -21,6 +21,7 @@ import BlogAmin from '~/pages/admin/Blog';
 import AdminLayout from '~/layouts/DefaultLayout/AdminLayout';
 import InsurancePackage from '~/pages/admin/InsurancePackage';
 import AdminLogin from '~/pages/AdminLogin';
+import SendReminderEmails from '~/pages/admin/send-email-reminder/SendEmailReminder';
 
 // Public routes
 const publicRoutes = [
@@ -47,6 +48,7 @@ const adminRoutes = [
     { path: config.routes.insuranceAdmin, component: Insurance, layout: AdminLayout },
     { path: config.routes.blogAdmin, component: BlogAmin, layout: AdminLayout },
     { path: config.routes.insurancePackage, component: InsurancePackage, layout: AdminLayout },
+    { path: config.routes.sendEmailReminderAdmin, component: SendReminderEmails, layout: AdminLayout },
 ];
 
 // Private routes

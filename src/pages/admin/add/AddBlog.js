@@ -44,7 +44,7 @@ const AddBlog = ({ onFinish }) => {
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64String = reader.result.split(',')[1]; // Get the Base64 part
-                onFinish({ ...values, description, image_path: base64String });
+                onFinish({ ...values, description, image: base64String });
             };
             reader.readAsDataURL(file);
         } else {
@@ -57,7 +57,12 @@ const AddBlog = ({ onFinish }) => {
             <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
                 <Input />
             </Form.Item>
-            <Form.Item label="Description" rules={[{ required: true, message: 'Please input the description!' }]}>
+            <Form.Item
+                label="Description"
+                name="description"
+                value={description}
+                rules={[{ required: true, message: 'Please input the description!' }]}
+            >
                 <Editor
                     apiKey="l1i9v8q0xwfkdzno0iih7p59m4dqchz5cdie0khvrozcztbg"
                     init={{

@@ -23,7 +23,7 @@
         "react-router-dom": "^6.26.2",
         "react-scripts": "5.0.1",
         "react-to-print": "^3.0.0",
-        "recharts": "^2.12.7",
+        "recharts": "^2.13.0",
         "tinymce": "^7.3.0",
         "buffer": "^6.0.3",
         "crypto-browserify": "^3.12.0",

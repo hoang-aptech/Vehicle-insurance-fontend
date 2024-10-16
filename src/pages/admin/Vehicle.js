@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Layout, Table, Button, Form, Input, Modal, Row, Col, Select, Card } from 'antd';
 import { EditOutlined, DeleteOutlined, PlusCircleOutlined, LogoutOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { Context } from '~/Context';
+import config from '~/config';
 
 const { Header, Content } = Layout;
 const { Option } = Select;
 
 const Vehicle = () => {
+    const navigate = useNavigate();
+    const { adminToken, handleLogoutAdmin } = useContext(Context);
     const [dataSource, setDataSource] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditMode, setIsEditMode] = useState(false);
@@ -22,10 +27,23 @@ const Vehicle = () => {
     // Fetch vehicle data from the API
     const fetchVehicleData = async () => {
         try {
-            const response = await axios.get(API_URL);
+            const response = await axios.get(API_URL, { headers: { Authorization: 'Bearer ' + adminToken } });
             setDataSource(response.data);
         } catch (error) {
             console.error('Failed to fetch vehicle data:', error);
+            handleError(error);
+        }
+    };
+
+    const handleError = (err) => {
+        if (err.status === 401) {
+            alert('Unauthorized. Please log in again.');
+            const Logouted = handleLogoutAdmin();
+            if (Logouted) {
+                navigate(config.routes.loginAdmin);
+            }
+        } else if (err.status === 400) {
+            alert(err.response.data.message);
         }
     };
 
@@ -177,9 +195,7 @@ const Vehicle = () => {
                     Add Vehicle
                 </Button>
                 <h1 style={{ margin: 0 }}>Vehicle Management</h1>
-                <Button type="default" icon={<LogoutOutlined />}>
-                    Logout
-                </Button>
+                <div></div>
             </Header>
             <Content style={{ margin: '16px' }}>
                 <Row gutter={16} style={{ marginBottom: '16px' }}>
@@ -189,13 +205,10 @@ const Vehicle = () => {
                 </Row>
                 <Table
                     columns={columns}
-                    dataSource={filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize)}
+                    dataSource={filteredData}
                     rowKey="id"
                     pagination={{
-                        current: currentPage,
-                        pageSize: pageSize,
-                        total: filteredData.length,
-                        onChange: (page) => setCurrentPage(page),
+                        pageSize: 5,
                     }}
                 />
 

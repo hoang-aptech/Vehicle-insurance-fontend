@@ -9,6 +9,7 @@ import {
     CarOutlined,
     UserAddOutlined,
     LogoutOutlined,
+    SendOutlined,
 } from '@ant-design/icons';
 import logo from './assetadmin/logo.png';
 import blogIcon from './assetadmin/ảnhblog.png'; // Import hình ảnh cho Blog
@@ -127,6 +128,11 @@ const AdminSidebar = () => {
             icon: <InsuranceOutlined style={{ color: 'black' }} />,
         },
         {
+            key: config.routes.sendEmailReminderAdmin,
+            label: <Link to={config.routes.sendEmailReminderAdmin}>Send email reminder</Link>,
+            icon: <SendOutlined style={{ color: 'black' }} />,
+        },
+        {
             key: '/logout',
             label: (
                 <Link to="/" onClick={handleLogout}>
@@ -135,14 +141,7 @@ const AdminSidebar = () => {
             ),
             icon: <LogoutOutlined style={{ color: 'black' }} />,
         },
-        // {
-        //     key: config.routes.blogAdmin,
-        //     label: <Link to={config.routes.blogAdmin}>Blog</Link>,
-        //     icon: <img src={blogIcon} alt="Blog Icon" style={{ width: '20px', height: '20px' }} />,
-        // },
     ];
-
-    console.log(admin);
 
     if (admin.role === 'Employee') {
         delete items[1];

@@ -21,6 +21,7 @@ const routes = {
     advertisementAdmin: '/admin/advertisement-admin',
     insuranceAdmin: '/admin/insurance-admin',
     blogAdmin: '/admin/blog-admin',
+    sendEmailReminderAdmin: '/admin/send-email-reminder',
     insurancePackage: '/admin/insurance-package-admin',
     insurances: '/insurances',
 };

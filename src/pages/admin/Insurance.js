@@ -24,7 +24,7 @@ const Insurance = () => {
 
     const fetchInsuranceData = async () => {
         try {
-            const response = await axios.get(API_URL);
+            const response = await axios.get(API_URL + '/root');
             setDataSource(response.data);
         } catch (error) {
             console.error('Unable to fetch insurance data:', error);
@@ -53,12 +53,20 @@ const Insurance = () => {
 
     const handleOk = async () => {
         try {
-            const values = await form.validateFields();
+            const values = form.getFieldsValue();
+
+            if (!descriptionContent) {
+                alert('Please fill in the description!');
+                return;
+            } else if (!clauseContent) {
+                alert('Please fill in the clause!');
+                return;
+            }
 
             const insuranceData = {
                 ...values,
-                description: descriptionContent, // Mô tả
-                clause: clauseContent, // Điều khoản
+                description: descriptionContent,
+                clause: clauseContent,
             };
 
             if (isEditMode && currentInsurance) {
@@ -68,16 +76,17 @@ const Insurance = () => {
                 });
             } else {
                 const response = await axios.post(API_URL, insuranceData);
-                setDataSource((prevData) => [...prevData, response.data]);
             }
 
             setIsModalVisible(false);
             form.resetFields();
-            setDescriptionContent(''); // Reset nội dung mô tả
-            setClauseContent(''); // Reset nội dung điều khoản
+            setDescriptionContent('');
+            setClauseContent('');
             fetchInsuranceData();
         } catch (error) {
-            console.error('Unable to update insurance information:', error.response?.data || error);
+            console.error(error);
+
+            alert('Unable to update insurance information!');
         }
     };
     const handleCancel = () => {
@@ -125,12 +134,6 @@ const Insurance = () => {
             render: (text) => <div dangerouslySetInnerHTML={{ __html: text }} />,
         },
         {
-            title: 'Clause',
-            dataIndex: 'clause',
-            key: 'clause',
-            render: (text) => <div dangerouslySetInnerHTML={{ __html: text }} />,
-        },
-        {
             title: 'Type',
             dataIndex: 'type',
             key: 'type',
@@ -174,6 +177,13 @@ const Insurance = () => {
         },
     ];
 
+    const handleDescriptionChange = (content) => {
+        setDescriptionContent(content);
+    };
+    const handleClauseChange = (content) => {
+        setClauseContent(content);
+    };
+
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <Header
@@ -189,9 +199,7 @@ const Insurance = () => {
                     Add Insurance
                 </Button>
                 <h1 style={{ margin: 0 }}>Insurance Management</h1>
-                <Button type="default" icon={<LogoutOutlined />}>
-                    Logout
-                </Button>
+                <div></div>
             </Header>
             <Content style={{ margin: '16px' }}>
                 <Row gutter={16} style={{ marginBottom: '16px' }}>
@@ -199,11 +207,7 @@ const Insurance = () => {
                         <Input placeholder="Filter by Name" value={filterName} onChange={handleFilterChange} />
                     </Col>
                 </Row>
-                <Table
-                    columns={columns}
-                    dataSource={filteredData.slice((currentPage - 1) * pageSize, currentPage * pageSize)}
-                    rowKey="id"
-                />
+                <Table columns={columns} dataSource={filteredData} rowKey="id" pagination={{ pageSize: 5 }} />
 
                 <Modal
                     title={isEditMode ? 'Edit Insurance Record' : 'Add New Insurance Record'}
@@ -227,6 +231,10 @@ const Insurance = () => {
                             <Select placeholder="Select type">
                                 <Option value="Car">Car</Option>
                                 <Option value="Motorbike">Motorbike</Option>
+                                <Option value="Bike">Bike</Option>
+                                <Option value="E-bike">E-bike</Option>
+                                <Option value="Taxi">Taxi</Option>
+                                <Option value="Truck">Truck</Option>
                             </Select>
                         </Form.Item>
                         <Form.Item name="isNew" valuePropName="checked">
@@ -235,11 +243,12 @@ const Insurance = () => {
                         <Form.Item
                             label="Description"
                             name="description"
+                            value={descriptionContent}
                             rules={[{ required: true, message: 'Please enter a description!' }]}
                         >
                             <Editor
                                 apiKey="l1i9v8q0xwfkdzno0iih7p59m4dqchz5cdie0khvrozcztbg"
-                                initialValue={descriptionContent}
+                                onEditorChange={handleDescriptionChange}
                                 init={{
                                     height: 300,
                                     menubar: false,
@@ -249,18 +258,19 @@ const Insurance = () => {
                                         'bold italic backcolor | alignleft aligncenter ' +
                                         'alignright alignjustify | bullist numlist outdent indent | ' +
                                         'image | removeformat | help',
+                                    directionality: 'ltr',
                                 }}
-                                onEditorChange={(newContent) => setDescriptionContent(newContent)}
                             />
                         </Form.Item>
                         <Form.Item
                             label="Clause"
                             name="clause"
+                            value={clauseContent}
                             rules={[{ required: true, message: 'Please enter a clause!' }]}
                         >
                             <Editor
                                 apiKey="l1i9v8q0xwfkdzno0iih7p59m4dqchz5cdie0khvrozcztbg"
-                                initialValue={clauseContent}
+                                onEditorChange={handleClauseChange}
                                 init={{
                                     height: 300,
                                     menubar: false,
@@ -271,7 +281,6 @@ const Insurance = () => {
                                         'alignright alignjustify | bullist numlist outdent indent | ' +
                                         'image | removeformat | help',
                                 }}
-                                onEditorChange={(newContent) => setClauseContent(newContent)}
                             />
                         </Form.Item>
                     </Form>
