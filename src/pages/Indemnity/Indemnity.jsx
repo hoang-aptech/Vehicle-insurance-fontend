@@ -198,31 +198,31 @@ const Indemnity = () => {
                         ))
                     )}
 
-                    <Title level={4}>Ưu điểm của cổng bồi thường Saladin</Title>
+                    <Title level={4}>Advantages of One team compensation portal</Title>
                     <div style={{ display: 'flex', marginBottom: '15px' }}>
                         <img src={Icon1} alt="" />
                         <Paragraph style={{ marginTop: '20px', marginLeft: '20px' }}>
-                            <strong style={{ display: 'flex' }}>Tạo bồi thường nhanh chóng:</strong> Tạo yêu cầu bồi
-                            thường chỉ trong vài phút theo hướng dẫn của hệ thống.
+                            <strong style={{ display: 'flex' }}>Create quick compensation:</strong> Create a claim in
+                            just minutes following the system's instructions.
                         </Paragraph>
                     </div>
                     <div style={{ display: 'flex', marginBottom: '40px' }}>
                         <img src={Icon2} alt="" />
                         <Paragraph style={{ marginTop: '20px', marginLeft: '20px' }}>
-                            <strong style={{ display: 'flex' }}>Quản lý và cập nhật dễ dàng:</strong> Quản lý và cập
-                            nhật tình trạng yêu cầu bồi thường kịp thời, nhanh chóng.
+                            <strong style={{ display: 'flex' }}>Easy management and updates:</strong> Manage and update
+                            claim status promptly and promptly.
                         </Paragraph>
                     </div>
 
-                    <Title level={5}>Liên hệ Saladin</Title>
+                    <Title level={5}>Contact one team</Title>
                     <div className={styles.container}>
                         <Paragraph className={styles.paragraph}>
                             <MailOutlined className={styles.icon} />
-                            Email: <a href="mailto:cs@saladin.vn">cs@saladin.vn</a>
+                            Email: <a href="mailto:cs@oneteam.vn">cs@oneteam.vn</a>
                         </Paragraph>
                         <Paragraph className={styles.paragraph}>
                             <PhoneOutlined className={styles.icon} />
-                            Điện thoại: 1900 638 454
+                            Phone: 1900 638 454
                         </Paragraph>
                     </div>
                 </Card>

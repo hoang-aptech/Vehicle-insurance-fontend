@@ -77,9 +77,9 @@ function Footer() {
                         </div>
                     </div>
                     <div className={cx('item-box')}>
-                        <h5>About Saladin</h5>
+                        <h5>About One team</h5>
                         <Link to="/">About Us</Link>
-                        <Link to="/">Saladin Reviews</Link>
+                        <Link to="/">One team Reviews</Link>
                         <Link to="/">Community Contributions</Link>
                         <Link to="/">Careers</Link>
                         <Link to="/">For Businesses</Link>
@@ -94,17 +94,17 @@ function Footer() {
                     <div className={cx('item-box')}>
                         <h5>Others</h5>
                         <Link to="/">Insurance Glossary</Link>
-                        <Link to="/">Saladin Blog</Link>
+                        <Link to="/">One team Blog</Link>
                         <Link to="/">Terms &amp; Conditions</Link>
                         <Link to="/">Privacy Policy</Link>
                     </div>
                 </div>
                 {/* <div className={cx('nav-section')}>
                     <div>
-                        <h5>About Saladin</h5>
+                        <h5>About One team</h5>
                         <Link to="/">About Us</Link>
                         <br />
-                        <Link to="/">Saladin Reviews</Link>
+                        <Link to="/">One team Reviews</Link>
                         <br />
                         <Link to="/">Community Contributions</Link>
                         <br />
@@ -123,7 +123,7 @@ function Footer() {
                         <h5>Others</h5>
                         <Link to="/">Insurance Glossary</Link>
                         <br />
-                        <Link to="/">Saladin Blog</Link>
+                        <Link to="/">One team Blog</Link>
                         <br />
                         <Link to="/">Terms &amp; Conditions</Link>
                         <br />

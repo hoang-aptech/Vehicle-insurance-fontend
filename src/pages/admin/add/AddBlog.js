@@ -40,7 +40,7 @@ const AddBlog = ({ onFinish }) => {
 
     const handleSubmit = async (values) => {
         if (imageFileList.length > 0) {
-            const file = imageFileList[0].originFileObj; // Get the first file
+            const file = imageFileList[imageFileList.length - 1].originFileObj; // Get the first file
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64String = reader.result.split(',')[1]; // Get the Base64 part

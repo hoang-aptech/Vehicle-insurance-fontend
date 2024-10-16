@@ -143,15 +143,17 @@ const AdminSidebar = () => {
         },
     ];
 
+    let filteredItems = items;
+
+    console.log(admin.role);
+
     if (admin.role === 'Employee') {
-        delete items[1];
-        delete items[2];
-        delete items[5];
-        delete items[7];
+        filteredItems = items.filter((item, index) => ![0, 1, 4, 7].includes(index));
+        console.log(filteredItems);
     }
 
     // Xác định key hiện tại dựa trên đường dẫn
-    const selectedKey = items.find((item) => location.pathname === item.key)?.key || config.routes.admin;
+    const selectedKey = filteredItems.find((item) => location.pathname === item.key)?.key || config.routes.admin;
 
     return (
         <Sider width={280} style={{ background: '#006494' }}>
@@ -161,7 +163,7 @@ const AdminSidebar = () => {
             </div>
 
             {/* Phần Menu Điều Hướng */}
-            <Menu mode="inline" selectedKeys={[selectedKey]} items={items} />
+            <Menu mode="inline" selectedKeys={[selectedKey]} items={filteredItems} />
         </Sider>
     );
 };

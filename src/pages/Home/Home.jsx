@@ -69,13 +69,13 @@ const data = [
 const partnersData = [
     {
         title: 'Insurance Partners',
-        description: 'Saladin partners with leading insurance providers to bring you the most choices',
+        description: 'One team partners with leading insurance providers to bring you the most choices',
         images: [lg1, lg2, lg3, lg4, lg5, lg6, lg7, lg8, lg9],
     },
     {
         title: 'Affiliate Partners',
         description:
-            'Saladin partners with businesses to provide comprehensive insurance protection services for your life',
+            'One team partners with businesses to provide comprehensive insurance protection services for your life',
         images: [lg10, lg11, lg12, lg13, lg14, lg15, lg16, lg17, lg18],
     },
 ];
@@ -159,7 +159,7 @@ const Home = () => {
                         24/7 Consulting and Support
                     </h1>
                     <p style={{ textAlign: 'center', minWidth: '600px', margin: 'auto' }}>
-                        The Saladin team is always ready to support you throughout your journey of buying and using
+                        The One team team is always ready to support you throughout your journey of buying and using
                         insurance.
                     </p>
                 </Col>
@@ -228,7 +228,7 @@ const Home = () => {
                                     }}
                                 >
                                     <h2>Get advice now</h2>
-                                    <p>Leave your information to receive advice and offers from Saladin.</p>
+                                    <p>Leave your information to receive advice and offers from One team.</p>
                                     <Form.Item
                                         label="Full name"
                                         name="name"
@@ -334,7 +334,7 @@ const Home = () => {
                     <Row justify="center" align="middle" className={styles.saladinHeader}>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12} className={styles.textContainer}>
                             <h1>Comprehensive insurance for Vietnamese</h1>
-                            <p>Live confidently, love confidently with Saladin</p>
+                            <p>Live confidently, love confidently with One team</p>
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <img src={Hero} alt="hero" />
@@ -361,7 +361,7 @@ const Home = () => {
 
                 {/* Carousel section */}
                 <div className={`${styles.saladinCarouselContainer}`}>
-                    <h2>What's new in Saladin?</h2>
+                    <h2>What's new in One team?</h2>
                     <Carousel autoplay dots={false}>
                         {groupedImages.map((group, index) => (
                             <div key={index} className={`${styles.saladinCarouselItem}`}>
@@ -396,7 +396,7 @@ const Home = () => {
                                     Insurance buying experience fast and convenient
                                 </Title>
                                 <Paragraph style={{ maxWidth: '500px', fontSize: '2rem' }}>
-                                    At Saladin, in addition to finding a variety of insurance product options from
+                                    At One team, in addition to finding a variety of insurance product options from
                                     standard to advanced, customers can also freely choose benefits according to their
                                     needs to create the most suitable insurance package.
                                 </Paragraph>

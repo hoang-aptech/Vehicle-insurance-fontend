@@ -13,7 +13,7 @@ const { Meta } = Card;
 const Blog = () => {
     const [dataState, setDataState] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 12;
+    const itemsPerPage = 6;
 
     const getDataFromAPI = useCallback(async () => {
         try {
@@ -57,10 +57,10 @@ const Blog = () => {
         <div className={styles.blogDetailsContainer}>
             <div className={styles.blogHeader}>
                 <Title level={1} style={{ fontSize: '16px', color: 'green' }}>
-                    Saladin Blog
+                    One team Blog
                 </Title>
                 <Title level={2} style={{ fontSize: '34px' }}>
-                    Tự tin sống, tự tin yêu thương cùng Saladin
+                    Live confidently, love confidently with One team
                 </Title>
             </div>
             <div className={styles.blogContent}>
@@ -83,7 +83,12 @@ const Blog = () => {
                             >
                                 <Meta
                                     title={<Link to={item.link}>{item.title}</Link>}
-                                    description={<p className={styles.descriptionBlog}>{item.description}</p>}
+                                    description={
+                                        <div
+                                            className={styles.descriptionBlog}
+                                            dangerouslySetInnerHTML={{ __html: item.description }}
+                                        />
+                                    }
                                 />
                             </Card>
                         </Col>

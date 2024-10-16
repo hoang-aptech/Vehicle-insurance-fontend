@@ -8,11 +8,14 @@ const EditBlog = ({ blog, onFinish }) => {
     const [imageFileList, setImageFileList] = useState([]);
     const [imageUrl, setImageUrl] = useState('');
     const [fileName, setFileName] = useState('');
+    const [form] = Form.useForm();
 
     useEffect(() => {
-        if (blog && blog.image_path) {
-            setImageUrl(`data:image/png;base64,${blog.image_path}`); // Đảm bảo rằng image_path là chuỗi base64 hợp lệ
-            setFileName(blog.image_name || ''); // Lấy tên tệp từ blog.image_name nếu có
+        if (blog && blog.image) {
+            form.setFieldsValue(blog);
+
+            setImageUrl(`data:image/png;base64,${blog.image}`); // Đảm bảo rằng image_path là chuỗi base64 hợp lệ
+            // setFileName(blog.image_name || ''); // Lấy tên tệp từ blog.image_name nếu có
             setDescription(blog.description || ''); // Thiết lập mô tả từ blog
         }
     }, [blog]);
@@ -52,24 +55,34 @@ const EditBlog = ({ blog, onFinish }) => {
 
     const handleSubmit = async (values) => {
         if (imageFileList.length > 0) {
-            const file = imageFileList[0].originFileObj;
+            const file = imageFileList[imageFileList.length - 1].originFileObj;
             const reader = new FileReader();
             reader.onloadend = () => {
                 const base64String = reader.result.split(',')[1]; // Lấy phần Base64
-                onFinish({ ...values, description, image_path: base64String, image_name: file.name }); // Gửi tên tệp cùng với ảnh
+                onFinish({ ...values, description, image: base64String }); // Gửi tên tệp cùng với ảnh
             };
             reader.readAsDataURL(file);
         } else {
-            onFinish({ ...values, description, image_path: imageUrl, image_name: fileName }); // Gửi hình ảnh hiện tại và tên tệp
+            onFinish({ ...values, description, image: imageUrl.replace('data:image/png;base64,', '') }); // Gửi hình ảnh hiện tại và tên tệp
         }
     };
 
+    const handleChangeDescription = (content) => {
+        form.setFieldValue('description', content);
+        setDescription(content);
+    };
+
     return (
-        <Form layout="vertical" onFinish={handleSubmit} initialValues={blog}>
+        <Form layout="vertical" onFinish={handleSubmit} form={form}>
             <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
                 <Input />
             </Form.Item>
-            <Form.Item label="Description" rules={[{ required: true, message: 'Please input the description!' }]}>
+            <Form.Item
+                label="Description"
+                name="description"
+                value={description}
+                rules={[{ required: true, message: 'Please input the description!' }]}
+            >
                 <Editor
                     apiKey="l1i9v8q0xwfkdzno0iih7p59m4dqchz5cdie0khvrozcztbg"
                     init={{
@@ -79,8 +92,7 @@ const EditBlog = ({ blog, onFinish }) => {
                         toolbar:
                             'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image | removeformat | help',
                     }}
-                    value={description}
-                    onEditorChange={(newContent) => setDescription(newContent)}
+                    onEditorChange={handleChangeDescription}
                 />
             </Form.Item>
             <Form.Item name="image_path" label="Upload Image">
