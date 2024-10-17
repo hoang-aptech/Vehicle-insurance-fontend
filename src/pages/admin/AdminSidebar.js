@@ -10,6 +10,7 @@ import {
     UserAddOutlined,
     LogoutOutlined,
     SendOutlined,
+    MoneyCollectOutlined,
 } from '@ant-design/icons';
 import logo from './assetadmin/logo.png';
 import blogIcon from './assetadmin/ảnhblog.png'; // Import hình ảnh cho Blog
@@ -128,6 +129,11 @@ const AdminSidebar = () => {
             icon: <InsuranceOutlined style={{ color: 'black' }} />,
         },
         {
+            key: config.routes.indemnityAdmin,
+            label: <Link to={config.routes.indemnityAdmin}>Compensation</Link>,
+            icon: <MoneyCollectOutlined style={{ color: 'black' }} />,
+        },
+        {
             key: config.routes.sendEmailReminderAdmin,
             label: <Link to={config.routes.sendEmailReminderAdmin}>Send email reminder</Link>,
             icon: <SendOutlined style={{ color: 'black' }} />,
@@ -156,7 +162,7 @@ const AdminSidebar = () => {
     const selectedKey = filteredItems.find((item) => location.pathname === item.key)?.key || config.routes.admin;
 
     return (
-        <Sider width={280} style={{ background: '#006494' }}>
+        <Sider width={280} style={{ background: '#006494', position: 'fixed', top: 0, left: 0, bottom: 0 }}>
             <div style={{ padding: '16px', textAlign: 'center', borderBottom: '1px solid #e8e8e8' }}>
                 <img src={logo} alt="Logo" className="image-logo" />
                 <h2 className="title-logo">Vehicle Insurance</h2>

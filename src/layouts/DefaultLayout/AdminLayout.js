@@ -9,7 +9,7 @@ const AdminLayout = ({ children }) => {
     return (
         <Layout style={{ minHeight: '100vh' }}>
             <AdminSidebar />
-            <Layout>
+            <Layout style={{ marginLeft: '280px' }}>
                 <Header
                     style={{
                         background: '#001529',

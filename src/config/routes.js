@@ -7,10 +7,9 @@ const routes = {
     blogDetails: '/blog-details/:id',
     insuranceDetails: '/insurance-details/:id',
     indemnity: '/indemnity',
-    chat: '/chat',
     contract: '/contract/:id',
     contractList: '/contract-list',
-    chat2: '/chat2',
+    insurances: '/insurances',
     insurancePackages: '/insurance-packages/:insuranceId',
 
     loginAdmin: '/admin-login',
@@ -23,7 +22,7 @@ const routes = {
     blogAdmin: '/admin/blog-admin',
     sendEmailReminderAdmin: '/admin/send-email-reminder',
     insurancePackage: '/admin/insurance-package-admin',
-    insurances: '/insurances',
+    indemnityAdmin: '/admin/indemnity',
 };
 
 export default routes;

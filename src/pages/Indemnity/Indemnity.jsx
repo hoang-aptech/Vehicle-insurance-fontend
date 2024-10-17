@@ -15,7 +15,7 @@ import styles from './Indemnity.module.scss';
 
 const { Title, Paragraph } = Typography;
 
-const Indemnity = () => {
+const Indemnity = ({ role = 'user' }) => {
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
     const openNotificationWithIcon = (type, message, description) => {
@@ -25,7 +25,7 @@ const Indemnity = () => {
         });
     };
 
-    const { user, userToken, handleLogoutUser } = useContext(Context);
+    const { user, userToken, handleLogoutUser, adminToken } = useContext(Context);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [compensations, setCompensations] = useState([]);
     const [chatId, setChatId] = useState();
@@ -48,7 +48,7 @@ const Indemnity = () => {
                 process.env.REACT_APP_BACKEND_URL + `/CustomerSupports`,
                 {
                     ...values,
-                    userId: user.id,
+                    userId: 3,
                 },
                 {
                     headers: { Authorization: `Bearer ${userToken}` },
@@ -114,9 +114,14 @@ const Indemnity = () => {
     };
     const fetchCompensations = async () => {
         try {
-            const response = await axios.get(`https://localhost:7289/api/CustomerSupports/by-user/${user.id}`, {
-                headers: { Authorization: `Bearer ${userToken}` },
-            });
+            const response = await axios.get(
+                `https://localhost:7289/api/CustomerSupports/by-role?${
+                    role === 'user' ? `userId=${user.id}` : 'employeeId=3'
+                }`,
+                {
+                    headers: { Authorization: `Bearer ${userToken || adminToken}` },
+                },
+            );
             setCompensations(response.data);
         } catch (err) {
             if (err.status === 401) {
@@ -140,18 +145,22 @@ const Indemnity = () => {
 
     useEffect(() => {
         fetchCompensations();
-        fetchVehicleByUser();
+        if (role === 'user') {
+            fetchVehicleByUser();
+        }
     }, []);
 
     return (
         <Wrapper>
             {contextHolder}
-            <div style={{ display: 'flex', justifyContent: 'center', maxWidth: '790px', margin: 'auto' }}>
-                <h2 style={{ marginRight: 'auto' }}>Bồi thường</h2>
-                <Button type="primary" onClick={showModal}>
-                    Tạo bồi thường
-                </Button>
-            </div>
+            {role === 'user' && (
+                <div style={{ display: 'flex', justifyContent: 'center', maxWidth: '790px', margin: 'auto' }}>
+                    <h2 style={{ marginRight: 'auto' }}>Compensation</h2>
+                    <Button type="primary" onClick={showModal}>
+                        Create compensation
+                    </Button>
+                </div>
+            )}
 
             <div style={{ padding: '20px' }}>
                 <Card
@@ -162,22 +171,29 @@ const Indemnity = () => {
                         margin: 'auto',
                     }}
                 >
-                    <Title level={4}>Lịch sử bồi thường</Title>
+                    <Title level={4}>Compensation history</Title>
                     {loading ? (
                         <p>Loading...</p>
                     ) : compensations.length === 0 ? (
                         <div style={{ display: 'flex' }}>
                             <img src={Khong} alt="" />
                             <Paragraph>
-                                <p style={{ marginTop: '50px' }}>Không có yêu cầu bồi thường</p>
-                                <p style={{ marginBottom: '-20px' }}>
-                                    Hiện tại bạn chưa có yêu cầu bồi thường nào được tạo.
-                                </p>
+                                <p style={{ marginTop: '50px' }}>No claim</p>
+                                <p style={{ marginBottom: '-20px' }}>You currently have no claims.</p>
                             </Paragraph>
                         </div>
                     ) : (
                         compensations.map((compensation) => (
                             <Paragraph key={compensation.id}>
+                                {role === 'admin' && (
+                                    <>
+                                        <strong>Customer name:</strong> {compensation.customerName} -{' '}
+                                        {compensation.customerPhone}
+                                        <br />
+                                        <strong>Customer vehicle name:</strong> {compensation.customerVehicle}
+                                        <br />
+                                    </>
+                                )}
                                 <strong>Type:</strong> {compensation.type}
                                 <br />
                                 <strong>Description:</strong> {compensation.description}
@@ -230,13 +246,13 @@ const Indemnity = () => {
 
             <Modal title="Tạo yêu cầu bồi thường" open={isModalVisible} onCancel={handleCancel} footer={null}>
                 <p>
-                    <b>Full name:</b> {user.fullname}
+                    <b>Full name:</b> {user?.fullname}
                 </p>
                 <p>
-                    <b>Phone number:</b> {user.phone}
+                    <b>Phone number:</b> {user?.phone}
                 </p>
                 <p>
-                    <b>Email:</b> {user.email}
+                    <b>Email:</b> {user?.email}
                 </p>
                 <Form className={styles.form} layout="vertical" onFinish={onFinish}>
                     <Form.Item label="Type" name="type" rules={[{ required: true, message: 'Please select a type!' }]}>
@@ -278,7 +294,9 @@ const Indemnity = () => {
                     </Form.Item>
                 </Form>
             </Modal>
-            {chatId && <Chat chatId={chatId} role="User" showChat={true} ref={chatRef} />}
+            {chatId && (
+                <Chat chatId={chatId} role={role === 'user' ? 'User' : 'Employee'} showChat={true} ref={chatRef} />
+            )}
         </Wrapper>
     );
 };

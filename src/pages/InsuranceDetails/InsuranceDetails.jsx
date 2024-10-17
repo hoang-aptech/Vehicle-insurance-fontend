@@ -257,7 +257,7 @@ const InsuranceAutomotivePhysical = () => {
                         position: 'fixed',
                         maxWidth: '100%',
                         margin: 'auto',
-                        height: '10vh',
+                        height: '60px',
                         left: 0,
                         right: 0,
                         zIndex: 1,
@@ -279,8 +279,6 @@ const InsuranceAutomotivePhysical = () => {
                             display: activeButton === '4' ? 'none' : 'block',
                         }}
                     >
-                        <img src={dataApi.section1.image} alt="Thông tin bảo hiểm" />
-
                         <Row justify="space-around">
                             {dataApi.section2.buttons.map((button, index) => (
                                 <Button
@@ -391,7 +389,7 @@ const InsuranceAutomotivePhysical = () => {
                 <Col span={20}>
                     <h1 id="5">{dataApi.section2.benefitTitle}</h1>
                     <h6 id="5">{dataApi.section2.description}</h6>
-                    <p style={{ margin: 'auto', minWidth: '900px' }}>{dataApi.section2.benefitDescription}</p>
+                    <p style={{ margin: 'auto' }}>{dataApi.section2.benefitDescription}</p>
                     <Row
                         justify="center"
                         style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}
@@ -500,7 +498,6 @@ const InsuranceAutomotivePhysical = () => {
                 <p
                     style={{
                         margin: '0 auto',
-                        minWidth: '600px',
                         marginBottom: '30px',
                         textAlign: 'center',
                         fontSize: '1.5rem',

@@ -85,9 +85,6 @@ function Footer() {
                         <Link to="/">For Businesses</Link>
                     </div>
                     <div className={cx('item-box')}>
-                        <h5>Insurance</h5>
-                    </div>
-                    <div className={cx('item-box')}>
                         <h5>Support</h5>
                         <Link to="/">Contact Us</Link>
                     </div>
@@ -97,39 +94,26 @@ function Footer() {
                         <Link to="/">One team Blog</Link>
                         <Link to="/">Terms &amp; Conditions</Link>
                         <Link to="/">Privacy Policy</Link>
+                    </div>
+                    <div className={cx('item-box')}>
+                        <h5>Back account test</h5>
+                        <p>
+                            <strong>Bank: </strong>NCB
+                        </p>
+                        <p>
+                            <strong>Bank account number: </strong>9704198526191432198
+                        </p>
+                        <p>
+                            <strong>Bank account holder: </strong>NGUYEN VAN A
+                        </p>
+                        <p>
+                            <strong>Release date: </strong>07/15
+                        </p>
+                        <p>
+                            <strong>OTP Code: </strong>123456
+                        </p>
                     </div>
                 </div>
-                {/* <div className={cx('nav-section')}>
-                    <div>
-                        <h5>About One team</h5>
-                        <Link to="/">About Us</Link>
-                        <br />
-                        <Link to="/">One team Reviews</Link>
-                        <br />
-                        <Link to="/">Community Contributions</Link>
-                        <br />
-                        <Link to="/">Careers</Link>
-                        <br />
-                        <Link to="/">For Businesses</Link>
-                    </div>
-                    <div>
-                        <h5>Insurance</h5>
-                    </div>
-                    <div>
-                        <h5>Support</h5>
-                        <Link to="/">Contact Us</Link>
-                    </div>
-                    <div>
-                        <h5>Others</h5>
-                        <Link to="/">Insurance Glossary</Link>
-                        <br />
-                        <Link to="/">One team Blog</Link>
-                        <br />
-                        <Link to="/">Terms &amp; Conditions</Link>
-                        <br />
-                        <Link to="/">Privacy Policy</Link>
-                    </div>
-                </div> */}
             </div>
         </footer>
     );
