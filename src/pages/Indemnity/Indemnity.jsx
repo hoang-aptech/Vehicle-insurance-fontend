@@ -147,9 +147,9 @@ const Indemnity = () => {
         <Wrapper>
             {contextHolder}
             <div style={{ display: 'flex', justifyContent: 'center', maxWidth: '790px', margin: 'auto' }}>
-                <h2 style={{ marginRight: 'auto' }}>Bồi thường</h2>
+                <h2 style={{ marginRight: 'auto' }}>Indemnity</h2>
                 <Button type="primary" onClick={showModal}>
-                    Tạo bồi thường
+                    Create Indemnity
                 </Button>
             </div>
 
@@ -162,16 +162,16 @@ const Indemnity = () => {
                         margin: 'auto',
                     }}
                 >
-                    <Title level={4}>Lịch sử bồi thường</Title>
+                    <Title level={4}>Indemnity History</Title>
                     {loading ? (
                         <p>Loading...</p>
                     ) : compensations.length === 0 ? (
                         <div style={{ display: 'flex' }}>
                             <img src={Khong} alt="" />
                             <Paragraph>
-                                <p style={{ marginTop: '50px' }}>Không có yêu cầu bồi thường</p>
+                                <p style={{ marginTop: '50px' }}>No indemnity requests</p>
                                 <p style={{ marginBottom: '-20px' }}>
-                                    Hiện tại bạn chưa có yêu cầu bồi thường nào được tạo.
+                                    You have not created any indemnity requests yet.
                                 </p>
                             </Paragraph>
                         </div>
@@ -198,37 +198,37 @@ const Indemnity = () => {
                         ))
                     )}
 
-                    <Title level={4}>Ưu điểm của cổng bồi thường Saladin</Title>
+                    <Title level={4}>Advantages of Oneteam Indemnity Portal</Title>
                     <div style={{ display: 'flex', marginBottom: '15px' }}>
                         <img src={Icon1} alt="" />
                         <Paragraph style={{ marginTop: '20px', marginLeft: '20px' }}>
-                            <strong style={{ display: 'flex' }}>Tạo bồi thường nhanh chóng:</strong> Tạo yêu cầu bồi
-                            thường chỉ trong vài phút theo hướng dẫn của hệ thống.
+                            <strong style={{ display: 'flex' }}>Quick indemnity creation:</strong> Create indemnity
+                            requests in just a few minutes following the system's guidance.
                         </Paragraph>
                     </div>
                     <div style={{ display: 'flex', marginBottom: '40px' }}>
                         <img src={Icon2} alt="" />
                         <Paragraph style={{ marginTop: '20px', marginLeft: '20px' }}>
-                            <strong style={{ display: 'flex' }}>Quản lý và cập nhật dễ dàng:</strong> Quản lý và cập
-                            nhật tình trạng yêu cầu bồi thường kịp thời, nhanh chóng.
+                            <strong style={{ display: 'flex' }}>Easy management and updates:</strong> Manage and update
+                            the status of indemnity requests promptly and quickly.
                         </Paragraph>
                     </div>
 
-                    <Title level={5}>Liên hệ Saladin</Title>
+                    <Title level={5}>Contact Oneteam</Title>
                     <div className={styles.container}>
                         <Paragraph className={styles.paragraph}>
                             <MailOutlined className={styles.icon} />
-                            Email: <a href="mailto:cs@saladin.vn">cs@saladin.vn</a>
+                            Email: <a href="mailto:cs@saladin.vn">cs@Oneteam.vn</a>
                         </Paragraph>
                         <Paragraph className={styles.paragraph}>
                             <PhoneOutlined className={styles.icon} />
-                            Điện thoại: 1900 638 454
+                            Phone: 1900 638 454
                         </Paragraph>
                     </div>
                 </Card>
             </div>
 
-            <Modal title="Tạo yêu cầu bồi thường" open={isModalVisible} onCancel={handleCancel} footer={null}>
+            <Modal title="Create Indemnity Request" open={isModalVisible} onCancel={handleCancel} footer={null}>
                 <p>
                     <b>Full name:</b> {user.fullname}
                 </p>
@@ -261,24 +261,33 @@ const Indemnity = () => {
                             ))}
                         </Select>
                     </Form.Item>
-                    <Form.Item label="Place" name="place" rules={[{ required: true, message: 'Please enter place!' }]}>
-                        <Input />
-                    </Form.Item>
                     <Form.Item
                         label="Description"
                         name="description"
-                        rules={[{ required: true, message: 'Please enter request description!' }]}
+                        rules={[
+                            {
+                                required: true,
+                                message: 'Please provide a description!',
+                            },
+                        ]}
                     >
                         <Input.TextArea rows={4} />
                     </Form.Item>
+                    <Form.Item
+                        label="Place"
+                        name="place"
+                        rules={[{ required: true, message: 'Please provide the place where the event occurred!' }]}
+                    >
+                        <Input />
+                    </Form.Item>
                     <Form.Item>
                         <Button type="primary" htmlType="submit">
-                            Send
+                            Submit
                         </Button>
                     </Form.Item>
                 </Form>
             </Modal>
-            {chatId && <Chat chatId={chatId} role="User" showChat={true} ref={chatRef} />}
+            <Chat ref={chatRef} csId={chatId} />
         </Wrapper>
     );
 };

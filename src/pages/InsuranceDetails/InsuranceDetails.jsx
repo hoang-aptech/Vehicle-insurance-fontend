@@ -479,7 +479,7 @@ const InsuranceAutomotivePhysical = () => {
                                 <h3 style={{ fontSize: '1rem', fontWeight: 'bold' }}>{feature.title}</h3>
                                 <div className={styles.featureContent}>
                                     <button className={styles.featureButton}>
-                                        Đọc thêm
+                                        Read more
                                         <ArrowRightOutlined style={{ marginLeft: '8px' }} />
                                     </button>
                                     <img
