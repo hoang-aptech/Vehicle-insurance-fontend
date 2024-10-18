@@ -195,11 +195,11 @@ const Dashboard = () => {
                                 </Select.Option>
                             ))}
                         </Select>
-                        <PieChart width={690} height={400}>
+                        <PieChart width={520} height={400}>
                             <Pie
                                 data={monthlyData}
                                 dataKey="value"
-                                cx={340}
+                                cx={260}
                                 cy={200}
                                 labelLine={false}
                                 label={({ InsurancePackage, value }) =>

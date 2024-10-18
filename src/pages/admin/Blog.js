@@ -191,10 +191,10 @@ const BlogAdmin = () => {
         setIsDetailModalVisible(true);
     };
 
-    const showDeletedBlogsModal = () => {
-        fetchDeletedBlogs();
-        setIsDeletedModalVisible(true);
-    };
+    // const showDeletedBlogsModal = () => {
+    //     fetchDeletedBlogs();
+    //     setIsDeletedModalVisible(true);
+    // };
 
     const handleRestore = async (id) => {
         try {
