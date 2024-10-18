@@ -255,8 +255,7 @@ const InsuranceAutomotivePhysical = () => {
                     style={{
                         backgroundColor: '#f8fafa',
                         position: 'fixed',
-                        maxWidth: '100%',
-                        margin: 'auto',
+                        width: '100%',
                         height: '10vh',
                         left: 0,
                         right: 0,
@@ -267,7 +266,6 @@ const InsuranceAutomotivePhysical = () => {
                 >
                     <div
                         style={{
-                            position: 'fixed',
                             maxWidth: '900px',
                             margin: 'auto',
                             top: 'var(--header-height)',
@@ -279,11 +277,10 @@ const InsuranceAutomotivePhysical = () => {
                             display: activeButton === '4' ? 'none' : 'block',
                         }}
                     >
-                        <img src={dataApi.section1.image} alt="Thông tin bảo hiểm" />
-
                         <Row justify="space-around">
                             {dataApi.section2.buttons.map((button, index) => (
                                 <Button
+                                    key={index}
                                     type={index === 0 ? 'primary' : 'default'}
                                     size="large"
                                     style={{
@@ -292,10 +289,10 @@ const InsuranceAutomotivePhysical = () => {
                                         border: activeButton === (index + 1).toString() ? 'none' : '1px solid #4caf50',
                                         borderRadius: '10px',
                                         flex: 1,
-                                        margin: '0 10px',
+                                        margin: '0 5px',
+                                        minWidth: '100px',
                                     }}
                                     onClick={() => handleScrollTo((index + 1).toString())}
-                                    key={index}
                                 >
                                     {button.text}
                                 </Button>
