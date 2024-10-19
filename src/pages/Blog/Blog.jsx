@@ -7,7 +7,6 @@ import config from '~/config';
 import { Link } from 'react-router-dom';
 
 const { Title } = Typography;
-
 const { Meta } = Card;
 
 const Blog = () => {
@@ -56,16 +55,16 @@ const Blog = () => {
     return (
         <div className={styles.blogDetailsContainer}>
             <div className={styles.blogHeader}>
-                <Title level={1} style={{ fontSize: '16px', color: 'green' }}>
-                    Saladin Blog
+                <Title level={1} style={{ fontSize: '5rem', color: 'green' }}>
+                    Oneteam Blog
                 </Title>
                 <Title level={2} style={{ fontSize: '34px' }}>
-                    Tự tin sống, tự tin yêu thương cùng Saladin
+                    Confident living, confident loving with Oneteam
                 </Title>
             </div>
             <div className={styles.blogContent}>
                 <div className={styles.searchBar}>
-                    <Input placeholder="Tìm kiếm bài báo" suffix={<SearchOutlined />} />
+                    <Input placeholder="Search for an article" suffix={<SearchOutlined />} />
                 </div>
 
                 <Row gutter={[16, 16]} style={{ marginTop: '40px' }}>

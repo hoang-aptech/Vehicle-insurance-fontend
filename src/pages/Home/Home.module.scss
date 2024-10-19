@@ -1,4 +1,5 @@
 .saladinContainer {
+    width: 100%;
     position: relative;
     padding: 20px;
     background-repeat: no-repeat;
@@ -10,17 +11,16 @@
     justify-content: center;
     min-height: 100vh;
     overflow: hidden;
-
-    &::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(255, 255, 255, 0.5);
-        z-index: 0;
-    }
+}
+.saladinContainer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.5);
+    z-index: 0;
 }
 
 .saladinHeader {
@@ -30,51 +30,45 @@
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
-
-    img {
-        max-width: 100%;
-        height: auto;
-        margin: 20px auto;
-        display: block;
-    }
+}
+.saladinHeader img {
+    max-width: 100%;
+    height: auto;
+    margin: 20px auto;
+    display: block;
 }
 
 .textContainer {
     text-align: center;
     width: 100%;
-
-    h1 {
-        color: #4caf50;
-        font-size: 5rem;
-        margin-right: -20px;
-    }
-
-    p {
-        font-size: 20px;
-        margin: 10px 0;
-        margin-right: -20px;
-    }
+}
+.textContainer h1 {
+    color: #4caf50;
+    font-size: 5rem;
+    margin-right: -20px;
+}
+.textContainer p {
+    font-size: 20px;
+    margin: 10px 0;
+    margin-right: -20px;
 }
 
 @media (min-width: 768px) {
     .saladinHeader {
         flex-direction: row;
         justify-content: space-between;
-
-        img {
-            max-width: 130%;
-            margin-left: -150px;
-        }
-
-        .textContainer {
-            text-align: left;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-        }
+    }
+    .saladinHeader img {
+        max-width: 130%;
+        margin-left: -150px;
+    }
+    .saladinHeader .textContainer {
+        text-align: left;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
     }
 }
-
 .saladinContent1 {
     display: flex;
     justify-content: center;
@@ -122,31 +116,64 @@
 }
 
 .saladinCarouselContainer {
+    width: 100%;
     max-width: 1200px;
-    margin: 40px auto;
+    margin: 0 auto;
     text-align: center;
+    padding: 0 20px;
 
     h2 {
         margin-bottom: 20px;
         font-size: 4rem;
         color: #4caf50;
     }
+
+    .saladinCarouselItem {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .saladinCarouselImageContainer {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin: 0 auto;
+    }
+
+    .saladinCarouselImage {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        display: block;
+        margin: 10px auto;
+    }
 }
 
-.saladinCarouselItem {
-    display: flex;
-    justify-content: center;
+@media (max-width: 1200px) {
+    h2 {
+        font-size: 3.5rem;
+    }
 }
 
-.saladinCarouselImageContainer {
-    display: flex;
-    justify-content: space-around;
+@media (max-width: 992px) {
+    .saladinCarouselImage {
+        width: 100%;
+        margin-bottom: 20px;
+    }
 }
 
-.saladinCarouselImage {
-    width: 48%;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+@media (max-width: 576px) {
+    h2 {
+        font-size: 3rem;
+    }
+
+    .saladinCarouselImage {
+        width: 100%;
+        object-fit: cover;
+    }
 }
 
 .saladinContainer2 {
@@ -196,53 +223,108 @@ p {
 
 .cardContainer {
     max-width: 400px;
-    img {
-        width: 100px;
-        height: 100px;
-        // margin: 0 auto;
-        display: block;
-    }
-    h3 {
-        font-size: 2.5rem;
-        margin: 16px 0;
-    }
-
-    ul {
-        li {
-            font-size: 2rem;
-        }
-    }
+}
+.cardContainer img {
+    width: 100px;
+    height: 100px;
+    display: block;
+}
+.cardContainer h3 {
+    font-size: 2.5rem;
+    margin: 16px 0;
+}
+.cardContainer ul li {
+    font-size: 2rem;
 }
 
 .saladinTrang4Container {
-    max-width: 1200px;
+    max-width: 1300px;
     margin: 0 auto;
     padding: 20px;
-
-    .saladinContainer2 {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
+}
+.saladinTrang4Container .saladinContainer2 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.saladinTrang4Container .saladinBlock {
+    flex: 1 1 50%;
+    max-width: 550px;
+}
+.saladinTrang4Container .saladinBlock h2 {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+.saladinTrang4Container .saladinBlock p {
+    font-size: 2rem;
+    margin: 0;
+}
+@media (max-width: 1200px) {
+    .saladinTrang4Container .saladinBlock {
+        flex: 1 1 100%;
     }
+}
 
-    .saladinBlock {
-        flex: 1 1 calc(50%);
-        max-width: 500px;
+.saladinMainContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
 
-        h2 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+.contactItem {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    width: 100%;
+    justify-content: flex-start;
+}
 
-        p {
-            font-size: 2rem;
-            margin: 0;
-        }
-    }
+.contactIcon,
+.qrImage {
+    width: 75px;
+    height: 75px;
+    margin-right: 16px;
+    background-color: #4caf50;
+    color: white;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
 
-    @media (max-width: 1200px) {
-        .saladinBlock {
-            flex: 1 1 100%;
-        }
-    }
+.qrImage {
+    border-radius: 4px;
+    background-color: transparent;
+    object-fit: cover;
+}
+
+.contactTextWrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.contactText {
+    color: #4caf50;
+    font-weight: bold;
+    font-size: 18px;
+    line-height: 1.2;
+    margin-top: -20px;
+}
+
+.contactSubtext {
+    color: black;
+    font-size: 14px;
+    line-height: 1.2;
+    margin: 0;
+}
+
+.contactItem > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }

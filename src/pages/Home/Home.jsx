@@ -40,7 +40,7 @@ import { useNavigate } from 'react-router-dom';
 import emailjs from 'emailjs-com';
 import config from '~/config';
 
-const carouselImages = [carou1, carou2, carou3, carou4, carou5, carou6, carou7];
+const carouselImages = [carou1, carou2, carou3, carou4, carou5, carou6, carou7, carou1];
 
 const data = [
     {
@@ -69,13 +69,13 @@ const data = [
 const partnersData = [
     {
         title: 'Insurance Partners',
-        description: 'Saladin partners with leading insurance providers to bring you the most choices',
+        description: 'Oneteam partners with leading insurance providers to bring you the most choices',
         images: [lg1, lg2, lg3, lg4, lg5, lg6, lg7, lg8, lg9],
     },
     {
         title: 'Affiliate Partners',
         description:
-            'Saladin partners with businesses to provide comprehensive insurance protection services for your life',
+            'Oneteam partners with businesses to provide comprehensive insurance protection services for your life',
         images: [lg10, lg11, lg12, lg13, lg14, lg15, lg16, lg17, lg18],
     },
 ];
@@ -97,7 +97,6 @@ const Home = () => {
         const [form] = Form.useForm();
         const [success, setSuccess] = useState(false);
         const [insurancesData, setInsurancesData] = useState([]);
-        // const [setInsuranceDetails] = useState([]);
         const onFinish = async (values) => {
             try {
                 const newAdvertisement = {
@@ -111,7 +110,6 @@ const Home = () => {
                 if (adResponse.status === 201) {
                     console.log('Advertisement added successfully.');
                     const response = await axios.get(`https://localhost:7289/api/insurances/type/${values.product}`);
-                    // setInsuranceDetails(response.data);
 
                     const insuranceInfo = response.data
                         .map(
@@ -155,58 +153,54 @@ const Home = () => {
                 style={{ maxWidth: '1050px', margin: 'auto', marginTop: '32px', marginBottom: '40px' }}
             >
                 <Col span={24}>
-                    <h1 style={{ textAlign: 'center', fontSize: '3rem', color: '#4caf50' }}>
+                    <h1 style={{ textAlign: 'center', fontSize: '4rem', color: '#4caf50' }}>
                         24/7 Consulting and Support
                     </h1>
-                    <p style={{ textAlign: 'center', minWidth: '600px', margin: 'auto' }}>
-                        The Saladin team is always ready to support you throughout your journey of buying and using
+                    <p style={{ textAlign: 'center', maxWidth: '800px', margin: 'auto', fontSize: '2.5rem' }}>
+                        The Oneteam team is always ready to support you throughout your journey of buying and using
                         insurance.
                     </p>
                 </Col>
                 <Col xs={24} sm={12} md={12}>
-                    <div
-                        style={{
-                            padding: '20px',
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                            textAlign: 'center',
-                        }}
-                    >
-                        <h3>Additional information</h3>
-                        <div
-                            style={{ display: 'flex', alignItems: 'center', marginBottom: '10px', paddingTop: '20px' }}
-                        >
-                            <PhoneOutlined
-                                style={{
-                                    marginRight: '8px',
-                                    background: '#4caf50',
-                                    padding: '14px',
-                                    color: 'white',
-                                    borderRadius: '4px',
-                                }}
-                            />
-                            <p style={{ marginTop: '-20px' }}>Row 1: Information 1</p>
+                    <div className={styles.saladinMainContainer}>
+                        <div className={styles.contactItem}>
+                            <div className={styles.contactIcon}>
+                                <PhoneOutlined />
+                            </div>
+                            <div>
+                                <p className={styles.contactText}>1900 638 454</p>
+                                <p className={styles.contactSubtext}>24/7 support hotline</p>
+                            </div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                            <MailOutlined
-                                style={{
-                                    marginRight: '8px',
-                                    background: '#4caf50',
-                                    padding: '14px',
-                                    color: 'white',
-                                    borderRadius: '4px',
-                                }}
-                            />
-                            <p style={{ marginTop: '-20px' }}>Row 2: Information 2</p>
+
+                        <div className={styles.contactItem}>
+                            <div className={styles.contactIcon}>
+                                <MailOutlined />
+                            </div>
+                            <div>
+                                <p className={styles.contactText}>cs@saladin.vn</p>
+                                <p className={styles.contactSubtext}>Email Saladin for support</p>
+                            </div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                            <img src={QrZalo} alt="qr zalo" style={{ width: '50px', marginRight: '8px' }} />
-                            <p style={{ marginTop: '-20px' }}>Row 3: Information 3</p>
+
+                        <div className={styles.contactItem}>
+                            <div className={styles.contactIcon}>
+                                <img style={{ minWidth: '85px ', minHeight: '85px' }} src={QrZalo} alt="qr zalo" />
+                            </div>
+                            <div>
+                                <p className={styles.contactText}>Saladin Zalo OA</p>
+                                <p className={styles.contactSubtext}>Connect with Saladin on Zalo</p>
+                            </div>
                         </div>
-                        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                            <img src={QrFace} alt="qr face" style={{ width: '50px', marginRight: '8px' }} />
-                            <p style={{ marginTop: '-20px' }}>Row 4: Information 4</p>
+
+                        <div className={styles.contactItem}>
+                            <div className={styles.contactIcon}>
+                                <img style={{ maxWidth: '85px', maxHeight: '85px' }} src={QrFace} alt="qr face" />
+                            </div>
+                            <div>
+                                <p className={styles.contactText}>Saladin Facebook</p>
+                                <p className={styles.contactSubtext}>Connect with Saladin on Facebook</p>
+                            </div>
                         </div>
                     </div>
                 </Col>
@@ -228,7 +222,7 @@ const Home = () => {
                                     }}
                                 >
                                     <h2>Get advice now</h2>
-                                    <p>Leave your information to receive advice and offers from Saladin.</p>
+                                    <p>Leave your information to receive advice and offers from Oneteam.</p>
                                     <Form.Item
                                         label="Full name"
                                         name="name"
@@ -334,7 +328,7 @@ const Home = () => {
                     <Row justify="center" align="middle" className={styles.saladinHeader}>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12} className={styles.textContainer}>
                             <h1>Comprehensive insurance for Vietnamese</h1>
-                            <p>Live confidently, love confidently with Saladin</p>
+                            <p>Live confidently, love confidently with Oneteam</p>
                         </Col>
                         <Col xs={24} sm={24} md={12} lg={12} xl={12}>
                             <img src={Hero} alt="hero" />
@@ -358,28 +352,34 @@ const Home = () => {
                         ))}
                     </Row>
                 </div>
-
                 {/* Carousel section */}
+
                 <div className={`${styles.saladinCarouselContainer}`}>
-                    <h2>What's new in Saladin?</h2>
+                    <h2>What's new in Oneteam?</h2>
                     <Carousel autoplay dots={false}>
                         {groupedImages.map((group, index) => (
                             <div key={index} className={`${styles.saladinCarouselItem}`}>
-                                <div className={`${styles.saladinCarouselImageContainer}`}>
+                                <Row gutter={[16, 16]} justify="center">
                                     {group.map((image, imgIndex) => (
-                                        <img
+                                        <Col
+                                            xs={24}
+                                            sm={12}
                                             key={imgIndex}
-                                            src={image}
-                                            alt={`Slide ${index * 2 + imgIndex + 1}`}
-                                            className={`${styles.saladinCarouselImage}`}
-                                        />
+                                            className={`${styles.saladinCarouselImageContainer}`}
+                                        >
+                                            <img
+                                                src={image}
+                                                alt={`Slide ${index * 2 + imgIndex + 1}`}
+                                                className={`${styles.saladinCarouselImage}`}
+                                                style={{ width: '100%', height: 'auto' }}
+                                            />
+                                        </Col>
                                     ))}
-                                </div>
+                                </Row>
                             </div>
                         ))}
                     </Carousel>
                 </div>
-
                 {/* Trang 3 section */}
                 <div className={`${styles.saladinTrang3Container}`}>
                     <Row justify="center" align="middle">
@@ -396,7 +396,7 @@ const Home = () => {
                                     Insurance buying experience fast and convenient
                                 </Title>
                                 <Paragraph style={{ maxWidth: '500px', fontSize: '2rem' }}>
-                                    At Saladin, in addition to finding a variety of insurance product options from
+                                    At Oneteam, in addition to finding a variety of insurance product options from
                                     standard to advanced, customers can also freely choose benefits according to their
                                     needs to create the most suitable insurance package.
                                 </Paragraph>
@@ -430,7 +430,6 @@ const Home = () => {
                         ))}
                     </Row>
                 </div>
-
                 {/* Trang 4 section */}
                 <div className={`${styles.saladinTrang4Container}`}>
                     <div className={`${styles.saladinContainer2}`}>
@@ -455,7 +454,7 @@ const Home = () => {
                         ))}
                     </div>
                 </div>
-                <div style={{ backgroundColor: '#f8f8fa' }}>
+                <div style={{ backgroundColor: '#f8f8fa', width: '100%' }}>
                     <ContactForm />
                 </div>
             </div>

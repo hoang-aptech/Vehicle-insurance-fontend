@@ -22,6 +22,7 @@ import AdminLayout from '~/layouts/DefaultLayout/AdminLayout';
 import InsurancePackage from '~/pages/admin/InsurancePackage';
 import AdminLogin from '~/pages/AdminLogin';
 import SendReminderEmails from '~/pages/admin/send-email-reminder/SendEmailReminder';
+import HomeDetails from '~/pages/AdminHomeDetails/AdminHomedetails';
 
 // Public routes
 const publicRoutes = [
@@ -35,6 +36,7 @@ const publicRoutes = [
     // { path: config.routes.chat2, component: Chat, params: { chatId: 3, role: 'Employee' } },
     { path: config.routes.insurancePackages, component: InsurancePackages },
     { path: config.routes.contract, component: Contract },
+    { path: config.routes.homeDetails, component: HomeDetails },
     { path: config.routes.loginAdmin, component: AdminLogin, layout: null },
 ];
 
