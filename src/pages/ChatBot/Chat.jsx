@@ -173,7 +173,7 @@ const ChatApp = forwardRef(({ chatId, role }, ref) => {
                 centered
             >
                 <div className={styles['chat-header']}>
-                    <h3>ChatBot Oneteam</h3>
+                    <h3>Chat with Oneteam</h3>
                     <Button onClick={handleCancel} className={styles['close-button']}>
                         X
                     </Button>

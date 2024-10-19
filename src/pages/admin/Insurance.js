@@ -178,9 +178,11 @@ const Insurance = () => {
     ];
 
     const handleDescriptionChange = (content) => {
+        form.setFieldValue('description', content);
         setDescriptionContent(content);
     };
     const handleClauseChange = (content) => {
+        form.setFieldValue('clause', content);
         setClauseContent(content);
     };
 

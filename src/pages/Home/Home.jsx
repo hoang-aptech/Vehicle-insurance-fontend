@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Row, Col, Card, Tag, Carousel, Typography, Form, Input, Select, Button } from 'antd';
+import { Row, Col, Card, Tag, Carousel, Typography, Form, Input, Select, Button, notification, Modal } from 'antd';
 import styles from './Home.module.scss';
 import Hero from '../../assets/Images/hero_mascot.png';
 import carou1 from '../../assets/Images/anh1.png';
@@ -69,7 +69,7 @@ const data = [
 const partnersData = [
     {
         title: 'Insurance Partners',
-        description: 'Oneteam partners with leading insurance providers to bring you the most choices',
+        description: 'One team partners with leading insurance providers to bring you the most choices',
         images: [lg1, lg2, lg3, lg4, lg5, lg6, lg7, lg8, lg9],
     },
     {
@@ -86,6 +86,20 @@ const { Title, Paragraph } = Typography;
 
 const Home = () => {
     const groupedImages = [];
+    const [api, contextHolder] = notification.useNotification();
+    const [isModalOpen, setIsModalOpen] = useState(true);
+    const handleOk = () => {
+        setIsModalOpen(false);
+    };
+    const handleCancel = () => {
+        setIsModalOpen(false);
+    };
+    const openNotificationWithIcon = (type, message, description) => {
+        api[type]({
+            message: message,
+            description: description,
+        });
+    };
     for (let i = 0; i < carouselImages.length; i += 2) {
         groupedImages.push(carouselImages.slice(i, i + 2));
     }
@@ -97,6 +111,7 @@ const Home = () => {
         const [form] = Form.useForm();
         const [success, setSuccess] = useState(false);
         const [insurancesData, setInsurancesData] = useState([]);
+        // const [setInsuranceDetails] = useState([]);
         const onFinish = async (values) => {
             try {
                 const newAdvertisement = {
@@ -131,6 +146,11 @@ const Home = () => {
                     emailjs.send('service_xe6f9kj', 'template_3z2uslk', emailParams, 'laGrWQghcmlQSS4rS').then(
                         (result) => {
                             console.log('Email successfully sent!');
+                            openNotificationWithIcon(
+                                'success',
+                                'Email successfully sent',
+                                'Thank you for contacting us! We will contact you as soon as possible.',
+                            );
                             setSuccess(true);
                         },
                         (error) => {
@@ -296,7 +316,7 @@ const Home = () => {
                         </Row>
                     </div>
                 </Col>
-                <img src={MascotSp} alt="" style={{ maxWidth: '800px', height: '30vh', margin: '0 auto' }}></img>
+                <img src={MascotSp} alt="" style={{ width: '100%', maxWidth: '800px', margin: '0 auto' }}></img>
             </Row>
         );
     };
@@ -322,6 +342,7 @@ const Home = () => {
 
     return (
         <>
+            {contextHolder}
             <div className={`${styles.saladinMainContainer}`}>
                 {/* Header section */}
                 <div className={`${styles.saladinContainer}`}>
@@ -458,6 +479,25 @@ const Home = () => {
                     <ContactForm />
                 </div>
             </div>
+            <Modal title="Bank test" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+                <h3>Bank account information to test</h3>
+                <p>
+                    <strong>Bank: </strong>NCB
+                </p>
+                <p>
+                    <strong>Bank account number: </strong>9704198526191432198
+                </p>
+                <p>
+                    <strong>Bank account holder: </strong>NGUYEN VAN A
+                </p>
+                <p>
+                    <strong>Release date: </strong>07/15
+                </p>
+                <p>
+                    <strong>OTP Code: </strong>123456
+                </p>
+                <p>You can review all this information at the footer.</p>
+            </Modal>
         </>
     );
 };

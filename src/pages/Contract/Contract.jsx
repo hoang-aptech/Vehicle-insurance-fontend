@@ -110,7 +110,7 @@ const Contract = () => {
                 <Title level={2}>Contract</Title>
 
                 <Row gutter={16}>
-                    <Col span={12}>
+                    <Col span={24} lg={12}>
                         <Title level={4}>Party A</Title>
                         <Paragraph>Name: One team company</Paragraph>
                         <Paragraph>

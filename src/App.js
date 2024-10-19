@@ -43,13 +43,19 @@ function App() {
                         const Page = route.component;
                         let Layout = route.layout || AdminLayout;
 
+                        let params = {};
+
+                        if (typeof route.params === 'object') {
+                            params = route.params;
+                        }
+
                         return (
                             <Route key={route.path} element={<AdminPrivateRoute />}>
                                 <Route
                                     path={route.path}
                                     element={
                                         <Layout>
-                                            <Page />
+                                            <Page {...params} />
                                         </Layout>
                                     }
                                 />

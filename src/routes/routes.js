@@ -32,8 +32,6 @@ const publicRoutes = [
     { path: config.routes.insuranceDetails, component: InsuranceDetails },
     { path: config.routes.blog, component: Blog },
     { path: config.routes.blogDetails, component: BlogDetails },
-    // { path: config.routes.chat, component: Chat, params: { chatId: 1, role: 'User' } },
-    // { path: config.routes.chat2, component: Chat, params: { chatId: 3, role: 'Employee' } },
     { path: config.routes.insurancePackages, component: InsurancePackages },
     { path: config.routes.contract, component: Contract },
     { path: config.routes.homeDetails, component: HomeDetails },
@@ -51,6 +49,7 @@ const adminRoutes = [
     { path: config.routes.blogAdmin, component: BlogAmin, layout: AdminLayout },
     { path: config.routes.insurancePackage, component: InsurancePackage, layout: AdminLayout },
     { path: config.routes.sendEmailReminderAdmin, component: SendReminderEmails, layout: AdminLayout },
+    { path: config.routes.indemnityAdmin, component: Indemnity, params: { role: 'admin' } },
 ];
 
 // Private routes

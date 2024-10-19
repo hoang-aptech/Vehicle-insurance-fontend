@@ -70,12 +70,6 @@ const BlogAdmin = () => {
             key: 'name',
         },
         {
-            title: 'Description',
-            dataIndex: 'description',
-            key: 'description',
-            render: (text) => <div dangerouslySetInnerHTML={{ __html: text }} />,
-        },
-        {
             title: 'Image',
             dataIndex: 'image',
             key: 'image',
@@ -197,10 +191,10 @@ const BlogAdmin = () => {
         setIsDetailModalVisible(true);
     };
 
-    const showDeletedBlogsModal = () => {
-        fetchDeletedBlogs();
-        setIsDeletedModalVisible(true);
-    };
+    // const showDeletedBlogsModal = () => {
+    //     fetchDeletedBlogs();
+    //     setIsDeletedModalVisible(true);
+    // };
 
     const handleRestore = async (id) => {
         try {
@@ -273,14 +267,14 @@ const BlogAdmin = () => {
 
             <Modal title="Blog Details" open={isDetailModalVisible} onCancel={handleModalCancel} footer={null}>
                 {selectedBlog && (
-                    <Card style={{ padding: 16 }}>
+                    <Card style={{ padding: 16, overflow: 'auto' }}>
                         <h3>{selectedBlog.name}</h3>
                         <div dangerouslySetInnerHTML={{ __html: selectedBlog.description }} />
                         <p>
                             <strong>Image:</strong>
                         </p>
                         <img
-                            src={`data:image/png;base64,${selectedBlog.image_path}`}
+                            src={`data:image/png;base64,${selectedBlog.image}`}
                             alt="Blog"
                             style={{ width: '100%', height: 'auto' }}
                         />

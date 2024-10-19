@@ -255,8 +255,9 @@ const InsuranceAutomotivePhysical = () => {
                     style={{
                         backgroundColor: '#f8fafa',
                         position: 'fixed',
-                        width: '100%',
-                        height: '10vh',
+                        maxWidth: '100%',
+                        margin: 'auto',
+                        height: '60px',
                         left: 0,
                         right: 0,
                         zIndex: 1,
@@ -388,7 +389,7 @@ const InsuranceAutomotivePhysical = () => {
                 <Col span={20}>
                     <h1 id="5">{dataApi.section2.benefitTitle}</h1>
                     <h6 id="5">{dataApi.section2.description}</h6>
-                    <p style={{ margin: 'auto', minWidth: '900px' }}>{dataApi.section2.benefitDescription}</p>
+                    <p style={{ margin: 'auto' }}>{dataApi.section2.benefitDescription}</p>
                     <Row
                         justify="center"
                         style={{ marginTop: 20, display: 'flex', flexWrap: 'wrap', alignItems: 'center' }}
@@ -497,7 +498,6 @@ const InsuranceAutomotivePhysical = () => {
                 <p
                     style={{
                         margin: '0 auto',
-                        minWidth: '600px',
                         marginBottom: '30px',
                         textAlign: 'center',
                         fontSize: '1.5rem',

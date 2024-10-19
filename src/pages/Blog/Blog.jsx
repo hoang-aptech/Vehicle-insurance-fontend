@@ -12,7 +12,7 @@ const { Meta } = Card;
 const Blog = () => {
     const [dataState, setDataState] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const itemsPerPage = 12;
+    const itemsPerPage = 6;
 
     const getDataFromAPI = useCallback(async () => {
         try {
@@ -82,7 +82,12 @@ const Blog = () => {
                             >
                                 <Meta
                                     title={<Link to={item.link}>{item.title}</Link>}
-                                    description={<p className={styles.descriptionBlog}>{item.description}</p>}
+                                    description={
+                                        <div
+                                            className={styles.descriptionBlog}
+                                            dangerouslySetInnerHTML={{ __html: item.description }}
+                                        />
+                                    }
                                 />
                             </Card>
                         </Col>

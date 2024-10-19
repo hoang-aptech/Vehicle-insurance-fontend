@@ -15,7 +15,7 @@ import styles from './Indemnity.module.scss';
 
 const { Title, Paragraph } = Typography;
 
-const Indemnity = () => {
+const Indemnity = ({ role = 'user' }) => {
     const navigate = useNavigate();
     const [api, contextHolder] = notification.useNotification();
     const openNotificationWithIcon = (type, message, description) => {
@@ -25,7 +25,7 @@ const Indemnity = () => {
         });
     };
 
-    const { user, userToken, handleLogoutUser } = useContext(Context);
+    const { user, userToken, handleLogoutUser, adminToken } = useContext(Context);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [compensations, setCompensations] = useState([]);
     const [chatId, setChatId] = useState();
@@ -48,7 +48,7 @@ const Indemnity = () => {
                 process.env.REACT_APP_BACKEND_URL + `/CustomerSupports`,
                 {
                     ...values,
-                    userId: user.id,
+                    userId: 3,
                 },
                 {
                     headers: { Authorization: `Bearer ${userToken}` },
@@ -114,9 +114,14 @@ const Indemnity = () => {
     };
     const fetchCompensations = async () => {
         try {
-            const response = await axios.get(`https://localhost:7289/api/CustomerSupports/by-user/${user.id}`, {
-                headers: { Authorization: `Bearer ${userToken}` },
-            });
+            const response = await axios.get(
+                `https://localhost:7289/api/CustomerSupports/by-role?${
+                    role === 'user' ? `userId=${user.id}` : 'employeeId=3'
+                }`,
+                {
+                    headers: { Authorization: `Bearer ${userToken || adminToken}` },
+                },
+            );
             setCompensations(response.data);
         } catch (err) {
             if (err.status === 401) {
@@ -140,7 +145,9 @@ const Indemnity = () => {
 
     useEffect(() => {
         fetchCompensations();
-        fetchVehicleByUser();
+        if (role === 'user') {
+            fetchVehicleByUser();
+        }
     }, []);
 
     return (
@@ -178,6 +185,15 @@ const Indemnity = () => {
                     ) : (
                         compensations.map((compensation) => (
                             <Paragraph key={compensation.id}>
+                                {role === 'admin' && (
+                                    <>
+                                        <strong>Customer name:</strong> {compensation.customerName} -{' '}
+                                        {compensation.customerPhone}
+                                        <br />
+                                        <strong>Customer vehicle name:</strong> {compensation.customerVehicle}
+                                        <br />
+                                    </>
+                                )}
                                 <strong>Type:</strong> {compensation.type}
                                 <br />
                                 <strong>Description:</strong> {compensation.description}
@@ -218,7 +234,7 @@ const Indemnity = () => {
                     <div className={styles.container}>
                         <Paragraph className={styles.paragraph}>
                             <MailOutlined className={styles.icon} />
-                            Email: <a href="mailto:cs@saladin.vn">cs@Oneteam.vn</a>
+                            Email: <a href="mailto:cs@saladin.vn">cs@oneteam.vn</a>
                         </Paragraph>
                         <Paragraph className={styles.paragraph}>
                             <PhoneOutlined className={styles.icon} />
@@ -230,13 +246,13 @@ const Indemnity = () => {
 
             <Modal title="Create Indemnity Request" open={isModalVisible} onCancel={handleCancel} footer={null}>
                 <p>
-                    <b>Full name:</b> {user.fullname}
+                    <b>Full name:</b> {user?.fullname}
                 </p>
                 <p>
-                    <b>Phone number:</b> {user.phone}
+                    <b>Phone number:</b> {user?.phone}
                 </p>
                 <p>
-                    <b>Email:</b> {user.email}
+                    <b>Email:</b> {user?.email}
                 </p>
                 <Form className={styles.form} layout="vertical" onFinish={onFinish}>
                     <Form.Item label="Type" name="type" rules={[{ required: true, message: 'Please select a type!' }]}>
@@ -287,7 +303,9 @@ const Indemnity = () => {
                     </Form.Item>
                 </Form>
             </Modal>
-            <Chat ref={chatRef} csId={chatId} />
+            {chatId && (
+                <Chat chatId={chatId} role={role === 'user' ? 'User' : 'Employee'} showChat={true} ref={chatRef} />
+            )}
         </Wrapper>
     );
 };
