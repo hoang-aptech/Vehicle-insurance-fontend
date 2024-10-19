@@ -11,7 +11,6 @@ const routes = {
     contractList: '/contract-list',
     insurances: '/insurances',
     insurancePackages: '/insurance-packages/:insuranceId',
-    homeDetails: '/homeDetails',
 
     loginAdmin: '/admin-login',
     admin: '/admin',
@@ -24,6 +23,7 @@ const routes = {
     sendEmailReminderAdmin: '/admin/send-email-reminder',
     insurancePackage: '/admin/insurance-package-admin',
     indemnityAdmin: '/admin/indemnity',
+    insuranceContentAdmin: '/admin/insurance-content',
 };
 
 export default routes;

@@ -114,6 +114,11 @@ const AdminSidebar = () => {
             icon: <InsuranceOutlined style={{ color: 'black' }} />,
         },
         {
+            key: config.routes.insuranceContentAdmin,
+            label: <Link to={config.routes.insuranceContentAdmin}>Insurance content</Link>,
+            icon: <InsuranceOutlined style={{ color: 'black' }} />,
+        },
+        {
             key: config.routes.vehicleAdmin,
             label: <Link to={config.routes.vehicleAdmin}>Vehicle</Link>,
             icon: <CarOutlined style={{ color: 'black' }} />,
@@ -154,8 +159,7 @@ const AdminSidebar = () => {
     console.log(admin.role);
 
     if (admin.role === 'Employee') {
-        filteredItems = items.filter((item, index) => ![0, 1, 4, 7].includes(index));
-        console.log(filteredItems);
+        filteredItems = items.filter((item, index) => ![0, 1, 4, 5, 8].includes(index));
     }
 
     // Xác định key hiện tại dựa trên đường dẫn

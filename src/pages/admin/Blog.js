@@ -10,14 +10,12 @@ const { Header, Content } = Layout;
 const BlogAdmin = () => {
     const [selectedBlog, setSelectedBlog] = useState(null);
     const [deletedBlogs, setDeletedBlogs] = useState([]);
-    const [currentPage, setCurrentPage] = useState(1);
     const [isAddModalVisible, setIsAddModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
     const [isDeletedModalVisible, setIsDeletedModalVisible] = useState(false);
     const [dataSource, setDataSource] = useState([]);
     const [filterName, setFilterName] = useState('');
-    const [form] = Form.useForm();
 
     const API_URL = 'https://localhost:7289/api/News';
 
@@ -47,7 +45,6 @@ const BlogAdmin = () => {
 
     const handleFilterChange = (e) => {
         setFilterName(e.target.value);
-        setCurrentPage(1);
     };
 
     const filteredBlogs = dataSource.filter((blog) => {
@@ -120,10 +117,6 @@ const BlogAdmin = () => {
 
     const handleEdit = (blog) => {
         setSelectedBlog(blog);
-        form.setFieldsValue({
-            name: blog.name,
-            description: blog.description,
-        });
         setIsEditModalVisible(true);
     };
 
@@ -141,7 +134,6 @@ const BlogAdmin = () => {
         setIsEditModalVisible(false);
         setIsDetailModalVisible(false);
         setIsDeletedModalVisible(false);
-        form.resetFields();
         setSelectedBlog(null);
     };
 

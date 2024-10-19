@@ -5,7 +5,7 @@ import axios from 'axios';
 
 const { Header, Content } = Layout;
 
-const InsuranceContents = () => {
+const AdminInsuranceContent = () => {
     const [dataSource, setDataSource] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditModalVisible, setIsEditModalVisible] = useState(false);
@@ -318,4 +318,4 @@ const InsuranceContents = () => {
     );
 };
 
-export default InsuranceContents;
+export default AdminInsuranceContent;

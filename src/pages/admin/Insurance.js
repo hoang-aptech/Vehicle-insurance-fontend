@@ -260,7 +260,15 @@ const Insurance = () => {
                                         'bold italic backcolor | alignleft aligncenter ' +
                                         'alignright alignjustify | bullist numlist outdent indent | ' +
                                         'image | removeformat | help',
-                                    directionality: 'ltr',
+                                    automatic_uploads: false, // Tắt tự động upload
+                                    images_upload_handler: (blobInfo, success) => {
+                                        const reader = new FileReader();
+                                        reader.onload = () => {
+                                            // Chèn hình ảnh dưới dạng base64
+                                            success(reader.result);
+                                        };
+                                        reader.readAsDataURL(blobInfo.blob()); // Đọc blob thành chuỗi nhị phân
+                                    },
                                 }}
                             />
                         </Form.Item>
@@ -282,6 +290,15 @@ const Insurance = () => {
                                         'bold italic backcolor | alignleft aligncenter ' +
                                         'alignright alignjustify | bullist numlist outdent indent | ' +
                                         'image | removeformat | help',
+                                    automatic_uploads: false, // Tắt tự động upload
+                                    images_upload_handler: (blobInfo, success) => {
+                                        const reader = new FileReader();
+                                        reader.onload = () => {
+                                            // Chèn hình ảnh dưới dạng base64
+                                            success(reader.result);
+                                        };
+                                        reader.readAsDataURL(blobInfo.blob()); // Đọc blob thành chuỗi nhị phân
+                                    },
                                 }}
                             />
                         </Form.Item>

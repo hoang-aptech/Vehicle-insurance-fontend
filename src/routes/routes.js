@@ -18,11 +18,10 @@ import Vehicle from '~/pages/admin/Vehicle';
 import Advertisement from '~/pages/admin/Advertisement';
 import Insurance from '~/pages/admin/Insurance';
 import BlogAmin from '~/pages/admin/Blog';
-import AdminLayout from '~/layouts/DefaultLayout/AdminLayout';
 import InsurancePackage from '~/pages/admin/InsurancePackage';
 import AdminLogin from '~/pages/AdminLogin';
 import SendReminderEmails from '~/pages/admin/send-email-reminder/SendEmailReminder';
-import HomeDetails from '~/pages/AdminHomeDetails/AdminHomedetails';
+import AdminInsuranceContent from '~/pages/AdminInsuranceContent';
 
 // Public routes
 const publicRoutes = [
@@ -34,22 +33,22 @@ const publicRoutes = [
     { path: config.routes.blogDetails, component: BlogDetails },
     { path: config.routes.insurancePackages, component: InsurancePackages },
     { path: config.routes.contract, component: Contract },
-    { path: config.routes.homeDetails, component: HomeDetails },
     { path: config.routes.loginAdmin, component: AdminLogin, layout: null },
 ];
 
 // Admin routes
 const adminRoutes = [
-    { path: config.routes.admin, component: Dashboard, layout: AdminLayout },
-    { path: config.routes.userAdmin, component: UserAdmin, layout: AdminLayout },
-    { path: config.routes.billingAdmin, component: Billing, layout: AdminLayout },
-    { path: config.routes.vehicleAdmin, component: Vehicle, layout: AdminLayout },
-    { path: config.routes.advertisementAdmin, component: Advertisement, layout: AdminLayout },
-    { path: config.routes.insuranceAdmin, component: Insurance, layout: AdminLayout },
-    { path: config.routes.blogAdmin, component: BlogAmin, layout: AdminLayout },
-    { path: config.routes.insurancePackage, component: InsurancePackage, layout: AdminLayout },
-    { path: config.routes.sendEmailReminderAdmin, component: SendReminderEmails, layout: AdminLayout },
+    { path: config.routes.admin, component: Dashboard },
+    { path: config.routes.userAdmin, component: UserAdmin },
+    { path: config.routes.billingAdmin, component: Billing },
+    { path: config.routes.vehicleAdmin, component: Vehicle },
+    { path: config.routes.advertisementAdmin, component: Advertisement },
+    { path: config.routes.insuranceAdmin, component: Insurance },
+    { path: config.routes.blogAdmin, component: BlogAmin },
+    { path: config.routes.insurancePackage, component: InsurancePackage },
+    { path: config.routes.sendEmailReminderAdmin, component: SendReminderEmails },
     { path: config.routes.indemnityAdmin, component: Indemnity, params: { role: 'admin' } },
+    { path: config.routes.insuranceContentAdmin, component: AdminInsuranceContent },
 ];
 
 // Private routes

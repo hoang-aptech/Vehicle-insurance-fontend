@@ -5,6 +5,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 
 const AddBlog = ({ onFinish }) => {
+    const [form] = Form.useForm();
     const [description, setDescription] = useState('');
     const [imageFileList, setImageFileList] = useState([]);
     const [imageUrl, setImageUrl] = useState('');
@@ -52,27 +53,41 @@ const AddBlog = ({ onFinish }) => {
         }
     };
 
+    const handleDescriptionChange = (newContent) => {
+        form.setFieldValue('description', newContent);
+        setDescription(newContent);
+    };
+
     return (
-        <Form layout="vertical" onFinish={handleSubmit}>
+        <Form form={form} layout="vertical" onFinish={handleSubmit}>
             <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
                 <Input />
             </Form.Item>
             <Form.Item
                 label="Description"
                 name="description"
-                value={description}
                 rules={[{ required: true, message: 'Please input the description!' }]}
             >
                 <Editor
                     apiKey="l1i9v8q0xwfkdzno0iih7p59m4dqchz5cdie0khvrozcztbg"
+                    value={description}
                     init={{
                         height: 300,
                         menubar: false,
                         plugins: ['image'],
                         toolbar:
                             'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image | removeformat | help',
+                        automatic_uploads: false, // Tắt tự động upload
+                        images_upload_handler: (blobInfo, success) => {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                // Chèn hình ảnh dưới dạng base64
+                                success(reader.result);
+                            };
+                            reader.readAsDataURL(blobInfo.blob()); // Đọc blob thành chuỗi nhị phân
+                        },
                     }}
-                    onEditorChange={(newContent) => setDescription(newContent)}
+                    onEditorChange={handleDescriptionChange}
                 />
             </Form.Item>
             <Form.Item name="image_path" label="Upload Image_Path">
@@ -87,14 +102,14 @@ const AddBlog = ({ onFinish }) => {
                         <Button icon={<UploadOutlined />}>Tải lên Avatar</Button>
                     </Upload>
                     {imageFileList.length > 0 && <span style={{ marginLeft: '10px' }}>{imageFileList[0].name}</span>}
+                    {imageUrl && (
+                        <img
+                            src={imageUrl}
+                            alt="Xem trước Avatar"
+                            style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
+                        />
+                    )}
                 </div>
-                {imageUrl && (
-                    <img
-                        src={imageUrl}
-                        alt="Xem trước Avatar"
-                        style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
-                    />
-                )}
             </Form.Item>
             <Form.Item>
                 <Button type="primary" htmlType="submit">

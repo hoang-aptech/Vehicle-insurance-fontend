@@ -91,6 +91,15 @@ const EditBlog = ({ blog, onFinish }) => {
                         plugins: ['image'],
                         toolbar:
                             'undo redo | formatselect | bold italic backcolor | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | image | removeformat | help',
+                        automatic_uploads: false, // Tắt tự động upload
+                        images_upload_handler: (blobInfo, success) => {
+                            const reader = new FileReader();
+                            reader.onload = () => {
+                                // Chèn hình ảnh dưới dạng base64
+                                success(reader.result);
+                            };
+                            reader.readAsDataURL(blobInfo.blob()); // Đọc blob thành chuỗi nhị phân
+                        },
                     }}
                     onEditorChange={handleChangeDescription}
                 />
@@ -106,16 +115,16 @@ const EditBlog = ({ blog, onFinish }) => {
                     >
                         <Button icon={<UploadOutlined />}>Upload Image</Button>
                     </Upload>
-                </div>
-                <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
-                    {imageUrl && (
-                        <img
-                            src={imageUrl}
-                            alt="Preview"
-                            style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
-                        />
-                    )}
-                    {fileName && <span>{fileName}</span>} {/* Hiển thị tên tệp bên cạnh ảnh */}
+                    <div style={{ marginTop: '10px', display: 'flex', alignItems: 'center' }}>
+                        {imageUrl && (
+                            <img
+                                src={imageUrl}
+                                alt="Preview"
+                                style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
+                            />
+                        )}
+                        {fileName && <span>{fileName}</span>} {/* Hiển thị tên tệp bên cạnh ảnh */}
+                    </div>
                 </div>
             </Form.Item>
             <Form.Item style={{ textAlign: 'center' }}>
