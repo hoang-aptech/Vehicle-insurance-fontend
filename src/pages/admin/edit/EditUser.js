@@ -5,6 +5,7 @@ import { UploadOutlined } from '@ant-design/icons';
 const { Option } = Select;
 
 const EditUser = ({ user, onFinish }) => {
+    const [form] = Form.useForm();
     const [avatarFileList, setAvatarFileList] = useState([]);
     const [avatarUrl, setAvatarUrl] = useState('');
     const [fileName, setFileName] = useState('');
@@ -14,6 +15,10 @@ const EditUser = ({ user, onFinish }) => {
             setAvatarUrl(`data:image/png;base64,${user.avatar}`); // Đảm bảo rằng avatar là chuỗi base64 hợp lệ
             setFileName(user.avatarName || ''); // Lấy tên tệp từ user.avatarName nếu có
         }
+        form.setFieldsValue(user);
+        return () => {
+            form.resetFields();
+        };
     }, [user]);
 
     const handleUploadChange = ({ fileList }) => {
@@ -64,7 +69,7 @@ const EditUser = ({ user, onFinish }) => {
     };
 
     return (
-        <Form name="editUser" initialValues={user} onFinish={handleSubmit}>
+        <Form name="editUser" form={form} onFinish={handleSubmit}>
             <Form.Item name="username" label="UserName" rules={[{ required: true, message: 'Please enter username!' }]}>
                 <Input />
             </Form.Item>
