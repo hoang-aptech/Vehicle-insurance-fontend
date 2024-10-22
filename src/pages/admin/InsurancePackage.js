@@ -20,7 +20,7 @@ const InsurancePackage = () => {
     const [filterName, setFilterName] = useState('');
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
-    const API_URL = 'https://localhost:7289/api/InsurancePackages';
+    const API_URL = process.env.REACT_APP_BACKEND_URL + '/InsurancePackages';
 
     const handleError = (err) => {
         if (err.status === 401) {

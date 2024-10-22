@@ -2,12 +2,18 @@
     color: white;
     background-color: #0f0f0f;
 
-    .title {
+    .title-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
         margin-bottom: 24px;
         padding-bottom: 24px;
-        font-size: 2rem;
-        font-weight: 500;
         border-bottom: 1px solid #e5e7eb;
+
+        .title {
+            font-size: 2rem;
+            font-weight: 500;
+        }
     }
 }
 

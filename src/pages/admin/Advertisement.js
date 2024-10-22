@@ -22,7 +22,7 @@ const Advertisement = () => {
     const [filterName, setFilterName] = useState('');
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
-    const API_URL = 'https://localhost:7289/api/Advertisements';
+    const API_URL = process.env.REACT_APP_BACKEND_URL + '/Advertisements';
 
     const fetchAdvertisementData = async () => {
         try {

@@ -65,7 +65,7 @@ const AdminInsuranceContent = () => {
         'questions7',
     ];
 
-    const API_URL = 'https://localhost:7289/api/Insurancecontents';
+    const API_URL = process.env.REACT_APP_BACKEND_URL + '/Insurancecontents';
 
     const fetchInsuranceData = async () => {
         try {

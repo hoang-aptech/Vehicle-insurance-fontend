@@ -16,7 +16,7 @@ const Blog = () => {
 
     const getDataFromAPI = useCallback(async () => {
         try {
-            const response = await axios.get('https://localhost:7289/api/News');
+            const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/News');
             return response.data;
         } catch (error) {
             console.error(error);

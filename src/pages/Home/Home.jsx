@@ -120,11 +120,16 @@ const Home = () => {
                     customerEmail: values.email,
                     type: values.product,
                 };
-                const adResponse = await axios.post('https://localhost:7289/api/advertisements', newAdvertisement);
+                const adResponse = await axios.post(
+                    process.env.REACT_APP_BACKEND_URL + '/advertisements',
+                    newAdvertisement,
+                );
 
                 if (adResponse.status === 201) {
                     console.log('Advertisement added successfully.');
-                    const response = await axios.get(`https://localhost:7289/api/insurances/type/${values.product}`);
+                    const response = await axios.get(
+                        process.env.REACT_APP_BACKEND_URL + `/insurances/type/${values.product}`,
+                    );
 
                     const insuranceInfo = response.data
                         .map(
@@ -198,8 +203,8 @@ const Home = () => {
                                 <MailOutlined />
                             </div>
                             <div>
-                                <p className={styles.contactText}>cs@saladin.vn</p>
-                                <p className={styles.contactSubtext}>Email Saladin for support</p>
+                                <p className={styles.contactText}>cs@oneteam.vn</p>
+                                <p className={styles.contactSubtext}>Email One team for support</p>
                             </div>
                         </div>
 
@@ -208,8 +213,8 @@ const Home = () => {
                                 <img style={{ minWidth: '85px ', minHeight: '85px' }} src={QrZalo} alt="qr zalo" />
                             </div>
                             <div>
-                                <p className={styles.contactText}>Saladin Zalo OA</p>
-                                <p className={styles.contactSubtext}>Connect with Saladin on Zalo</p>
+                                <p className={styles.contactText}>One team zalo OA</p>
+                                <p className={styles.contactSubtext}>Connect with One team on Zalo</p>
                             </div>
                         </div>
 
@@ -218,8 +223,8 @@ const Home = () => {
                                 <img style={{ maxWidth: '85px', maxHeight: '85px' }} src={QrFace} alt="qr face" />
                             </div>
                             <div>
-                                <p className={styles.contactText}>Saladin Facebook</p>
-                                <p className={styles.contactSubtext}>Connect with Saladin on Facebook</p>
+                                <p className={styles.contactText}>One team Facebook</p>
+                                <p className={styles.contactSubtext}>Connect with One team on Facebook</p>
                             </div>
                         </div>
                     </div>
@@ -324,7 +329,7 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('https://localhost:7289/api/Insurances/root');
+                const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/Insurances/root');
                 console.log(response.data);
 
                 setInsuranceData(response.data);

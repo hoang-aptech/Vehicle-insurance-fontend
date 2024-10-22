@@ -48,7 +48,7 @@ const InsurancePackages = () => {
                 setTimeout(() => {
                     if (insurancePackageId) {
                         axios
-                            .get(`https://localhost:7289/api/insurances/pay/${insurancePackageId}`)
+                            .get(process.env.REACT_APP_BACKEND_URL + `/insurances/pay/${insurancePackageId}`)
                             .then((response) => {
                                 const { paymentUrl } = response.data;
                                 window.location.href = paymentUrl;

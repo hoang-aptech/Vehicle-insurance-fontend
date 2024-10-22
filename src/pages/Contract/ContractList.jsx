@@ -99,7 +99,7 @@ const ContractList = () => {
         localStorage.setItem('vehicleIdToBuyInsurance', JSON.stringify(vehicleId));
         if (insurancePackageId) {
             axios
-                .get(`https://localhost:7289/api/insurances/pay/${insurancePackageId}`)
+                .get(process.env.REACT_APP_BACKEND_URL + `/insurances/pay/${insurancePackageId}`)
                 .then((response) => {
                     const { paymentUrl } = response.data;
                     window.location.href = paymentUrl;
@@ -114,9 +114,10 @@ const ContractList = () => {
         if (txnRef && responseCode && orderInfo && vehicleId) {
             axios
                 .get(
-                    `https://localhost:7289/api/insurances/payment-success?vnp_TxnRef=${txnRef}&vnp_ResponseCode=${responseCode}&vnp_OrderInfo=${encodeURIComponent(
-                        orderInfo,
-                    )}&vehicleId=${vehicleId}`,
+                    process.env.REACT_APP_BACKEND_URL +
+                        `/insurances/payment-success?vnp_TxnRef=${txnRef}&vnp_ResponseCode=${responseCode}&vnp_OrderInfo=${encodeURIComponent(
+                            orderInfo,
+                        )}&vehicleId=${vehicleId}`,
                 )
                 .then((response) => {
                     openNotificationWithIcon('success', 'Payment successfully', response.data.message);

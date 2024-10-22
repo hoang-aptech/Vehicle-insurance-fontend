@@ -22,7 +22,7 @@ const Vehicle = () => {
     const [filterName, setFilterName] = useState('');
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
 
-    const API_URL = 'https://localhost:7289/api/Vehicles';
+    const API_URL = process.env.REACT_APP_BACKEND_URL + '/Vehicles';
 
     // Fetch vehicle data from the API
     const fetchVehicleData = async () => {

@@ -17,7 +17,7 @@ const BlogAdmin = () => {
     const [dataSource, setDataSource] = useState([]);
     const [filterName, setFilterName] = useState('');
 
-    const API_URL = 'https://localhost:7289/api/News';
+    const API_URL = process.env.REACT_APP_BACKEND_URL + '/News';
 
     // Fetch blog data
     const fetchBlogs = async () => {

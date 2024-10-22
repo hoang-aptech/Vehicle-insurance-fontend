@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
+import { FacebookFilled, InstagramOutlined, LinkedinOutlined } from '@ant-design/icons';
 import classNames from 'classnames/bind';
 
+import config from '~/config';
 import logo from '~/assets/img/logo.png';
 import style from './Footer.module.scss';
-import { FacebookFilled, InstagramOutlined, LinkedinOutlined } from '@ant-design/icons';
+import { Button } from 'antd';
 
 const cx = classNames.bind(style);
 
@@ -11,7 +13,12 @@ function Footer() {
     return (
         <footer className={cx('footer')}>
             <div className={cx('wrapper')}>
-                <h4 className={cx('title')}>Business Locations</h4>
+                <div className={cx('title-wrapper')}>
+                    <h4 className={cx('title')}>Business Locations</h4>
+                    <Link to={config.routes.admin}>
+                        <Button>ADMIN</Button>
+                    </Link>
+                </div>
                 <div className={cx('locations')}>
                     <div className={cx('location')}>
                         <div className={cx('location-title')}>Head Office</div>

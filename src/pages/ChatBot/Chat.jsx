@@ -35,7 +35,7 @@ const ChatApp = forwardRef(({ chatId, role }, ref) => {
     const joinChatRoom = useCallback(async () => {
         try {
             const connection = new HubConnectionBuilder()
-                .withUrl('https://localhost:7289/chat')
+                .withUrl(process.env.REACT_APP_BACKEND_URL_ROOT + '/chat')
                 .configureLogging(LogLevel.Information)
                 .build();
 

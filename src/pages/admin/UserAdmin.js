@@ -24,7 +24,7 @@ const UserAdmin = () => {
     const [dataSource, setDataSource] = useState([]);
     const [filterName, setFilterName] = useState('');
 
-    const API_URL = 'https://localhost:7289/api/Users';
+    const API_URL = process.env.REACT_APP_BACKEND_URL + '/Users';
 
     const { adminToken, handleLogoutAdmin } = useContext(Context);
 
@@ -83,9 +83,9 @@ const UserAdmin = () => {
         return fullnameLower.includes(searchLower) || emailLower.includes(searchLower);
     });
 
-    const pageSize = 5;
-    const paginatedUsers = filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-    const totalUsers = filteredUsers.length;
+    // const pageSize = 5;
+    // const paginatedUsers = filteredUsers.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+    // const totalUsers = filteredUsers.length;
 
     const columns = [
         {
@@ -324,7 +324,7 @@ const UserAdmin = () => {
                     <Row gutter={16}>
                         <Col span={24}>
                             <Table
-                                dataSource={paginatedUsers}
+                                dataSource={filteredUsers}
                                 columns={columns}
                                 rowKey="id"
                                 pagination={{

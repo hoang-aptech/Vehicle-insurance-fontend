@@ -33,6 +33,7 @@ import Inspection from '../../assets/Images/inspection-support.png';
 import Garage from '../../assets/Images/garage-system.png';
 import Claim from '../../assets/Images/claim-guide.png';
 import styles from './InsuranceDetails.module.scss';
+import axios from 'axios';
 
 const images = {
     section1: {
@@ -175,11 +176,13 @@ const InsuranceAutomotivePhysical = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await fetch(`https://localhost:7289/api/Insurancecontents/Insurance/${id}`);
-                if (!response.ok) {
+                const response = await axios.get(
+                    process.env.REACT_APP_BACKEND_URL + `/Insurancecontents/Insurance/${id}`,
+                );
+                if (response.status !== 200) {
                     throw new Error('Network response was not ok');
                 }
-                const filteredData = await response.json();
+                const filteredData = response.data;
                 const updatedData = {
                     section1: {
                         title: filteredData.find((item) => item.id)?.title || '',

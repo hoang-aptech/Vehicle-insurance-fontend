@@ -115,9 +115,8 @@ const Indemnity = ({ role = 'user' }) => {
     const fetchCompensations = async () => {
         try {
             const response = await axios.get(
-                `https://localhost:7289/api/CustomerSupports/by-role?${
-                    role === 'user' ? `userId=${user.id}` : 'employeeId=3'
-                }`,
+                process.env.REACT_APP_BACKEND_URL +
+                    `/CustomerSupports/by-role?${role === 'user' ? `userId=${user.id}` : 'employeeId=3'}`,
                 {
                     headers: { Authorization: `Bearer ${userToken || adminToken}` },
                 },

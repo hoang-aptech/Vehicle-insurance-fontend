@@ -10,6 +10,7 @@ import AdminLayout from './layouts/DefaultLayout/AdminLayout';
 function App() {
     return (
         <Router>
+            {/* basename="/fe" */}
             <div className="App">
                 <Routes>
                     {publicRoutes.map((route) => {

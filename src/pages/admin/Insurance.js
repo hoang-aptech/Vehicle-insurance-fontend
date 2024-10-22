@@ -13,14 +13,12 @@ const Insurance = () => {
     const [isEditMode, setIsEditMode] = useState(false);
     const [currentInsurance, setCurrentInsurance] = useState(null);
     const [form] = Form.useForm();
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 5;
     const [filterName, setFilterName] = useState('');
     const [isDetailModalVisible, setIsDetailModalVisible] = useState(false);
     const [descriptionContent, setDescriptionContent] = useState('');
     const [clauseContent, setClauseContent] = useState('');
 
-    const API_URL = 'https://localhost:7289/api/Insurances';
+    const API_URL = process.env.REACT_APP_BACKEND_URL + '/Insurances';
 
     const fetchInsuranceData = async () => {
         try {
@@ -75,7 +73,7 @@ const Insurance = () => {
                     ...insuranceData,
                 });
             } else {
-                const response = await axios.post(API_URL, insuranceData);
+                await axios.post(API_URL, insuranceData);
             }
 
             setIsModalVisible(false);
@@ -95,7 +93,6 @@ const Insurance = () => {
 
     const handleFilterChange = (e) => {
         setFilterName(e.target.value);
-        setCurrentPage(1);
     };
 
     const filteredData = (dataSource || []).filter((item) => {

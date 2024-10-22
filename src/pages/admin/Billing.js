@@ -26,7 +26,7 @@ const Billing = () => {
     const [vehicles, setVehicles] = useState([]);
     const [insurancePackage, setInsurancePackage] = useState([]);
 
-    const API_URL = 'https://localhost:7289/api/Billings';
+    const API_URL = process.env.REACT_APP_BACKEND_URL + '/Billings';
 
     const handleError = (err) => {
         if (err.status === 401) {

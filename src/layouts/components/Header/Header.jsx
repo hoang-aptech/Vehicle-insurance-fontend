@@ -63,6 +63,10 @@ function Header() {
                 to: config.routes.blog,
             },
             {
+                label: 'Sitemap',
+                to: config.routes.sitemap,
+            },
+            {
                 label: 'Language',
                 isTbMb: true,
                 rightBox: {

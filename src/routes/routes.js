@@ -22,6 +22,7 @@ import InsurancePackage from '~/pages/admin/InsurancePackage';
 import AdminLogin from '~/pages/AdminLogin';
 import SendReminderEmails from '~/pages/admin/send-email-reminder/SendEmailReminder';
 import AdminInsuranceContent from '~/pages/AdminInsuranceContent';
+import Sitemap from '~/pages/Sitemap';
 
 // Public routes
 const publicRoutes = [
@@ -33,6 +34,7 @@ const publicRoutes = [
     { path: config.routes.blogDetails, component: BlogDetails },
     { path: config.routes.insurancePackages, component: InsurancePackages },
     { path: config.routes.contract, component: Contract },
+    { path: config.routes.sitemap, component: Sitemap },
     { path: config.routes.loginAdmin, component: AdminLogin, layout: null },
 ];
 

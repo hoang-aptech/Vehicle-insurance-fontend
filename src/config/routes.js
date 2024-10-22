@@ -11,6 +11,7 @@ const routes = {
     contractList: '/contract-list',
     insurances: '/insurances',
     insurancePackages: '/insurance-packages/:insuranceId',
+    sitemap: '/sitemap',
 
     loginAdmin: '/admin-login',
     admin: '/admin',

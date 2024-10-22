@@ -50,7 +50,7 @@ const SendReminderEmails = () => {
     useEffect(() => {
         const fetchBillings = async () => {
             try {
-                const response = await axios.get('https://localhost:7289/api/Billings', {
+                const response = await axios.get(process.env.REACT_APP_BACKEND_URL + '/Billings', {
                     headers: { Authorization: 'Bearer ' + adminToken },
                 });
                 const billingsData = response.data;

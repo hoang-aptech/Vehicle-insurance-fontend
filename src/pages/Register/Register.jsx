@@ -81,7 +81,7 @@ const RegistrationForm = () => {
                 const hashedPassword = await bcrypt.hash(formData.password, 10);
 
                 axios
-                    .post('https://localhost:7289/api/Users', {
+                    .post(process.env.REACT_APP_BACKEND_URL + '/Users', {
                         username: formData.username,
                         fullname: formData.fullname,
                         password: hashedPassword,
