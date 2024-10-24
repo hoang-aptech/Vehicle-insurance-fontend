@@ -1,24 +1,24 @@
 import jsPDF from 'jspdf';
 import axios from 'axios';
 import React, { useContext, useEffect, useRef, useState } from 'react';
-import { Button, Row, Col, Typography, notification } from 'antd';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Button, Row, Col, Typography } from 'antd';
+import { useParams } from 'react-router-dom';
 
 import { Context } from '~/Context';
 import Wrapper from '~/components/Wrapper';
-import config from '~/config';
+// import config from '~/config';
 
 const { Title, Paragraph } = Typography;
 
 const Contract = () => {
-    const navigate = useNavigate();
-    const [api, contextHolder] = notification.useNotification();
-    const openNotificationWithIcon = (type, message, description) => {
-        api[type]({
-            message: message,
-            description: description,
-        });
-    };
+    // const navigate = useNavigate();
+    // const [api, contextHolder] = notification.useNotification();
+    // const openNotificationWithIcon = (type, message, description) => {
+    //     api[type]({
+    //         message: message,
+    //         description: description,
+    //     });
+    // };
     const { user } = useContext(Context);
     const { id } = useParams();
     const contractRef = useRef();
@@ -83,7 +83,7 @@ const Contract = () => {
         cursorY += lineHeight * 2;
         doc.setFont('times', 'normal');
         // Add contract clause with automatic text wrapping and page breaks
-        const clauseText = contractData.clause; // Your contract clause text
+        const clauseText = contractData.clause.replace(/<\/?[^>]+(>|$)/g, ''); // Your contract clause text
         const splitClauseText = doc.splitTextToSize(clauseText, maxLineWidth); // Split the text to fit within the max width
 
         splitClauseText.forEach((line) => {
@@ -105,7 +105,7 @@ const Contract = () => {
 
     return (
         <Wrapper>
-            {contextHolder}
+            {/* {contextHolder} */}
             <div ref={contractRef} style={{ padding: '20px', border: '1px solid #ddd' }}>
                 <Title level={2}>Contract</Title>
 
@@ -127,7 +127,9 @@ const Contract = () => {
                 </Row>
 
                 <Title level={4}>Contract Content</Title>
-                <Paragraph>{contractData.clause}</Paragraph>
+                <Paragraph>
+                    <div dangerouslySetInnerHTML={{ __html: contractData.clause }} />
+                </Paragraph>
             </div>
             {user && (
                 <Button type="default" onClick={exportPDF} style={{ marginTop: '20px' }}>

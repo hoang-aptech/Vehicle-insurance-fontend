@@ -132,14 +132,15 @@ const Home = () => {
                     );
 
                     const insuranceInfo = response.data
-                        .map(
-                            (i) => `
+                        .map((i) => {
+                            const plainTextDescription = i.description.replace(/<\/?[^>]+(>|$)/g, '');
+                            return `
                       Name: ${i.name}
                       Package name: ${i.packageName}
-                      Description: ${i.description}
+                      Description: ${plainTextDescription}
                       Price: ${i.price}
-                    `,
-                        )
+                    `;
+                        })
                         .join('\n');
                     const emailParams = {
                         to_name: values.name,
